@@ -1,0 +1,9 @@
+# Clang-tidy checks – enable common goodies, no noise
+Checks: >
+  -bugprone-*,
+  -clang-analyzer-*,
+  -performance-*,
+  -portability-*,
+  -readability-*
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'

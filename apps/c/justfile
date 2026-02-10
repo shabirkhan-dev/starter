@@ -1,0 +1,28 @@
+# personal-os C app – Justfile
+cc := "cc"
+cflags := "-std=c17 -Wall -Wextra -pedantic"
+binary := "build/personal-os-c"
+src := "src/main.c"
+
+default: build
+
+# Build release binary
+build:
+	@mkdir -p build
+	{{cc}} {{cflags}} -o {{binary}} {{src}}
+
+# Build and run
+run: build
+	./{{binary}}
+
+# Lint (requires clang-tidy)
+lint:
+	clang-tidy {{src}} -- {{cflags}} -I.
+
+# Format (requires clang-format)
+format:
+	clang-format -i {{src}}
+
+# Remove build output
+clean:
+	rm -rf build
