@@ -1,0 +1,13 @@
+---
+description: Monorepo structure, tooling, and conventions
+alwaysApply: true
+---
+
+# personal-os Conventions
+
+- **Monorepo**: Turborepo with `apps/*` and `packages/*`. Run from root: `bun run dev`, `bun run build`, `bun run lint`, `bun run format`.
+- **Package manager**: Bun. Use `bun` for install/run, not npm/yarn/pnpm.
+- **Lint/format**: Biome only. Config: root `biome.json`. Pre-commit (lefthook) runs `biome check --write .`.
+- **Style**: Tabs, line width 100. Biome formatter + linter apply to `apps/**/*.ts(x)`, `packages/**/*.ts(x)`, `*.config.ts`, `*.config.mjs`.
+- **Shared UI**: `packages/ui` (shadcn-style). Shared Tailwind: `packages/tailwind-config`. TypeScript bases: `packages/typescript-config`.
+- **Apps**: `apps/web` is the Next.js app. Add new apps under `apps/` and wire in `turbo.json` if needed.

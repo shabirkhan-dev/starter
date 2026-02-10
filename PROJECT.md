@@ -1,0 +1,45 @@
+# personal-os – Project overview
+
+## What this is
+
+Monorepo for the personal-os product: Next.js app(s), shared UI, and shared config. Managed with Turborepo and Bun.
+
+## Repository layout
+
+```
+personal-os/
+├── apps/
+│   └── web/          # Next.js app (main app)
+├── packages/
+│   ├── ui/           # Shared React UI (shadcn-style components)
+│   ├── tailwind-config/  # Shared Tailwind theme (e.g. theme.css)
+│   └── typescript-config/  # Shared tsconfig bases
+├── biome.json        # Lint + format (Biome)
+├── lefthook.yml      # Git hooks (pre-commit: biome check --write)
+├── turbo.json        # Turborepo pipeline
+├── package.json      # Root workspaces + scripts
+├── AGENTS.md         # Instructions for AI agents
+├── PROJECT.md        # This file
+└── .cursor/rules/    # Cursor rules (conventions, clean code)
+```
+
+## Commands (run from root)
+
+| Command | Purpose |
+|--------|---------|
+| `bun run dev` | Start dev (e.g. Next.js in apps/web) |
+| `bun run build` | Build all apps/packages |
+| `bun run lint` | Lint via Turbo (Biome where configured) |
+| `bun run format` | Format with Biome |
+| `bun run lint:fix` | Lint with auto-fix where supported |
+
+## Tooling and config
+
+- **Biome**: Single formatter/linter; config in root `biome.json`. Covers `apps/**`, `packages/**`, and root config files.
+- **Lefthook**: Pre-commit runs `biome check --write .`.
+- **VS Code**: Project settings in `.vscode/settings.json` (e.g. `css.lint.unknownAtRules: "ignore"` for Tailwind).
+
+## Conventions and clean code
+
+- See `.cursor/rules/` for project conventions and clean-code guidelines.
+- Use workspace packages as `@personal-os/<package-name>` (e.g. `@personal-os/ui`, `@personal-os/tailwind-config`).
