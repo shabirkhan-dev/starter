@@ -1,4 +1,4 @@
-# personal-os scripts
+# Starter Kit scripts
 
 Scripts live under **`scripts/`** at repo root, organized by language: **bash**, **lua**, **python**.
 
