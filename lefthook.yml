@@ -1,8 +1,8 @@
 pre-commit:
   commands:
     format:
-      run: bun run format --write .
+      run: bun run format
     lint:
-      run: bun run lint --write .
+      run: bun run lint:fix
     typecheck:
       run: bun run typecheck
