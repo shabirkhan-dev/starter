@@ -13,10 +13,9 @@
 # testing
 /coverage
 
-# next.js
-*.next/
-*.out/
-apps/**/.next/
+# next.js (any .next dir in repo)
+.next/
+.out/
 
 # production
 /build
