@@ -2,3 +2,5 @@ pre-commit:
   commands:
     biome:
       run: biome check --write .
+    typecheck:
+      run: bun run typecheck

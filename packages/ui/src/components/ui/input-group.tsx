@@ -2,17 +2,17 @@
 
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
+import { cn } from "../../lib/utils";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
-import { cn } from "../../lib/utils";
 
-function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
+function InputGroup({ className, ...props }: React.ComponentProps<"fieldset">) {
 	return (
-		<div
+		<fieldset
 			data-slot="input-group"
-			role="group"
 			className={cn(
+				"border-0 p-0 m-0 min-w-0",
 				"border-input dark:bg-input/30 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-disabled:bg-input/50 dark:has-disabled:bg-input/80 h-8 rounded-lg border transition-colors in-data-[slot=combobox-content]:focus-within:border-inherit in-data-[slot=combobox-content]:focus-within:ring-0 has-disabled:opacity-50 has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-3 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 group/input-group relative flex w-full min-w-0 items-center outline-none has-[>textarea]:h-auto",
 				className,
 			)}
@@ -44,18 +44,25 @@ function InputGroupAddon({
 	className,
 	align = "inline-start",
 	...props
-}: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
+}: React.ComponentProps<"fieldset"> & VariantProps<typeof inputGroupAddonVariants>) {
+	const focusInput = (el: HTMLElement | null) => {
+		el?.parentElement?.querySelector("input")?.focus();
+	};
 	return (
-		<div
-			role="group"
+		<fieldset
 			data-slot="input-group-addon"
 			data-align={align}
-			className={cn(inputGroupAddonVariants({ align }), className)}
+			className={cn("border-0 p-0 m-0 min-w-0", inputGroupAddonVariants({ align }), className)}
 			onClick={(e) => {
-				if ((e.target as HTMLElement).closest("button")) {
-					return;
+				if ((e.target as HTMLElement).closest("button")) return;
+				focusInput(e.currentTarget);
+			}}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					if ((e.target as HTMLElement).closest("button")) return;
+					focusInput(e.currentTarget);
 				}
-				e.currentTarget.parentElement?.querySelector("input")?.focus();
 			}}
 			{...props}
 		/>
