@@ -1,6 +1,6 @@
-# personal-os C app
+# Starter Kit C app
 
-C binary in the personal-os monorepo. Lives under **`apps/c`**. Turbo can run `build` / `dev` from root.
+C binary in the starter monorepo. Lives under **`apps/c`**. Turbo can run `build` / `dev` from root.
 
 ## Prerequisites
 
@@ -11,7 +11,7 @@ C binary in the personal-os monorepo. Lives under **`apps/c`**. Turbo can run `b
 
 | From root | From `apps/c` | Purpose |
 |-----------|---------------|---------|
-| `bun run build` | `just build` | Build binary to `build/personal-os-c` |
+| `bun run build` | `just build` | Build binary to `build/starter-c` |
 | `bun run dev` | `just run` | Build and run |
 | — | `just lint` | clang-tidy |
 | — | `just format` | clang-format |

@@ -1,7 +1,7 @@
-# personal-os C app – Justfile
+# Starter Kit C app – Justfile
 cc := "cc"
 cflags := "-std=c17 -Wall -Wextra -pedantic"
-binary := "build/personal-os-c"
+binary := "build/starter-c"
 src := "src/main.c"
 
 default: build

@@ -1,13 +1,13 @@
-# personal-os – Project overview
+# Starter Kit – Project overview
 
 ## What this is
 
-Monorepo for the personal-os product: Next.js app(s), shared UI, and shared config. Managed with Turborepo and Bun.
+Monorepo starter kit for your projects: Next.js app(s), shared UI, and shared config. Managed with Turborepo and Bun.
 
 ## Repository layout
 
 ```
-personal-os/
+starter/
 ├── apps/
 │   ├── web/          # Next.js app (main app)
 │   ├── rust/         # Rust binary (Cargo; run via cargo or Turbo)
@@ -23,6 +23,9 @@ personal-os/
 ├── package.json      # Root workspaces + scripts
 ├── AGENTS.md         # Instructions for AI agents
 ├── PROJECT.md        # This file
+├── CHANGELOG.md      # Changelog (Keep a Changelog format)
+├── LICENSE-MIT       # MIT license
+├── LICENSE-Apache-2.0 # Apache License 2.0 (dual license)
 └── .cursor/rules/    # Cursor rules (conventions, clean code)
 ```
 
@@ -49,4 +52,4 @@ personal-os/
 ## Conventions and clean code
 
 - See `.cursor/rules/` for project conventions and clean-code guidelines.
-- Use workspace packages as `@personal-os/<package-name>` (e.g. `@personal-os/ui`, `@personal-os/tailwind-config`).
+- Use workspace packages as `@starter/<package-name>` (e.g. `@starter/ui`, `@starter/tailwind-config`).

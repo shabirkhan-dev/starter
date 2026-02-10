@@ -3,7 +3,7 @@ description: Monorepo structure, tooling, and conventions
 alwaysApply: true
 ---
 
-# personal-os Conventions
+# Starter Kit Conventions
 
 - **Monorepo**: Turborepo with `apps/*` and `packages/*`. Run from root: `bun run dev`, `bun run build`, `bun run lint`, `bun run format`.
 - **Package manager**: Bun. Use `bun` for install/run, not npm/yarn/pnpm.
