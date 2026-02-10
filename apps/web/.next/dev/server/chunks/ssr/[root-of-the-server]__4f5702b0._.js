@@ -741,7 +741,7 @@ function ComboboxValue({ ...props }) {
         ...props
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 19,
+        lineNumber: 14,
         columnNumber: 9
     }, this);
 }
@@ -758,13 +758,13 @@ function ComboboxTrigger({ className, children, ...props }) {
                 className: "text-muted-foreground size-4 pointer-events-none"
             }, void 0, false, {
                 fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                lineNumber: 30,
+                lineNumber: 25,
                 columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 24,
+        lineNumber: 19,
         columnNumber: 3
     }, this);
 }
@@ -776,7 +776,7 @@ function ComboboxClear({ className, ...props }) {
             size: "icon-xs"
         }, void 0, false, {
             fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-            lineNumber: 43,
+            lineNumber: 38,
             columnNumber: 12
         }, void 0),
         className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])(className),
@@ -787,12 +787,12 @@ function ComboboxClear({ className, ...props }) {
             className: "pointer-events-none"
         }, void 0, false, {
             fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-            lineNumber: 47,
+            lineNumber: 42,
             columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 41,
+        lineNumber: 36,
         columnNumber: 3
     }, this);
 }
@@ -805,13 +805,13 @@ function ComboboxInput({ className, children, disabled = false, showTrigger = tr
                     disabled: disabled
                 }, void 0, false, {
                     fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                    lineNumber: 65,
+                    lineNumber: 60,
                     columnNumber: 37
                 }, void 0),
                 ...props
             }, void 0, false, {
                 fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                lineNumber: 65,
+                lineNumber: 60,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$bun$2f$next$40$16$2e$1$2e$6$2b$67f6792bdf102c28$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2f$src$2f$components$2f$ui$2f$input$2d$group$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["InputGroupAddon"], {
@@ -822,7 +822,7 @@ function ComboboxInput({ className, children, disabled = false, showTrigger = tr
                         variant: "ghost",
                         render: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$bun$2f$next$40$16$2e$1$2e$6$2b$67f6792bdf102c28$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(ComboboxTrigger, {}, void 0, false, {
                             fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                            lineNumber: 71,
+                            lineNumber: 66,
                             columnNumber: 15
                         }, void 0),
                         "data-slot": "input-group-button",
@@ -830,27 +830,27 @@ function ComboboxInput({ className, children, disabled = false, showTrigger = tr
                         disabled: disabled
                     }, void 0, false, {
                         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                        lineNumber: 68,
+                        lineNumber: 63,
                         columnNumber: 6
                     }, this),
                     showClear && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$bun$2f$next$40$16$2e$1$2e$6$2b$67f6792bdf102c28$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(ComboboxClear, {
                         disabled: disabled
                     }, void 0, false, {
                         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                        lineNumber: 77,
+                        lineNumber: 72,
                         columnNumber: 19
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                lineNumber: 66,
+                lineNumber: 61,
                 columnNumber: 4
             }, this),
             children
         ]
     }, void 0, true, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 64,
+        lineNumber: 59,
         columnNumber: 3
     }, this);
 }
@@ -870,17 +870,17 @@ function ComboboxContent({ className, side = "bottom", sideOffset = 6, align = "
                 ...props
             }, void 0, false, {
                 fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                lineNumber: 107,
+                lineNumber: 102,
                 columnNumber: 5
             }, this)
         }, void 0, false, {
             fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-            lineNumber: 99,
+            lineNumber: 94,
             columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 98,
+        lineNumber: 93,
         columnNumber: 3
     }, this);
 }
@@ -891,7 +891,7 @@ function ComboboxList({ className, ...props }) {
         ...props
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 123,
+        lineNumber: 118,
         columnNumber: 3
     }, this);
 }
@@ -907,7 +907,7 @@ function ComboboxItem({ className, children, ...props }) {
                     className: "pointer-events-none absolute end-2 flex size-4 items-center justify-center"
                 }, void 0, false, {
                     fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                    lineNumber: 147,
+                    lineNumber: 142,
                     columnNumber: 6
                 }, void 0),
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$bun$2f$next$40$16$2e$1$2e$6$2b$67f6792bdf102c28$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$bun$2f40$hugeicons$2b$react$40$1$2e$1$2e$5$2b$83d5fd7b249dbeef$2f$node_modules$2f40$hugeicons$2f$react$2f$dist$2f$esm$2f$HugeiconsIcon$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["HugeiconsIcon"], {
@@ -916,18 +916,18 @@ function ComboboxItem({ className, children, ...props }) {
                     className: "pointer-events-none"
                 }, void 0, false, {
                     fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                    lineNumber: 150,
+                    lineNumber: 145,
                     columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                lineNumber: 145,
+                lineNumber: 140,
                 columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 136,
+        lineNumber: 131,
         columnNumber: 3
     }, this);
 }
@@ -938,7 +938,7 @@ function ComboboxGroup({ className, ...props }) {
         ...props
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 158,
+        lineNumber: 153,
         columnNumber: 3
     }, this);
 }
@@ -949,7 +949,7 @@ function ComboboxLabel({ className, ...props }) {
         ...props
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 164,
+        lineNumber: 159,
         columnNumber: 3
     }, this);
 }
@@ -959,7 +959,7 @@ function ComboboxCollection({ ...props }) {
         ...props
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 173,
+        lineNumber: 168,
         columnNumber: 9
     }, this);
 }
@@ -970,7 +970,7 @@ function ComboboxEmpty({ className, ...props }) {
         ...props
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 178,
+        lineNumber: 173,
         columnNumber: 3
     }, this);
 }
@@ -981,7 +981,7 @@ function ComboboxSeparator({ className, ...props }) {
         ...props
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 191,
+        lineNumber: 186,
         columnNumber: 3
     }, this);
 }
@@ -992,7 +992,7 @@ function ComboboxChips({ className, ...props }) {
         ...props
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 204,
+        lineNumber: 199,
         columnNumber: 3
     }, this);
 }
@@ -1009,7 +1009,7 @@ function ComboboxChip({ className, children, showRemove = true, ...props }) {
                     size: "icon-xs"
                 }, void 0, false, {
                     fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                    lineNumber: 235,
+                    lineNumber: 230,
                     columnNumber: 14
                 }, void 0),
                 className: "-ms-1 opacity-50 hover:opacity-100",
@@ -1020,18 +1020,18 @@ function ComboboxChip({ className, children, showRemove = true, ...props }) {
                     className: "pointer-events-none"
                 }, void 0, false, {
                     fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                    lineNumber: 239,
+                    lineNumber: 234,
                     columnNumber: 6
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-                lineNumber: 234,
+                lineNumber: 229,
                 columnNumber: 5
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 224,
+        lineNumber: 219,
         columnNumber: 3
     }, this);
 }
@@ -1042,7 +1042,7 @@ function ComboboxChipsInput({ className, ...props }) {
         ...props
     }, void 0, false, {
         fileName: "[project]/packages/ui/src/components/ui/combobox.tsx",
-        lineNumber: 248,
+        lineNumber: 243,
         columnNumber: 3
     }, this);
 }

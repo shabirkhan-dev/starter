@@ -4,14 +4,9 @@ import { Combobox as ComboboxPrimitive } from "@base-ui/react";
 import { ArrowDown01Icon, Cancel01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
-import { Button } from "./button";
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupButton,
-	InputGroupInput,
-} from "./input-group";
 import { cn } from "../../lib/utils";
+import { Button } from "./button";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "./input-group";
 
 const Combobox = ComboboxPrimitive.Root;
 

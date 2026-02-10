@@ -639,6 +639,10 @@
     grid-row-start: 1;
   }
 
+  .m-0 {
+    margin: calc(var(--spacing) * 0);
+  }
+
   .-mx-1 {
     margin-inline: calc(var(--spacing) * -1);
   }
