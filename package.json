@@ -12,6 +12,9 @@
     "lint:fix": "turbo run lint:fix",
     "format": "biome format --write .",
     "typecheck": "turbo run typecheck",
+    "scripts:lint": "shellcheck scripts/*.sh",
+    "scripts:format": "shfmt -i 4 -w scripts/*.sh",
+    "scripts:run": "bash scripts/main.sh",
     "prepare": "lefthook install"
   },
   "devDependencies": {

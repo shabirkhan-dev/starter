@@ -17,8 +17,9 @@
 .next/
 .out/
 
-# production
+# production / build output
 /build
+dist/
 
 # misc
 .DS_Store
@@ -43,5 +44,19 @@ next-env.d.ts
 # turborepo
 .turbo/
 
-# rust
+# rust (Cargo)
 target/
+
+# c (Just / build output)
+apps/c/build/
+*.o
+*.a
+*.so
+*.d
+.deps/
+
+# just (optional: local overrides / cache if any)
+.just-*
+
+# scripts (no build output; add if you generate artifacts)
+# (none)

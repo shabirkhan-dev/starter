@@ -1,0 +1,12 @@
+{
+  "name": "c",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "just build",
+    "dev": "just run",
+    "lint": "just lint",
+    "format": "just format",
+    "clean": "just clean"
+  }
+}
