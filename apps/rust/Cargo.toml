@@ -1,0 +1,12 @@
+[package]
+name = "personal-os-rust"
+version = "0.1.0"
+edition = "2021"
+description = "Rust app for personal-os monorepo"
+rust-version = "1.83"
+
+[dependencies]
+
+[profile.release]
+lto = true
+codegen-units = 1

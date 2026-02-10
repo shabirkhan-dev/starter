@@ -9,7 +9,8 @@ Monorepo for the personal-os product: Next.js app(s), shared UI, and shared conf
 ```
 personal-os/
 ├── apps/
-│   └── web/          # Next.js app (main app)
+│   ├── web/          # Next.js app (main app)
+│   └── rust/         # Rust binary (Cargo; run via cargo or Turbo)
 ├── packages/
 │   ├── ui/           # Shared React UI (shadcn-style components)
 │   ├── tailwind-config/  # Shared Tailwind theme (e.g. theme.css)
@@ -30,12 +31,14 @@ personal-os/
 | `bun run dev` | Start dev (e.g. Next.js in apps/web) |
 | `bun run build` | Build all apps/packages |
 | `bun run lint` | Lint via Turbo (Biome where configured) |
-| `bun run format` | Format with Biome |
+| `bun run format` | Format with Biome (TS/JS); use `cargo fmt` in `apps/rust` for Rust |
 | `bun run lint:fix` | Lint with auto-fix where supported |
+| `bun run dev` / `bun run build` | Turbo runs dev/build for all apps (including `apps/rust` if scripts exist) |
 
 ## Tooling and config
 
-- **Biome**: Single formatter/linter; config in root `biome.json`. Covers `apps/**`, `packages/**`, and root config files.
+- **Biome**: Single formatter/linter for TS/JS; config in root `biome.json`. Covers `apps/**`, `packages/**`, and root config files.
+- **Rust**: `apps/rust` uses `rust-toolchain.toml`, `rustfmt.toml`, and Clippy; run `cargo fmt`, `cargo clippy`, `cargo test` in that directory.
 - **Lefthook**: Pre-commit runs `biome check --write .`.
 - **VS Code**: Project settings in `.vscode/settings.json` (e.g. `css.lint.unknownAtRules: "ignore"` for Tailwind).
 
