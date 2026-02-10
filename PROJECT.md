@@ -12,7 +12,7 @@ personal-os/
 │   ├── web/          # Next.js app (main app)
 │   ├── rust/         # Rust binary (Cargo; run via cargo or Turbo)
 │   └── c/            # C binary (justfile; clang-format, clang-tidy)
-├── scripts/          # Bash scripts (ShellCheck, shfmt); run from root
+├── scripts/          # Scripts by language: bash/, lua/, python/ (ShellCheck, shfmt, luacheck, stylua, ruff)
 ├── packages/
 │   ├── ui/           # Shared React UI (shadcn-style components)
 │   ├── tailwind-config/  # Shared Tailwind theme (e.g. theme.css)
@@ -42,7 +42,7 @@ personal-os/
 - **Biome**: Single formatter/linter for TS/JS; config in root `biome.json`. Covers `apps/**`, `packages/**`, and root config files.
 - **Rust**: `apps/rust` uses `rust-toolchain.toml`, `rustfmt.toml`, and Clippy; run `cargo fmt`, `cargo clippy`, `cargo test` in that directory.
 - **C**: `apps/c` uses justfile, `.clang-format`, `.clang-tidy`; run `just build`, `just run`, `just lint`, `just format` in that directory (requires [just](https://github.com/casey/just)).
-- **Shell**: `scripts/` at root uses ShellCheck and shfmt; run `bun run scripts:lint`, `bun run scripts:format`, `bun run scripts:run` from root.
+- **Scripts**: `scripts/` at root: **bash** (ShellCheck, shfmt), **lua** (luacheck, stylua), **python** (ruff). Run `bun run scripts:lint`, `bun run scripts:format`, `bun run scripts:run` (or `scripts:run:bash`, `scripts:run:lua`, `scripts:run:python`) from root.
 - **Lefthook**: Pre-commit runs `biome check --write .`.
 - **VS Code**: Project settings in `.vscode/settings.json` (e.g. `css.lint.unknownAtRules: "ignore"` for Tailwind).
 

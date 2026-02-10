@@ -58,5 +58,13 @@ apps/c/build/
 # just (optional: local overrides / cache if any)
 .just-*
 
-# scripts (no build output; add if you generate artifacts)
-# (none)
+# scripts – build/cache
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+# lua (if any)
+*.luac

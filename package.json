@@ -12,9 +12,12 @@
     "lint:fix": "turbo run lint:fix",
     "format": "biome format --write .",
     "typecheck": "turbo run typecheck",
-    "scripts:lint": "shellcheck scripts/*.sh",
-    "scripts:format": "shfmt -i 4 -w scripts/*.sh",
-    "scripts:run": "bash scripts/main.sh",
+    "scripts:lint": "shellcheck scripts/bash/*.sh && (luacheck scripts/lua 2>/dev/null || true) && (ruff check scripts/python 2>/dev/null || true)",
+    "scripts:format": "shfmt -i 4 -w scripts/bash/*.sh && (stylua scripts/lua 2>/dev/null || true) && (ruff format scripts/python 2>/dev/null || true)",
+    "scripts:run": "bash scripts/bash/main.sh",
+    "scripts:run:bash": "bash scripts/bash/main.sh",
+    "scripts:run:lua": "lua scripts/lua/main.lua",
+    "scripts:run:python": "python scripts/python/main.py",
     "prepare": "lefthook install"
   },
   "devDependencies": {
