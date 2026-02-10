@@ -13,8 +13,8 @@
 			"packages/**/*.tsx",
 			"*.config.ts",
 			"*.config.mjs",
-			"!**/.next/**",
-			"!**/dist/**"
+			"!**/.next",
+			"!**/dist"
 		]
 	},
 	"formatter": {
