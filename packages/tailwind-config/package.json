@@ -1,0 +1,7 @@
+{
+  "name": "@personal-os/tailwind-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "files": ["theme.css"]
+}
