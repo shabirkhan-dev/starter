@@ -10,6 +10,7 @@ Consistency, fast feedback, and automation across TS, Rust, C, Lua, Bash, and Py
 | **Task runner** | Root `justfile` wraps `bun run`; use `just lint`, `just format`, `just test`, or `bun run <task>` |
 | **Editor consistency** | `.editorconfig`: LF, indent, charset, final newline |
 | **CI** | `.github/workflows/ci.yml`: lint, typecheck, build, test on push/PR to `main` |
+| **Dev Container** | `.devcontainer/`: reproducible env (Bun, Rust, C, Python, Lua, shell tools). Reopen in Container; see `.devcontainer/README.md` |
 
 ## Per-language
 
@@ -40,6 +41,6 @@ Optional: install [just](https://github.com/casey/just) and use `just lint`, `ju
 - **C**: sanitizers (ASan/UBSan) in debug builds
 - **Python**: Pyright + pytest in CI
 - **Releases**: changesets for versioning and changelogs
-- **Environments**: devcontainer or Nix for pinned toolchains
+- **Environments**: Dev Container (`.devcontainer/`) or Nix for pinned toolchains
 
 See `PROJECT.md` for full layout and commands.
