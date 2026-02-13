@@ -17,6 +17,7 @@ starter/
 │   ├── ui/           # Shared React UI (shadcn-style components)
 │   ├── tailwind-config/  # Shared Tailwind theme (e.g. theme.css)
 │   └── typescript-config/  # Shared tsconfig bases
+├── .devcontainer/    # Dev Container (Bun, Rust, C, Python, Lua, shell tools)
 ├── .editorconfig     # Editor consistency (line endings, indent, charset)
 ├── biome.json        # Lint + format (Biome)
 ├── justfile          # Optional task runner: `just lint`, `just format`, etc.
@@ -55,6 +56,7 @@ One interface: **`bun run <task>`** (or **`just <task>`** if [just](https://gith
 - **Lefthook**: Pre-commit runs format, lint, typecheck, large-file check, secret scan; commit-msg enforces message length.
 - **EditorConfig**: `.editorconfig` enforces line endings (LF), indent style, charset (UTF-8), final newline across editors.
 - **CI**: `.github/workflows/ci.yml` runs lint, typecheck, build, test on push/PR to `main`.
+- **Dev Container**: `.devcontainer/` provides a reproducible environment (Bun, Rust, C, Python, Lua, shellcheck, shfmt, ruff, stylua, luacheck, just). Reopen in Container in VS Code/Cursor; see `.devcontainer/README.md`.
 - **VS Code**: Project settings in `.vscode/settings.json` (e.g. `css.lint.unknownAtRules: "ignore"` for Tailwind).
 
 ## QoL stack
