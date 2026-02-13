@@ -1,0 +1,3 @@
+# Local env (root .gitignore also has .env*)
+.env
+/target
