@@ -17,10 +17,13 @@ starter/
 │   ├── ui/           # Shared React UI (shadcn-style components)
 │   ├── tailwind-config/  # Shared Tailwind theme (e.g. theme.css)
 │   └── typescript-config/  # Shared tsconfig bases
+├── .editorconfig     # Editor consistency (line endings, indent, charset)
 ├── biome.json        # Lint + format (Biome)
-├── lefthook.yml      # Git hooks (pre-commit: biome check --write)
+├── justfile          # Optional task runner: `just lint`, `just format`, etc.
+├── lefthook.yml      # Git hooks (format, lint, typecheck, large-files, secrets, commit-msg)
 ├── turbo.json        # Turborepo pipeline
 ├── package.json      # Root workspaces + scripts
+├── .github/workflows # CI (lint, typecheck, build, test)
 ├── AGENTS.md         # Instructions for AI agents
 ├── PROJECT.md        # This file
 ├── CHANGELOG.md      # Changelog (Keep a Changelog format)
@@ -31,23 +34,32 @@ starter/
 
 ## Commands (run from root)
 
+One interface: **`bun run <task>`** (or **`just <task>`** if [just](https://github.com/casey/just) is installed).
+
 | Command | Purpose |
 |--------|---------|
-| `bun run dev` | Start dev (e.g. Next.js in apps/web) |
-| `bun run build` | Build all apps/packages |
-| `bun run lint` | Lint via Turbo (Biome where configured) |
-| `bun run format` | Format with Biome (TS/JS); Rust: `cargo fmt` in `apps/rust`; C: `just format` in `apps/c`; Shell: `bun run scripts:format` |
+| `bun run dev` | Start dev (Turbo: Next.js, Rust, etc.) |
+| `bun run build` | Build all (Turbo + C app) |
+| `bun run lint` | Lint: Turbo (Biome) + scripts (ShellCheck, luacheck, ruff) |
+| `bun run format` | Format: Biome + scripts (shfmt, stylua, ruff) + Rust (cargo fmt) + C (clang-format) |
 | `bun run lint:fix` | Lint with auto-fix where supported |
-| `bun run dev` / `bun run build` | Turbo runs dev/build for all apps (including `apps/rust` if scripts exist) |
+| `bun run typecheck` | Typecheck (TS) |
+| `bun run test` | Run tests (e.g. `cargo test` in apps/rust) |
 
 ## Tooling and config
 
 - **Biome**: Single formatter/linter for TS/JS; config in root `biome.json`. Covers `apps/**`, `packages/**`, and root config files.
 - **Rust**: `apps/rust` uses `rust-toolchain.toml`, `rustfmt.toml`, and Clippy; run `cargo fmt`, `cargo clippy`, `cargo test` in that directory.
-- **C**: `apps/c` uses justfile, `.clang-format`, `.clang-tidy`; run `just build`, `just run`, `just lint`, `just format` in that directory (requires [just](https://github.com/casey/just)).
-- **Scripts**: `scripts/` at root: **bash** (ShellCheck, shfmt), **lua** (luacheck, stylua), **python** (ruff). Run `bun run scripts:lint`, `bun run scripts:format`, `bun run scripts:run` (or `scripts:run:bash`, `scripts:run:lua`, `scripts:run:python`) from root.
-- **Lefthook**: Pre-commit runs `biome check --write .`.
+- **C**: `apps/c` uses `clang-format`, `clang-tidy`; run `bun run build` / `bun run format` in that directory (or `just build` / `just format` if just is installed).
+- **Scripts**: `scripts/` at root: **bash** (ShellCheck, shfmt), **lua** (luacheck, stylua), **python** (ruff). Included in root `bun run lint` and `bun run format`.
+- **Lefthook**: Pre-commit runs format, lint, typecheck, large-file check, secret scan; commit-msg enforces message length.
+- **EditorConfig**: `.editorconfig` enforces line endings (LF), indent style, charset (UTF-8), final newline across editors.
+- **CI**: `.github/workflows/ci.yml` runs lint, typecheck, build, test on push/PR to `main`.
 - **VS Code**: Project settings in `.vscode/settings.json` (e.g. `css.lint.unknownAtRules: "ignore"` for Tailwind).
+
+## QoL stack
+
+See **`docs/QoL.md`** for the full QoL stack (hooks, task runner, EditorConfig, CI, per-language tools).
 
 ## Conventions and clean code
 
