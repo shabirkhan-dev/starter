@@ -23,7 +23,14 @@ dist/
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
+*~
+*.swp
+*.swo
+*.log
+.cache/
+*.local
 
 # debug
 npm-debug.log*
@@ -47,7 +54,7 @@ next-env.d.ts
 # rust (Cargo)
 target/
 
-# c (Just / build output)
+# c (build output)
 apps/c/build/
 *.o
 *.a
@@ -68,3 +75,12 @@ venv/
 .ruff_cache/
 # lua (if any)
 *.luac
+
+# biome (cache)
+.biome/
+
+# editor / IDE (local only)
+.idea/
+
+# root workspace generated / temp (remove from .gitignore to track)
+root.ts

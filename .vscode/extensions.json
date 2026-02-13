@@ -1,0 +1,13 @@
+{
+	"recommendations": [
+		"biomejs.biome",
+		"bradlc.vscode-tailwindcss",
+		"rust-lang.rust-analyzer",
+		"llvm-vs-code-extensions.vscode-clangd",
+		"timonwong.shellcheck"
+	],
+	"unwantedRecommendations": [
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode"
+	]
+}
