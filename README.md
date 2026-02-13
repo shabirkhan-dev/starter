@@ -1,6 +1,6 @@
 # Starter Kit
 
-Monorepo starter: **Turborepo + Bun** with Next.js, Rust, C, and scripts (Bash, Lua, Python). Shared UI, lint/format everywhere, git hooks, CI, and an optional dev container.
+Monorepo starter: **Turborepo + Bun** with Next.js, **FastAPI + PostgreSQL + auth**, Rust, C, and scripts (Bash, Lua, Python). Shared UI, lint/format everywhere, git hooks, CI, and an optional dev container.
 
 ## Quick start
 
@@ -18,7 +18,7 @@ bun run dev      # start Next.js + other dev servers
 
 | Area | Contents |
 |------|----------|
-| **apps/** | `web` (Next.js), `rust` (Cargo), `c` (C with clang-format/clang-tidy) |
+| **apps/** | `web` (Next.js), `api` (FastAPI + PostgreSQL + auth), `rust` (Cargo), `c` (C) |
 | **packages/** | `ui` (shared React/shadcn), `tailwind-config`, `typescript-config` |
 | **scripts/** | Bash, Lua, Python (ShellCheck, shfmt, luacheck, stylua, ruff) |
 
@@ -29,7 +29,7 @@ One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** i
 | `bun run dev` | Start dev (Next.js, Rust, etc.) |
 | `bun run build` | Build all (Turbo + C app) |
 | `bun run lint` | Lint: Biome + scripts (ShellCheck, luacheck, ruff) |
-| `bun run format` | Format: Biome + scripts + Rust + C |
+| `bun run format` | Format: Biome + scripts + Rust + C + API (ruff) |
 | `bun run typecheck` | Typecheck (TS) |
 | `bun run test` | Run tests (e.g. `cargo test` in apps/rust) |
 

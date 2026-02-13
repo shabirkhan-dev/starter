@@ -1,0 +1,7 @@
+# Local env and venv (root .gitignore also has .env* and .venv)
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/

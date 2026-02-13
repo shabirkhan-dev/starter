@@ -11,7 +11,7 @@
     "start": "turbo run start",
     "lint": "turbo run lint && bun run scripts:lint",
     "lint:fix": "turbo run lint:fix",
-    "format": "biome format --write . && bun run scripts:format && (cd apps/rust && cargo fmt) && (cd apps/c && bun run format)",
+    "format": "biome format --write . && bun run scripts:format && (cd apps/rust && cargo fmt) && (cd apps/c && bun run format) && (cd apps/python-api && uv run ruff format .)",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "scripts:lint": "shellcheck scripts/bash/*.sh scripts/git-hooks/*.sh && (luacheck scripts/lua 2>/dev/null || true) && (ruff check scripts/python 2>/dev/null || true)",
