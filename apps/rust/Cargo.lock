@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "personal-os-rust"
+name = "starter-rust"
 version = "0.1.0"

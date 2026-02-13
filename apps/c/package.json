@@ -1,12 +1,12 @@
 {
-  "name": "c",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "build": "just build",
-    "dev": "just run",
-    "lint": "just lint",
-    "format": "just format",
-    "clean": "just clean"
-  }
+	"name": "c",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"build": "mkdir -p build && cc -std=c17 -Wall -Wextra -pedantic -o build/starter-c src/main.c",
+		"dev": "bun run build && ./build/starter-c",
+		"lint": "clang-tidy src/main.c -- -std=c17 -Wall -Wextra -pedantic -I.",
+		"format": "clang-format -i src/main.c",
+		"clean": "rm -rf build"
+	}
 }
