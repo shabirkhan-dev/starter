@@ -18,7 +18,7 @@ bun run dev      # start Next.js + other dev servers
 
 | Area | Contents |
 |------|----------|
-| **apps/** | `web` (Next.js), `api` (FastAPI + PostgreSQL + auth), `rust` (Cargo), `c` (C) |
+| **apps/** | `web` (Next.js), `python-api` (FastAPI + PostgreSQL + auth), `rust-api` (Axum + SQLx + auth), `rust` (Cargo), `c` (C) |
 | **packages/** | `ui` (shared React/shadcn), `tailwind-config`, `typescript-config` |
 | **scripts/** | Bash, Lua, Python (ShellCheck, shfmt, luacheck, stylua, ruff) |
 
@@ -29,7 +29,7 @@ One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** i
 | `bun run dev` | Start dev (Next.js, Rust, etc.) |
 | `bun run build` | Build all (Turbo + C app) |
 | `bun run lint` | Lint: Biome + scripts (ShellCheck, luacheck, ruff) |
-| `bun run format` | Format: Biome + scripts + Rust + C + API (ruff) |
+| `bun run format` | Format: Biome + scripts + Rust + C + python-api (ruff) |
 | `bun run typecheck` | Typecheck (TS) |
 | `bun run test` | Run tests (e.g. `cargo test` in apps/rust) |
 
