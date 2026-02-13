@@ -51,12 +51,15 @@ One interface: **`bun run <task>`** (or **`just <task>`** if [just](https://gith
 
 **Python API (apps/python-api):** FastAPI on port 8000. Set `DATABASE_URL` and `SECRET_KEY` in `apps/python-api/.env`; see [apps/python-api/README.md](apps/python-api/README.md).
 
+**Rust API (apps/rust-api):** Axum + SQLx on port 8001. Set `DATABASE_URL` and `SECRET_KEY` in `apps/rust-api/.env`; see [apps/rust-api/README.md](apps/rust-api/README.md).
+
 ## Tooling and config
 
 - **Biome**: Single formatter/linter for TS/JS; config in root `biome.json`. Covers `apps/**`, `packages/**`, and root config files.
 - **Rust**: `apps/rust` uses `rust-toolchain.toml`, `rustfmt.toml`, and Clippy; run `cargo fmt`, `cargo clippy`, `cargo test` in that directory.
 - **C**: `apps/c` uses `clang-format`, `clang-tidy`; run `bun run build` / `bun run format` in that directory (or `just build` / `just format` if just is installed).
 - **Python API**: `apps/python-api` is FastAPI + PostgreSQL + auth (ruff, uv). Run `cd apps/python-api && uv sync && uv run uvicorn src.main:app --reload`; lint/format via Turbo or `uv run ruff check .` / `uv run ruff format .`. See [apps/python-api/README.md](apps/python-api/README.md).
+- **Rust API**: `apps/rust-api` is Axum + SQLx + PostgreSQL + auth. Run `cd apps/rust-api && cargo run`; lint/format via Turbo or `cargo clippy` / `cargo fmt`. See [apps/rust-api/README.md](apps/rust-api/README.md).
 - **Scripts**: `scripts/` at root: **bash** (ShellCheck, shfmt), **lua** (luacheck, stylua), **python** (ruff). Included in root `bun run lint` and `bun run format`.
 - **Lefthook**: Pre-commit runs format, lint, typecheck, large-file check, secret scan; commit-msg enforces message length.
 - **EditorConfig**: `.editorconfig` enforces line endings (LF), indent style, charset (UTF-8), final newline across editors.

@@ -17,7 +17,7 @@ Consistency, fast feedback, and automation across TS, Rust, C, Lua, Bash, and Py
 | Language | Lint / format | Test / types |
 |----------|----------------|--------------|
 | **TS/JS** | Biome (lint + format) | tsc (typecheck), Vitest/Jest if added |
-| **Rust** | rustfmt, clippy | cargo test |
+| **Rust** | rustfmt, clippy | cargo test; **apps/rust-api** Axum + SQLx + PostgreSQL + auth |
 | **C** | clang-format, clang-tidy | (manual / sanitizers optional) |
 | **Bash** | shellcheck, shfmt | (bats optional) |
 | **Lua** | luacheck, stylua | (busted optional) |
