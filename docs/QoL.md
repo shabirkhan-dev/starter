@@ -21,7 +21,7 @@ Consistency, fast feedback, and automation across TS, Rust, C, Lua, Bash, and Py
 | **C** | clang-format, clang-tidy | (manual / sanitizers optional) |
 | **Bash** | shellcheck, shfmt | (bats optional) |
 | **Lua** | luacheck, stylua | (busted optional) |
-| **Python** | ruff (check + format) | (pytest optional) |
+| **Python** | ruff (check + format) | (pytest optional); **apps/python-api** FastAPI + PostgreSQL + auth |
 
 ## One-command surface
 
