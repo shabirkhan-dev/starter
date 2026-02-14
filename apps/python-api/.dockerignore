@@ -1,0 +1,15 @@
+# Local env and cache
+.env
+.env.*
+!.env.example
+__pycache__
+*.pyc
+.venv
+.python-version
+.uv
+# Git and IDE
+.git
+.gitignore
+*.md
+.vscode
+.idea
