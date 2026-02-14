@@ -33,6 +33,19 @@ One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** i
 | `bun run typecheck` | Typecheck (TS) |
 | `bun run test` | Run tests (e.g. `cargo test` in apps/rust) |
 
+## Docker (Postgres + both APIs)
+
+Run Postgres, Python API (8000), and Rust API (8001):
+
+```bash
+cp env.docker.example .env
+docker compose up -d postgres   # wait for healthy
+docker compose build rust-api   # needs DB at build time
+docker compose up
+```
+
+See **[docs/docker.md](docs/docker.md)** for details and env options.
+
 ## Reproducible environment
 
 - **Dev Container:** [.devcontainer/](.devcontainer/) — Bun, Rust, C, Python, Lua, shell tools. In VS Code/Cursor: **Reopen in Container**. See [.devcontainer/README.md](.devcontainer/README.md).
@@ -42,6 +55,7 @@ One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** i
 ## Docs
 
 - **[PROJECT.md](PROJECT.md)** — Full layout, tooling, and conventions.
+- **[docs/docker.md](docs/docker.md)** — Docker Compose (Postgres + Python API + Rust API).
 - **[docs/QoL.md](docs/QoL.md)** — QoL stack (hooks, task runner, EditorConfig, CI, per-language).
 - **[AGENTS.md](AGENTS.md)** — Instructions for AI agents working in this repo.
 
