@@ -1,0 +1,12 @@
+# Build artifacts
+target
+# Local env
+.env
+.env.*
+!.env.example
+# Git and IDE
+.git
+.gitignore
+*.md
+.vscode
+.idea
