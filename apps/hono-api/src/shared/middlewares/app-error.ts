@@ -1,6 +1,7 @@
 import type { Context } from "hono";
+import type { ContentfulStatusCode } from "hono/utils/http-status";
 import type { HttpCode } from "@/shared/configs/http-config";
-import { HTTP_CODE, getMessage } from "@/shared/configs/http-config";
+import { getMessage, HTTP_CODE } from "@/shared/configs/http-config";
 
 export class AppError extends Error {
 	constructor(
@@ -22,7 +23,7 @@ export function appErrorHandler(err: unknown, c: Context) {
 				message: err.message,
 				...(err.details != null && { details: err.details }),
 			},
-			err.code,
+			err.code as ContentfulStatusCode,
 		);
 	}
 	const message = err instanceof Error ? err.message : "Internal Server Error";

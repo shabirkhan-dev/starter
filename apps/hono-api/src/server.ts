@@ -1,6 +1,6 @@
 import { serve } from "bun";
-import { appConfig } from "@/shared/configs/app-config";
 import app from "@/app";
+import { appConfig } from "@/shared/configs/app-config";
 
 export function startServer() {
 	serve({

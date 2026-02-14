@@ -1,7 +1,7 @@
 import { Hono } from "hono";
-import { appErrorHandler } from "@/middleware/app-error";
-import { HTTP_CODE } from "@/shared/configs/http-config";
 import { appConfig } from "@/shared/configs/app-config";
+import { HTTP_CODE } from "@/shared/configs/http-config";
+import { appErrorHandler } from "@/shared/middlewares/app-error";
 
 const app = new Hono();
 
