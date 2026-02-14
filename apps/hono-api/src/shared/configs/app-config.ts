@@ -1,8 +1,6 @@
 import type { AppConfig } from "@/shared/interfaces/app-config";
 
-export type { AppConfig };
-
-const env = process.env;
+const env = Bun.env;
 
 export const appConfig: AppConfig = {
 	name: env.APP_NAME ?? "hono-api",
