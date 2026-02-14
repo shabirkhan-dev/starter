@@ -1,0 +1,57 @@
+# Run PostgreSQL + Python API + Rust API. From repo root: copy env.docker.example to .env, then docker compose up
+# See docs/docker.md for full steps (start postgres first, then build rust-api, then up).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-starter}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-starter}
+      POSTGRES_DB: ${POSTGRES_DB:-starter}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-starter} -d ${POSTGRES_DB:-starter}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  python-api:
+    build:
+      context: ./apps/python-api
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-starter}:${POSTGRES_PASSWORD:-starter}@postgres:5432/${POSTGRES_DB:-starter}
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production-min-32-chars}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  rust-api:
+    build:
+      context: ./apps/rust-api
+      dockerfile: Dockerfile
+      # Pass DATABASE_URL so SQLx can compile-check; postgres must be reachable (start postgres first, then build)
+      args:
+        DATABASE_URL: ${DATABASE_URL:-postgresql://starter:starter@127.0.0.1:5432/starter}
+      network: host
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-starter}:${POSTGRES_PASSWORD:-starter}@postgres:5432/${POSTGRES_DB:-starter}
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production-min-32-chars}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

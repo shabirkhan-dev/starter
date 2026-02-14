@@ -65,6 +65,7 @@ One interface: **`bun run <task>`** (or **`just <task>`** if [just](https://gith
 - **EditorConfig**: `.editorconfig` enforces line endings (LF), indent style, charset (UTF-8), final newline across editors.
 - **CI**: `.github/workflows/ci.yml` runs lint, typecheck, build, test on push/PR to `main`.
 - **Dev Container**: `.devcontainer/` provides a reproducible environment (Bun, Rust, C, Python, Lua, shellcheck, shfmt, ruff, stylua, luacheck, just). Reopen in Container in VS Code/Cursor; see `.devcontainer/README.md`.
+- **Docker**: Root `docker-compose.yml` runs Postgres + Python API (8000) + Rust API (8001). Copy `env.docker.example` to `.env` and see **`docs/docker.md`** for steps (start postgres, build rust-api, then up).
 - **VS Code**: Project settings in `.vscode/settings.json` (e.g. `css.lint.unknownAtRules: "ignore"` for Tailwind).
 
 ## QoL stack
