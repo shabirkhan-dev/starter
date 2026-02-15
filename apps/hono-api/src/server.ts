@@ -1,3 +1,4 @@
+import "./load-env";
 import { serve } from "bun";
 import { createLogger } from "@starter/logger";
 import app from "@/app";
