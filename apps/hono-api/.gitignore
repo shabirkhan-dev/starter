@@ -1,2 +1,10 @@
 # deps
 node_modules/
+
+# env
+.env
+.env.*
+!.env.example
+
+# prisma
+prisma/migrations/**/migration_lock.toml
