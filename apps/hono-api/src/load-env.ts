@@ -2,13 +2,17 @@
  * Load .env from app root into process.env so config sees it when cwd is monorepo root.
  * Import this first in server.ts (before app/config).
  */
-import { resolve } from "node:path";
-import { readFileSync, existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 
-const appRoot = resolve(fileURLToPath(import.meta.url), "..", "..");
-const envPath = resolve(appRoot, ".env");
-if (existsSync(envPath)) {
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+const cwd = process.cwd();
+const envPath = existsSync(resolve(cwd, ".env"))
+	? resolve(cwd, ".env")
+	: existsSync(resolve(cwd, "apps/hono-api/.env"))
+		? resolve(cwd, "apps/hono-api/.env")
+		: null;
+if (envPath) {
 	const content = readFileSync(envPath, "utf-8");
 	for (const line of content.split("\n")) {
 		const trimmed = line.trim();
