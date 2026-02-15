@@ -1,6 +1,6 @@
 # Starter Kit
 
-Monorepo starter: **Turborepo + Bun** with Next.js, **FastAPI + PostgreSQL + auth**, Rust, C, and scripts (Bash, Lua, Python). Shared UI, lint/format everywhere, git hooks, CI, and an optional dev container.
+Monorepo starter: **Turborepo + Bun** with Next.js, **Hono + Prisma + PostgreSQL**, Rust, C, and scripts (Bash, Lua, Python). Shared UI, lint/format everywhere, git hooks, CI, and an optional dev container.
 
 ## Quick start
 
@@ -18,7 +18,7 @@ bun run dev      # start Next.js + other dev servers
 
 | Area | Contents |
 |------|----------|
-| **apps/** | `web` (Next.js), `python-api` (FastAPI + PostgreSQL + auth), `rust-api` (Axum + SQLx + auth), `rust` (Cargo), `c` (C) |
+| **apps/** | `web` (Next.js), `hono-api` (Hono + Prisma + PostgreSQL), `rust` (Cargo), `c` (C) |
 | **packages/** | `ui` (shared React/shadcn), `tailwind-config`, `typescript-config` |
 | **scripts/** | Bash, Lua, Python (ShellCheck, shfmt, luacheck, stylua, ruff) |
 
@@ -29,19 +29,17 @@ One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** i
 | `bun run dev` | Start dev (Next.js, Rust, etc.) |
 | `bun run build` | Build all (Turbo + C app) |
 | `bun run lint` | Lint: Biome + scripts (ShellCheck, luacheck, ruff) |
-| `bun run format` | Format: Biome + scripts + Rust + C + python-api (ruff) |
+| `bun run format` | Format: Biome + scripts + Rust + C |
 | `bun run typecheck` | Typecheck (TS) |
 | `bun run test` | Run tests (e.g. `cargo test` in apps/rust) |
 
-## Docker (Postgres + both APIs)
+## Docker (Postgres + Hono API)
 
-Run Postgres, Python API (8000), and Rust API (8001):
+Run Postgres and Hono API (3000):
 
 ```bash
 cp env.docker.example .env
-docker compose up -d postgres   # wait for healthy
-docker compose build rust-api   # needs DB at build time
-docker compose up
+docker compose up --build
 ```
 
 See **[docs/docker.md](docs/docker.md)** for details and env options.
