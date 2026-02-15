@@ -12,9 +12,7 @@ export function startServer() {
 		hostname: appConfig.host,
 	});
 
-	log.info(
-		`v${appConfig.version} listening on http://${appConfig.host}:${appConfig.port}`,
-	);
+	log.info(`v${appConfig.version} listening on http://${appConfig.host}:${appConfig.port}`);
 }
 
 startServer();

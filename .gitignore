@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
+# dependencies (root and all packages/apps)
+node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -48,7 +48,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# turborepo
+# turborepo (cache – do not track)
 .turbo/
 
 # rust (Cargo)
