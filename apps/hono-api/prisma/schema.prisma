@@ -1,5 +1,4 @@
-// Prisma schema – no models yet. Add tables when ready.
-// Connection URL: prisma.config.ts (Migrate) and PrismaClient adapter (runtime).
+// Prisma schema – PostgreSQL. Connection URL: prisma.config.ts (Migrate) and PrismaClient adapter (runtime).
 
 generator client {
 	provider = "prisma-client"
@@ -10,4 +9,59 @@ datasource db {
 	provider = "postgresql"
 }
 
-// Add model blocks here when you add tables.
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum VerificationType {
+	EMAIL_VERIFICATION
+	PASSWORD_RESET
+	TWO_FACTOR
+}
+
+// ---------------------------------------------------------------------------
+// Models
+// ---------------------------------------------------------------------------
+
+model User {
+	id                String    @id @default(cuid())
+	name              String
+	email             String    @unique
+	password          String
+	isEmailVerified   Boolean   @default(false)
+	enable2FA         Boolean   @default(false)
+	emailNotification Boolean   @default(true)
+	twoFactorSecret   String?
+	createdAt         DateTime  @default(now())
+	updatedAt        DateTime  @updatedAt
+
+	sessions          Session[]
+	verificationCodes VerificationCode[]
+
+	@@map("users")
+}
+
+model Session {
+	id        String   @id @default(cuid())
+	userId    String
+	user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+	userAgent String?
+	expiredAt DateTime
+	createdAt DateTime @default(now())
+
+	@@index([userId])
+	@@map("sessions")
+}
+
+model VerificationCode {
+	id        String           @id @default(cuid())
+	userId    String
+	user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+	code      String           @unique
+	type      VerificationType
+	expiresAt DateTime
+	createdAt DateTime         @default(now())
+
+	@@index([userId])
+	@@map("verification_codes")
+}
