@@ -12,6 +12,7 @@ export const HTTP_CODE = {
 	NOT_FOUND: 404,
 	CONFLICT: 409,
 	UNPROCESSABLE_ENTITY: 422,
+	TOO_MANY_REQUESTS: 429,
 	INTERNAL_SERVER_ERROR: 500,
 	SERVICE_UNAVAILABLE: 503,
 } as const;
@@ -26,6 +27,7 @@ export const HTTP_MESSAGE: Record<number, string> = {
 	[HTTP_CODE.NOT_FOUND]: "Not Found",
 	[HTTP_CODE.CONFLICT]: "Conflict",
 	[HTTP_CODE.UNPROCESSABLE_ENTITY]: "Unprocessable Entity",
+	[HTTP_CODE.TOO_MANY_REQUESTS]: "Too Many Requests",
 	[HTTP_CODE.INTERNAL_SERVER_ERROR]: "Internal Server Error",
 	[HTTP_CODE.SERVICE_UNAVAILABLE]: "Service Unavailable",
 };

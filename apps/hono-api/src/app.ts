@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { appConfig } from "@/shared/configs/app-config";
 import { HTTP_CODE } from "@/shared/configs/http-config";
 import { appErrorHandler } from "@/shared/middlewares/app-error";
+import authRoutes from "@/modules/auth/auth.routes";
 
 const app = new Hono();
 
@@ -24,5 +25,7 @@ app.get("/health", (c) => {
 		data: { status: "ok", env: appConfig.env },
 	});
 });
+
+app.route("/auth", authRoutes);
 
 export default app;

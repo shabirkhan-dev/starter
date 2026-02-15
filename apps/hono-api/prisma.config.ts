@@ -8,6 +8,8 @@ export default defineConfig({
 	},
 	datasource: {
 		// Optional for `prisma generate`; required for migrate/db push/studio
-		url: Bun.env.DATABASE_URL ?? "postgresql://localhost:5432/hono",
+		url:
+			(typeof Bun !== "undefined" ? Bun.env.DATABASE_URL : process.env.DATABASE_URL) ??
+			"postgresql://localhost:5432/hono",
 	},
 });
