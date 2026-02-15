@@ -1,36 +1,37 @@
-# Run PostgreSQL + Hono API. From repo root: copy env.docker.example to .env, then docker compose up
-# See docs/docker.md for details.
+# PostgreSQL + Hono API. From repo root: docker compose up --build -d
+# Run without sudo: bash scripts/bash/docker-group.sh then log out/in or run newgrp docker
+# Optional: copy apps/hono-api/.env.example to .env and set POSTGRES_* for custom credentials.
 
 services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-starter}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-starter}
-      POSTGRES_DB: ${POSTGRES_DB:-starter}
+      POSTGRES_USER: ${POSTGRES_USER:-hono}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hono}
+      POSTGRES_DB: ${POSTGRES_DB:-hono}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-starter} -d ${POSTGRES_DB:-starter}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-hono} -d ${POSTGRES_DB:-hono}"]
       interval: 5s
       timeout: 5s
       retries: 5
 
   hono-api:
     build:
-      context: ./apps/hono-api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/hono-api/Dockerfile
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-starter}:${POSTGRES_PASSWORD:-starter}@postgres:5432/${POSTGRES_DB:-starter}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-hono}:${POSTGRES_PASSWORD:-hono}@postgres:5432/${POSTGRES_DB:-hono}
       PORT: 3000
       HOST: 0.0.0.0
       NODE_ENV: production
     ports:
-      - "3000:3000"
+      - "3001:3000"   # host:container – use 3001 so dev on 3000 doesn't conflict
     depends_on:
       postgres:
         condition: service_healthy
