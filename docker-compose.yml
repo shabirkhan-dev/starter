@@ -53,5 +53,21 @@ services:
       postgres:
         condition: service_healthy
 
+  hono-api:
+    build:
+      context: ./apps/hono-api
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-starter}:${POSTGRES_PASSWORD:-starter}@postgres:5432/${POSTGRES_DB:-starter}
+      PORT: 3000
+      HOST: 0.0.0.0
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   postgres_data:
