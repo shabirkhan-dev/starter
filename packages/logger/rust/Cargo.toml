@@ -1,12 +1,11 @@
 [package]
-name = "starter-rust"
+name = "starter-logger"
 version = "0.1.0"
 edition = "2021"
-description = "Rust app for starter monorepo"
+description = "Beautiful, injectable logger for Rust"
 rust-version = "1.83"
 
 [dependencies]
-starter-logger = { path = "../../packages/logger/rust" }
 
 [profile.release]
 lto = true

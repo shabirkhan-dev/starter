@@ -5,10 +5,3 @@ version = 4
 [[package]]
 name = "starter-logger"
 version = "0.1.0"
-
-[[package]]
-name = "starter-rust"
-version = "0.1.0"
-dependencies = [
- "starter-logger",
-]
