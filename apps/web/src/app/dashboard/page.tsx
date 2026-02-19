@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@starter/ui";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { ApiSwitcher } from "@/components/api-switcher";
+import { ApiSwitcher, getApiDisplayName } from "@/components/api-switcher";
 import { useAuth } from "@/context/auth-context";
 
 export default function DashboardPage() {
@@ -27,8 +27,7 @@ export default function DashboardPage() {
 				<CardHeader>
 					<CardTitle>Backend</CardTitle>
 					<CardDescription>
-						Current API: {api === "python" ? "Python (FastAPI)" : "Rust (Axum)"}. Switch below to
-						use the other.
+						Current API: {getApiDisplayName(api)}. Switch below to use another backend.
 					</CardDescription>
 				</CardHeader>
 				<CardContent>

@@ -59,7 +59,15 @@ export class AuthService {
 	async register(input: RegisterInput): Promise<{ user: SafeUser }> {
 		const { name, email, password } = input;
 
-		const existing = await prisma.user.findUnique({ where: { email } });
+		if (typeof email !== "string" || email.trim() === "") {
+			throw new AppError(
+				HTTP_CODE.BAD_REQUEST,
+				"Email is required",
+				undefined,
+				ErrorCode.VALIDATION_ERROR,
+			);
+		}
+		const existing = await prisma.user.findFirst({ where: { email: email.trim() } });
 		if (existing) {
 			throw new AppError(
 				HTTP_CODE.BAD_REQUEST,
@@ -71,27 +79,44 @@ export class AuthService {
 
 		const hashedPassword = await hashPassword(password);
 		const user = await prisma.user.create({
-			data: { name, email, password: hashedPassword },
+			data: { name, email: email.trim(), password: hashedPassword },
 		});
 
-		const code = generateUniqueCode();
-		await prisma.verificationCode.create({
-			data: {
-				userId: user.id,
-				code,
-				type: VerificationType.EMAIL_VERIFICATION,
-				expiresAt: fortyFiveMinutesFromNow(),
-			},
-		});
-
-		const verificationUrl = `${appConfig.appOrigin}/confirm-account?code=${code}`;
-		const { error } = await sendEmail({
-			...verifyEmailTemplate(verificationUrl),
-			to: user.email,
-		});
-		if (error) log.warn("Verify email send failed", error.message);
+		// Verification code and email are best-effort; don't fail registration if they fail
+		try {
+			const code = generateUniqueCode();
+			await prisma.verificationCode.create({
+				data: {
+					userId: user.id,
+					code,
+					type: VerificationType.EMAIL_VERIFICATION,
+					expiresAt: fortyFiveMinutesFromNow(),
+				},
+			});
+			const verificationUrl = `${appConfig.appOrigin}/confirm-account?code=${code}`;
+			const { error } = await sendEmail({
+				...verifyEmailTemplate(verificationUrl),
+				to: user.email,
+			});
+			if (error) log.warn("Verify email send failed", error.message);
+		} catch (e) {
+			log.warn("Verification code or email failed after user create", e);
+		}
 
 		return { user: toSafeUser(user) };
+	}
+
+	async getCurrentUser(userId: string): Promise<SafeUser> {
+		const user = await prisma.user.findUnique({ where: { id: userId } });
+		if (!user) {
+			throw new AppError(
+				HTTP_CODE.NOT_FOUND,
+				"User not found",
+				undefined,
+				ErrorCode.AUTH_USER_NOT_FOUND,
+			);
+		}
+		return toSafeUser(user);
 	}
 
 	async login(input: LoginInput): Promise<{
@@ -102,8 +127,16 @@ export class AuthService {
 	}> {
 		const { email, password, userAgent } = input;
 
+		if (typeof email !== "string" || email.trim() === "") {
+			throw new AppError(
+				HTTP_CODE.BAD_REQUEST,
+				"Invalid email or password",
+				undefined,
+				ErrorCode.AUTH_USER_NOT_FOUND,
+			);
+		}
 		log.info("Login attempt", { email });
-		const user = await prisma.user.findUnique({ where: { email } });
+		const user = await prisma.user.findFirst({ where: { email: email.trim() } });
 		if (!user) {
 			log.warn("Login failed: user not found", { email });
 			throw new AppError(

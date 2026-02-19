@@ -15,7 +15,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ApiSwitcher } from "@/components/api-switcher";
+import { ApiSwitcherCompact, getApiDisplayName } from "@/components/api-switcher";
 import { useAuth } from "@/context/auth-context";
 
 export default function RegisterPage() {
@@ -52,13 +52,13 @@ export default function RegisterPage() {
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center gap-6 p-4">
 			<div className="absolute right-4 top-4">
-				<ApiSwitcher />
+				<ApiSwitcherCompact />
 			</div>
 			<Card className="w-full max-w-sm">
 				<CardHeader>
 					<CardTitle>Register</CardTitle>
 					<CardDescription>
-						Using {api === "python" ? "Python API" : "Rust API"}. Switch in the top right.
+						Using {getApiDisplayName(api)}. Switch API in the top right.
 					</CardDescription>
 				</CardHeader>
 				<CardContent>

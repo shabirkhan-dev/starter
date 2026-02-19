@@ -25,16 +25,16 @@ interface AuthContextValue extends AuthState {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+const VALID_API_KINDS: ApiKind[] = ["python", "rust", "hono"];
+
 function loadStored(): { api: ApiKind; token: string | null } {
 	if (typeof window === "undefined") {
 		return { api: "python", token: null };
 	}
 	const apiStored = localStorage.getItem(STORAGE_API) as ApiKind | null;
 	const token = localStorage.getItem(STORAGE_TOKEN);
-	return {
-		api: apiStored === "rust" ? "rust" : "python",
-		token,
-	};
+	const api: ApiKind = apiStored && VALID_API_KINDS.includes(apiStored) ? apiStored : "python";
+	return { api, token };
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {

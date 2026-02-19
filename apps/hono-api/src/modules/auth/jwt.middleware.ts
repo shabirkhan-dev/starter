@@ -1,4 +1,5 @@
 import type { Context, Next } from "hono";
+import { getCookie } from "hono/cookie";
 import { HTTP_CODE } from "@/shared/configs/http-config";
 import { AppError } from "@/shared/middlewares/app-error";
 import { ErrorCode } from "@/shared/errors/error-enum";
@@ -17,7 +18,7 @@ export type AuthEnv = {
 export async function authenticateJWT(c: Context<{ Variables: AuthEnv }>, next: Next) {
 	const token =
 		c.req.header("Authorization")?.replace(/^Bearer\s+/i, "") ??
-		(c.req.cookie("accessToken") as string | undefined);
+		(getCookie(c, "accessToken") as string | undefined);
 
 	if (!token) {
 		throw new AppError(

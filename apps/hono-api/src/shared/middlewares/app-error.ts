@@ -2,6 +2,7 @@ import type { Context } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { createLogger } from "@starter/logger";
 import { z } from "zod";
+import { appConfig } from "@/shared/configs/app-config";
 import type { HttpCode } from "@/shared/configs/http-config";
 import { getMessage, HTTP_CODE } from "@/shared/configs/http-config";
 import type { ErrorCode } from "@/shared/errors/error-enum";
@@ -77,7 +78,7 @@ export function appErrorHandler(err: unknown, c: Context) {
 	}
 
 	const message = err instanceof Error ? err.message : "Unknown error occurred";
-	const isDev = process.env.NODE_ENV === "development";
+	const isDev = appConfig.env === "development";
 	return c.json(
 		{
 			success: false,

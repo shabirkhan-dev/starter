@@ -1,9 +1,9 @@
-/** Shared auth types for Python API and Rust API. */
+/** Shared auth types for Python, Rust, and Hono APIs. */
 
-export type ApiKind = "python" | "rust";
+export type ApiKind = "python" | "rust" | "hono";
 
 export interface User {
-	id: number;
+	id: number | string;
 	email: string;
 	username: string;
 	is_active: boolean;

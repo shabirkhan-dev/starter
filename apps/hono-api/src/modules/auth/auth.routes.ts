@@ -16,5 +16,6 @@ auth.post("/password/forgot", (c) => authController.forgotPassword(c));
 auth.post("/password/reset", (c) => authController.resetPassword(c));
 auth.get("/refresh", (c) => authController.refreshToken(c));
 auth.post("/logout", authenticateJWT, (c) => authController.logout(c));
+auth.get("/me", authenticateJWT, (c) => authController.me(c));
 
 export default auth;

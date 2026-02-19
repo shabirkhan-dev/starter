@@ -127,5 +127,16 @@ export function createAuthController(service: AuthService) {
 				message: "Logged out successfully",
 			});
 		},
+
+		async me(c: Context<{ Variables: AuthEnv }>) {
+			const userId = c.get("userId");
+			const user = await service.getCurrentUser(userId);
+			return c.json({
+				success: true,
+				code: HTTP_CODE.OK,
+				message: "OK",
+				data: { user },
+			});
+		},
 	};
 }

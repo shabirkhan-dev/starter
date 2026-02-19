@@ -6,7 +6,7 @@ function loadAppConfig(): AppConfig {
 		name: getEnv("APP_NAME", "hono-api"),
 		version: getEnv("APP_VERSION", "0.0.0"),
 		env: getEnv("NODE_ENV", "development"),
-		port: Number(getEnv("PORT", "8080")),
+		port: 8080, // Backend API always uses 8080
 		host: getEnv("HOST", "0.0.0.0"),
 		appOrigin: getEnv("APP_ORIGIN", "localhost"),
 		basePath: getEnv("BASE_PATH", "/api/v1"),

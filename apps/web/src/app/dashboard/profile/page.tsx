@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@starter/ui";
+import { getApiDisplayName } from "@/components/api-switcher";
 import { useAuth } from "@/context/auth-context";
 
 export default function ProfilePage() {
@@ -17,9 +18,7 @@ export default function ProfilePage() {
 			<Card className="max-w-md">
 				<CardHeader>
 					<CardTitle>Account</CardTitle>
-					<CardDescription>
-						Info from {api === "python" ? "Python API" : "Rust API"}
-					</CardDescription>
+					<CardDescription>Info from {getApiDisplayName(api)}</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-2">
 					<div>
