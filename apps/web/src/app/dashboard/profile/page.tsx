@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@starter/ui";
+import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@starter/ui";
 import { getApiDisplayName } from "@/components/api-switcher";
 import { useAuth } from "@/context/auth-context";
 
@@ -10,32 +10,43 @@ export default function ProfilePage() {
 	if (!user) return null;
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-8">
 			<div>
-				<h1 className="text-2xl font-semibold">Profile</h1>
-				<p className="text-muted-foreground">Your account details.</p>
+				<h1 className="text-2xl font-bold tracking-tight md:text-3xl">Profile</h1>
+				<p className="text-muted-foreground mt-1">Account details from {getApiDisplayName(api)}.</p>
 			</div>
-			<Card className="max-w-md">
+
+			<Card className="max-w-xl">
 				<CardHeader>
-					<CardTitle>Account</CardTitle>
-					<CardDescription>Info from {getApiDisplayName(api)}</CardDescription>
+					<CardTitle className="text-base">Account</CardTitle>
+					<CardDescription>Your profile information</CardDescription>
 				</CardHeader>
-				<CardContent className="space-y-2">
-					<div>
-						<span className="text-muted-foreground text-sm">ID</span>
+				<CardContent className="grid gap-4 sm:grid-cols-2">
+					<div className="space-y-1">
+						<span className="text-muted-foreground text-xs">ID</span>
 						<p className="font-mono text-sm">{user.id}</p>
 					</div>
-					<div>
-						<span className="text-muted-foreground text-sm">Email</span>
-						<p className="font-mono text-sm">{user.email}</p>
+					<div className="space-y-1">
+						<span className="text-muted-foreground text-xs">Email</span>
+						<p className="truncate text-sm font-medium">{user.email}</p>
 					</div>
-					<div>
-						<span className="text-muted-foreground text-sm">Username</span>
-						<p className="font-mono text-sm">{user.username}</p>
+					<div className="space-y-1">
+						<span className="text-muted-foreground text-xs">Username</span>
+						<p className="text-sm font-medium">{user.username}</p>
 					</div>
-					<div>
-						<span className="text-muted-foreground text-sm">Active</span>
-						<p className="font-mono text-sm">{user.is_active ? "Yes" : "No"}</p>
+					<div className="space-y-1">
+						<span className="text-muted-foreground text-xs">Status</span>
+						<p className="text-sm">
+							{user.is_active ? (
+								<Badge variant="secondary" className="font-normal">
+									Active
+								</Badge>
+							) : (
+								<Badge variant="outline" className="font-normal">
+									Inactive
+								</Badge>
+							)}
+						</p>
 					</div>
 				</CardContent>
 			</Card>
