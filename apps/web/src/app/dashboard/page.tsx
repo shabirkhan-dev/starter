@@ -1,6 +1,20 @@
 "use client";
 
-import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@starter/ui";
+import {
+	Badge,
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@starter/ui";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { ApiSwitcher } from "@/components/api-switcher";
@@ -19,6 +33,17 @@ export default function DashboardPage() {
 
 	return (
 		<div className="space-y-8">
+			<Breadcrumb>
+				<BreadcrumbList>
+					<BreadcrumbItem>
+						<BreadcrumbLink render={<Link href="/dashboard">Dashboard</Link>} />
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbPage>Overview</BreadcrumbPage>
+					</BreadcrumbItem>
+				</BreadcrumbList>
+			</Breadcrumb>
 			{/* Welcome / Page header */}
 			<div>
 				<h1 className="text-2xl font-bold tracking-tight md:text-3xl">

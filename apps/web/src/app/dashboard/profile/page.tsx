@@ -1,6 +1,20 @@
 "use client";
 
-import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@starter/ui";
+import {
+	Badge,
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@starter/ui";
+import Link from "next/link";
 import { getApiDisplayName } from "@/components/api-switcher";
 import { useAuth } from "@/context/auth-context";
 
@@ -11,6 +25,17 @@ export default function ProfilePage() {
 
 	return (
 		<div className="space-y-8">
+			<Breadcrumb>
+				<BreadcrumbList>
+					<BreadcrumbItem>
+						<BreadcrumbLink render={<Link href="/dashboard">Dashboard</Link>} />
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbPage>Profile</BreadcrumbPage>
+					</BreadcrumbItem>
+				</BreadcrumbList>
+			</Breadcrumb>
 			<div>
 				<h1 className="text-2xl font-bold tracking-tight md:text-3xl">Profile</h1>
 				<p className="text-muted-foreground mt-1">Account details from {getApiDisplayName(api)}.</p>
