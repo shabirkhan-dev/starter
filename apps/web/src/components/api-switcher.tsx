@@ -1,8 +1,10 @@
 "use client";
 
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, cn } from "@starter/ui";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/context/auth-context";
 import type { ApiKind } from "@/lib/auth-types";
+import { cn } from "@/lib/utils";
 
 const API_OPTIONS: { kind: ApiKind; label: string; port: string; description: string }[] = [
 	{ kind: "python", label: "Python", port: "8000", description: "FastAPI" },
@@ -81,6 +83,48 @@ export function ApiSwitcherCompact() {
 				))}
 			</div>
 			{current && <span className="text-muted-foreground shrink-0 text-xs">:{current.port}</span>}
+		</div>
+	);
+}
+
+/** Prominent switcher for login/register pages – segmented control with label and port. */
+export function ApiSwitcherAuth() {
+	const { api, setApi } = useAuth();
+
+	return (
+		<div
+			className="flex flex-col gap-2 rounded-xl border bg-card/80 px-4 py-3 shadow-sm backdrop-blur-sm"
+			role="group"
+			aria-label="Backend API"
+		>
+			<span className="text-muted-foreground text-xs font-medium">Backend API</span>
+			<div className="flex flex-wrap gap-2">
+				{API_OPTIONS.map((opt) => (
+					<Button
+						key={opt.kind}
+						type="button"
+						variant={api === opt.kind ? "secondary" : "outline"}
+						size="sm"
+						onClick={() => setApi(opt.kind)}
+						className={cn(
+							"min-w-[7rem] justify-start gap-2 font-medium transition-colors",
+							api === opt.kind && "ring-2 ring-primary/50 ring-offset-2 ring-offset-background",
+						)}
+						aria-pressed={api === opt.kind}
+						aria-label={`${opt.label} (${opt.description}), port ${opt.port}`}
+					>
+						{api === opt.kind && (
+							<span className="size-1.5 shrink-0 rounded-full bg-primary" aria-hidden />
+						)}
+						<span className="flex flex-col items-start text-left">
+							<span>{opt.label}</span>
+							<span className="text-muted-foreground text-xs font-normal">
+								{opt.description} · :{opt.port}
+							</span>
+						</span>
+					</Button>
+				))}
+			</div>
 		</div>
 	);
 }
