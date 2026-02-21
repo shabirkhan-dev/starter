@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { getApiDisplayName } from "@/components/api-switcher";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -19,7 +20,7 @@ import { cn } from "@/lib/utils";
 
 export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
 	const router = useRouter();
-	const { user, loading, error, clearError, register } = useAuth();
+	const { user, loading, error, clearError, register, api } = useAuth();
 	const [email, setEmail] = useState("");
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -59,6 +60,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 								<p className="text-muted-foreground text-balance text-sm">
 									Enter your email below to create your account
 								</p>
+								<p className="text-muted-foreground text-xs">Using {getApiDisplayName(api)}</p>
 							</div>
 							{error && (
 								<div className="bg-destructive/10 text-destructive rounded-md px-3 py-2 text-sm">

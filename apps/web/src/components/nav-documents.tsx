@@ -40,7 +40,10 @@ export function NavDocuments({
 			<SidebarMenu>
 				{items.map((item) => (
 					<SidebarMenuItem key={item.name}>
-						<SidebarMenuButton render={<a href={item.url} />}>
+						<SidebarMenuButton
+							// biome-ignore lint/a11y/useAnchorContent: content from SidebarMenuButton children (icon + span)
+							render={<a href={item.url} aria-label={item.name} />}
+						>
 							{item.icon}
 							<span>{item.name}</span>
 						</SidebarMenuButton>

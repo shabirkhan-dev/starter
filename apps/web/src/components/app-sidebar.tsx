@@ -16,6 +16,7 @@ import {
 	UserGroupIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
 import type * as React from "react";
 import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
@@ -30,13 +31,9 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/context/auth-context";
 
 const data = {
-	user: {
-		name: "shadcn",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
-	},
 	navMain: [
 		{
 			title: "Dashboard",
@@ -147,7 +144,23 @@ const data = {
 		},
 	],
 };
+function initials(username: string): string {
+	const parts = username.trim().split(/\s+/);
+	if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+	return username.slice(0, 2).toUpperCase() || "?";
+}
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const { user } = useAuth();
+	const userForNav =
+		user &&
+		({
+			name: user.username,
+			email: user.email,
+			avatar: "",
+			initials: initials(user.username),
+		} as const);
+
 	return (
 		<Sidebar collapsible="offcanvas" {...props}>
 			<SidebarHeader>
@@ -155,7 +168,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					<SidebarMenuItem>
 						<SidebarMenuButton
 							className="data-[slot=sidebar-menu-button]:p-1.5!"
-							render={<a href="#" />}
+							render={<Link href="/dashboard" />}
 						>
 							<HugeiconsIcon icon={CommandIcon} strokeWidth={2} className="size-5!" />
 							<span className="text-base font-semibold">Acme Inc.</span>
@@ -168,9 +181,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				<NavDocuments items={data.documents} />
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
-			<SidebarFooter>
-				<NavUser user={data.user} />
-			</SidebarFooter>
+			<SidebarFooter>{userForNav ? <NavUser user={userForNav} /> : null}</SidebarFooter>
 		</Sidebar>
 	);
 }

@@ -1,0 +1,72 @@
+/**
+ * Stub for @starter/ui until all consumers use @/components/ui.
+ * Allows typecheck to pass for component-example and modules/dashboard.
+ */
+declare module "@starter/ui" {
+	import type * as React from "react";
+	type DivProps = React.ComponentProps<"div">;
+	type ButtonProps = React.ComponentProps<"button">;
+	type LabelProps = React.ComponentProps<"label">;
+	export const Button: React.FC<ButtonProps>;
+	export const Card: React.FC<DivProps>;
+	export const CardContent: React.FC<DivProps>;
+	export const CardDescription: React.FC<DivProps>;
+	export const CardHeader: React.FC<DivProps>;
+	export const CardTitle: React.FC<DivProps>;
+	export const CardFooter: React.FC<DivProps>;
+	export const CardAction: React.FC<DivProps>;
+	export const Separator: React.FC<DivProps>;
+	export const SidebarTrigger: React.FC<ButtonProps>;
+	export const SidebarGroup: React.FC<DivProps>;
+	export const SidebarGroupContent: React.FC<DivProps>;
+	export const SidebarMenu: React.FC<DivProps>;
+	export const SidebarMenuButton: React.FC<DivProps>;
+	export const SidebarMenuItem: React.FC<DivProps>;
+	export const Field: React.FC<DivProps>;
+	export const FieldGroup: React.FC<DivProps>;
+	export const FieldLabel: React.FC<LabelProps>;
+	export const Input: React.FC<React.ComponentProps<"input">>;
+	export const Label: React.FC<LabelProps>;
+	export const Badge: React.FC<DivProps>;
+	export const Select: React.FC<DivProps>;
+	export const SelectContent: React.FC<DivProps>;
+	export const SelectGroup: React.FC<DivProps>;
+	export const SelectItem: React.FC<DivProps>;
+	export const SelectTrigger: React.FC<DivProps>;
+	export const SelectValue: React.FC<DivProps>;
+	export const Textarea: React.FC<React.ComponentProps<"textarea">>;
+	export const DropdownMenu: React.FC<DivProps>;
+	export const DropdownMenuContent: React.FC<DivProps>;
+	export const DropdownMenuTrigger: React.FC<DivProps>;
+	export const DropdownMenuItem: React.FC<DivProps>;
+	export const DropdownMenuLabel: React.FC<DivProps>;
+	export const DropdownMenuSeparator: React.FC<DivProps>;
+	export const DropdownMenuGroup: React.FC<DivProps>;
+	export const DropdownMenuCheckboxItem: React.FC<DivProps>;
+	export const DropdownMenuRadioGroup: React.FC<DivProps>;
+	export const DropdownMenuRadioItem: React.FC<DivProps>;
+	export const DropdownMenuSub: React.FC<DivProps>;
+	export const DropdownMenuSubContent: React.FC<DivProps>;
+	export const DropdownMenuSubTrigger: React.FC<DivProps>;
+	export const DropdownMenuShortcut: React.FC<DivProps>;
+	export const DropdownMenuPortal: React.FC<DivProps>;
+	export const AlertDialog: React.FC<DivProps>;
+	export const AlertDialogAction: React.FC<DivProps>;
+	export const AlertDialogCancel: React.FC<DivProps>;
+	export const AlertDialogContent: React.FC<DivProps>;
+	export const AlertDialogDescription: React.FC<DivProps>;
+	export const AlertDialogFooter: React.FC<DivProps>;
+	export const AlertDialogHeader: React.FC<DivProps>;
+	export const AlertDialogMedia: React.FC<DivProps>;
+	export const AlertDialogTitle: React.FC<DivProps>;
+	export const AlertDialogTrigger: React.FC<DivProps>;
+	export const Combobox: React.FC<DivProps>;
+	export const ComboboxContent: React.FC<DivProps>;
+	export const ComboboxEmpty: React.FC<DivProps>;
+	export const ComboboxInput: React.FC<DivProps>;
+	export const ComboboxItem: React.FC<DivProps>;
+	export const ComboboxList: React.FC<DivProps>;
+	export const Example: React.FC<DivProps>;
+	export const ExampleWrapper: React.FC<DivProps>;
+	export function cn(...args: unknown[]): string;
+}

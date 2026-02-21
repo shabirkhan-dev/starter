@@ -8,6 +8,8 @@ import {
 	UserCircle02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -24,6 +26,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/context/auth-context";
 
 export function NavUser({
 	user,
@@ -31,10 +34,20 @@ export function NavUser({
 	user: {
 		name: string;
 		email: string;
-		avatar: string;
+		avatar?: string;
+		initials?: string;
 	};
 }) {
 	const { isMobile } = useSidebar();
+	const router = useRouter();
+	const { logout } = useAuth();
+	const fallback = user.initials ?? (user.name.slice(0, 2).toUpperCase() || "?");
+
+	function handleLogout() {
+		logout();
+		router.push("/login");
+	}
+
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
@@ -43,8 +56,8 @@ export function NavUser({
 						render={<SidebarMenuButton size="lg" className="aria-expanded:bg-muted" />}
 					>
 						<Avatar className="size-8 rounded-lg grayscale">
-							<AvatarImage src={user.avatar} alt={user.name} />
-							<AvatarFallback className="rounded-lg">CN</AvatarFallback>
+							{user.avatar ? <AvatarImage src={user.avatar} alt={user.name} /> : null}
+							<AvatarFallback className="rounded-lg">{fallback}</AvatarFallback>
 						</Avatar>
 						<div className="grid flex-1 text-start text-sm leading-tight">
 							<span className="truncate font-medium">{user.name}</span>
@@ -66,8 +79,8 @@ export function NavUser({
 							<DropdownMenuLabel className="p-0 font-normal">
 								<div className="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
 									<Avatar className="size-8">
-										<AvatarImage src={user.avatar} alt={user.name} />
-										<AvatarFallback className="rounded-lg">CN</AvatarFallback>
+										{user.avatar ? <AvatarImage src={user.avatar} alt={user.name} /> : null}
+										<AvatarFallback className="rounded-lg">{fallback}</AvatarFallback>
 									</Avatar>
 									<div className="grid flex-1 text-start text-sm leading-tight">
 										<span className="truncate font-medium">{user.name}</span>
@@ -78,9 +91,9 @@ export function NavUser({
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem>
+							<DropdownMenuItem render={<Link href="/dashboard/profile" />}>
 								<HugeiconsIcon icon={UserCircle02Icon} strokeWidth={2} />
-								Account
+								Profile
 							</DropdownMenuItem>
 							<DropdownMenuItem>
 								<HugeiconsIcon icon={CreditCardIcon} strokeWidth={2} />
@@ -92,7 +105,7 @@ export function NavUser({
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
+						<DropdownMenuItem onClick={handleLogout}>
 							<HugeiconsIcon icon={Logout01Icon} strokeWidth={2} />
 							Log out
 						</DropdownMenuItem>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { getApiDisplayName } from "@/components/api-switcher";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -19,7 +20,7 @@ import { cn } from "@/lib/utils";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
 	const router = useRouter();
-	const { user, loading, error, clearError, login } = useAuth();
+	const { user, loading, error, clearError, login, api } = useAuth();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [submitting, setSubmitting] = useState(false);
@@ -53,6 +54,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 							<div className="flex flex-col items-center gap-2 text-center">
 								<h1 className="text-2xl font-bold">Welcome back</h1>
 								<p className="text-muted-foreground text-balance">Login to your Acme Inc account</p>
+								<p className="text-muted-foreground text-xs">Using {getApiDisplayName(api)}</p>
 							</div>
 							{error && (
 								<div className="bg-destructive/10 text-destructive rounded-md px-3 py-2 text-sm">

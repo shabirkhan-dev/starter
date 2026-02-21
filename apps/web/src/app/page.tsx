@@ -1,6 +1,7 @@
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@starter/ui";
 import Link from "next/link";
 import { HomeClient } from "@/components/home-client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Page() {
 	return (
