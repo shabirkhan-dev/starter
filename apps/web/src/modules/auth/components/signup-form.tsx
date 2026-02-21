@@ -17,11 +17,13 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
 
-export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
 	const router = useRouter();
-	const { user, loading, error, clearError, login } = useAuth();
+	const { user, loading, error, clearError, register } = useAuth();
 	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 	const [submitting, setSubmitting] = useState(false);
 
 	if (loading && user) return null;
@@ -33,9 +35,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
 		clearError();
+		if (password.length < 8) return;
+		if (password !== confirmPassword) return;
 		setSubmitting(true);
 		try {
-			await login({ email, password });
+			await register({ email, username, password });
 			router.push("/dashboard");
 		} catch {
 			// error set in context
@@ -51,8 +55,10 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 					<form className="p-6 md:p-8" onSubmit={handleSubmit}>
 						<FieldGroup>
 							<div className="flex flex-col items-center gap-2 text-center">
-								<h1 className="text-2xl font-bold">Welcome back</h1>
-								<p className="text-muted-foreground text-balance">Login to your Acme Inc account</p>
+								<h1 className="text-2xl font-bold">Create your account</h1>
+								<p className="text-muted-foreground text-balance text-sm">
+									Enter your email below to create your account
+								</p>
 							</div>
 							{error && (
 								<div className="bg-destructive/10 text-destructive rounded-md px-3 py-2 text-sm">
@@ -60,9 +66,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 								</div>
 							)}
 							<Field>
-								<FieldLabel htmlFor="email">Email</FieldLabel>
+								<FieldLabel htmlFor="signup-email">Email</FieldLabel>
 								<Input
-									id="email"
+									id="signup-email"
 									type="email"
 									placeholder="m@example.com"
 									value={email}
@@ -70,33 +76,62 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 									required
 									autoComplete="email"
 								/>
+								<FieldDescription>
+									We&apos;ll use this to contact you. We will not share your email with anyone else.
+								</FieldDescription>
 							</Field>
 							<Field>
-								<div className="flex items-center">
-									<FieldLabel htmlFor="password">Password</FieldLabel>
-									<Link href="#" className="ml-auto text-sm underline-offset-2 hover:underline">
-										Forgot your password?
-									</Link>
-								</div>
+								<FieldLabel htmlFor="signup-username">Username</FieldLabel>
 								<Input
-									id="password"
-									type="password"
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
+									id="signup-username"
+									type="text"
+									placeholder="johndoe"
+									value={username}
+									onChange={(e) => setUsername(e.target.value)}
 									required
-									autoComplete="current-password"
+									autoComplete="username"
 								/>
 							</Field>
 							<Field>
+								<div className="grid grid-cols-2 gap-4">
+									<Field>
+										<FieldLabel htmlFor="signup-password">Password</FieldLabel>
+										<Input
+											id="signup-password"
+											type="password"
+											value={password}
+											onChange={(e) => setPassword(e.target.value)}
+											required
+											minLength={8}
+											autoComplete="new-password"
+										/>
+									</Field>
+									<Field>
+										<FieldLabel htmlFor="signup-confirm-password">Confirm Password</FieldLabel>
+										<Input
+											id="signup-confirm-password"
+											type="password"
+											value={confirmPassword}
+											onChange={(e) => setConfirmPassword(e.target.value)}
+											required
+											minLength={8}
+											autoComplete="new-password"
+											aria-invalid={confirmPassword.length > 0 && password !== confirmPassword}
+										/>
+									</Field>
+								</div>
+								<FieldDescription>Must be at least 8 characters long.</FieldDescription>
+							</Field>
+							<Field>
 								<Button type="submit" className="w-full" disabled={submitting}>
-									{submitting ? "Signing in…" : "Login"}
+									{submitting ? "Creating account…" : "Create Account"}
 								</Button>
 							</Field>
 							<FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
 								Or continue with
 							</FieldSeparator>
 							<Field className="grid grid-cols-3 gap-4">
-								<Button variant="outline" type="button" aria-label="Login with Apple">
+								<Button variant="outline" type="button" aria-label="Sign up with Apple">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
@@ -109,9 +144,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 											fill="currentColor"
 										/>
 									</svg>
-									<span className="sr-only">Login with Apple</span>
+									<span className="sr-only">Sign up with Apple</span>
 								</Button>
-								<Button variant="outline" type="button" aria-label="Login with Google">
+								<Button variant="outline" type="button" aria-label="Sign up with Google">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
@@ -124,9 +159,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 											fill="currentColor"
 										/>
 									</svg>
-									<span className="sr-only">Login with Google</span>
+									<span className="sr-only">Sign up with Google</span>
 								</Button>
-								<Button variant="outline" type="button" aria-label="Login with Meta">
+								<Button variant="outline" type="button" aria-label="Sign up with Meta">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
@@ -139,18 +174,18 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 											fill="currentColor"
 										/>
 									</svg>
-									<span className="sr-only">Login with Meta</span>
+									<span className="sr-only">Sign up with Meta</span>
 								</Button>
 							</Field>
 							<FieldDescription className="text-center">
-								Don&apos;t have an account?{" "}
-								<Link href="/register" className="text-primary underline underline-offset-4">
-									Sign up
+								Already have an account?{" "}
+								<Link href="/login" className="text-primary underline underline-offset-4">
+									Sign in
 								</Link>
 							</FieldDescription>
 						</FieldGroup>
 					</form>
-					<div className="bg-muted relative hidden md:block min-h-48">
+					<div className="bg-muted relative hidden min-h-48 md:block">
 						<Image
 							src="/placeholder.svg"
 							alt="Decorative"

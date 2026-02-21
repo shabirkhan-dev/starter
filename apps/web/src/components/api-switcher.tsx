@@ -92,12 +92,11 @@ export function ApiSwitcherAuth() {
 	const { api, setApi } = useAuth();
 
 	return (
-		<div
+		<fieldset
 			className="flex flex-col gap-2 rounded-xl border bg-card/80 px-4 py-3 shadow-sm backdrop-blur-sm"
-			role="group"
 			aria-label="Backend API"
 		>
-			<span className="text-muted-foreground text-xs font-medium">Backend API</span>
+			<legend className="text-muted-foreground text-xs font-medium">Backend API</legend>
 			<div className="flex flex-wrap gap-2">
 				{API_OPTIONS.map((opt) => (
 					<Button
@@ -107,7 +106,7 @@ export function ApiSwitcherAuth() {
 						size="sm"
 						onClick={() => setApi(opt.kind)}
 						className={cn(
-							"min-w-[7rem] justify-start gap-2 font-medium transition-colors",
+							"min-w-28 justify-start gap-2 font-medium transition-colors",
 							api === opt.kind && "ring-2 ring-primary/50 ring-offset-2 ring-offset-background",
 						)}
 						aria-pressed={api === opt.kind}
@@ -125,6 +124,6 @@ export function ApiSwitcherAuth() {
 					</Button>
 				))}
 			</div>
-		</div>
+		</fieldset>
 	);
 }
