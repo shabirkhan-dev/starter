@@ -17,7 +17,15 @@ import { hashPassword, verifyPassword } from "@/shared/utils/password";
 import { generateUniqueCode } from "@/shared/utils/unique-code";
 import { sendEmail, passwordResetTemplate, verifyEmailTemplate } from "@/shared/mailer/mailer";
 import { appConfig } from "@/shared/configs/app-config";
-import type { RegisterInput, LoginInput, ResetPasswordInput } from "./auth.validator";
+import { generateSecret, generateURI, verify } from "otplib";
+import QRCode from "qrcode";
+import type {
+	RegisterInput,
+	LoginInput,
+	ResetPasswordInput,
+	Enable2FAInput,
+	Disable2FAInput,
+} from "./auth.validator";
 
 const log = createLogger({ prefix: "auth-service" });
 
@@ -358,5 +366,125 @@ export class AuthService {
 
 	async logout(sessionId: string): Promise<void> {
 		await prisma.session.deleteMany({ where: { id: sessionId } });
+	}
+
+	/** List sessions for user. currentSessionId is used to mark the current session. */
+	async listSessions(
+		userId: string,
+		currentSessionId: string,
+	): Promise<
+		{ id: string; userAgent: string | null; createdAt: Date; expiredAt: Date; current: boolean }[]
+	> {
+		const sessions = await prisma.session.findMany({
+			where: { userId },
+			orderBy: { createdAt: "desc" },
+		});
+		return sessions.map((s) => ({
+			id: s.id,
+			userAgent: s.userAgent,
+			createdAt: s.createdAt,
+			expiredAt: s.expiredAt,
+			current: s.id === currentSessionId,
+		}));
+	}
+
+	/** Delete a session. Only sessions belonging to the user can be deleted. */
+	async deleteSession(userId: string, sessionId: string): Promise<void> {
+		const deleted = await prisma.session.deleteMany({
+			where: { id: sessionId, userId },
+		});
+		if (deleted.count === 0) {
+			throw new AppError(
+				HTTP_CODE.NOT_FOUND,
+				"Session not found",
+				undefined,
+				ErrorCode.AUTH_TOKEN_NOT_FOUND,
+			);
+		}
+	}
+
+	/** Start 2FA setup: generate secret, store on user (pending), return secret and QR data URL. */
+	async setup2FA(userId: string, email: string): Promise<{ secret: string; dataUrl: string }> {
+		const user = await prisma.user.findUnique({ where: { id: userId } });
+		if (!user) {
+			throw new AppError(
+				HTTP_CODE.NOT_FOUND,
+				"User not found",
+				undefined,
+				ErrorCode.AUTH_USER_NOT_FOUND,
+			);
+		}
+		if (user.enable2FA) {
+			throw new AppError(
+				HTTP_CODE.BAD_REQUEST,
+				"2FA is already enabled",
+				undefined,
+				ErrorCode.VALIDATION_ERROR,
+			);
+		}
+		const secret = generateSecret();
+		const uri = generateURI({
+			issuer: appConfig.name,
+			label: email,
+			secret,
+		});
+		const dataUrl = await QRCode.toDataURL(uri);
+		await prisma.user.update({
+			where: { id: userId },
+			data: { twoFactorSecret: secret },
+		});
+		return { secret, dataUrl };
+	}
+
+	/** Enable 2FA after verifying the code from the authenticator app. */
+	async enable2FA(userId: string, input: Enable2FAInput): Promise<void> {
+		const user = await prisma.user.findUnique({ where: { id: userId } });
+		if (!user || !user.twoFactorSecret) {
+			throw new AppError(
+				HTTP_CODE.BAD_REQUEST,
+				"2FA setup not started or expired. Start setup again.",
+				undefined,
+				ErrorCode.VALIDATION_ERROR,
+			);
+		}
+		const valid = await verify({ secret: user.twoFactorSecret, token: input.code });
+		if (!valid) {
+			throw new AppError(
+				HTTP_CODE.BAD_REQUEST,
+				"Invalid verification code",
+				undefined,
+				ErrorCode.VALIDATION_ERROR,
+			);
+		}
+		await prisma.user.update({
+			where: { id: userId },
+			data: { enable2FA: true },
+		});
+	}
+
+	/** Disable 2FA after verifying password. */
+	async disable2FA(userId: string, input: Disable2FAInput): Promise<void> {
+		const user = await prisma.user.findUnique({ where: { id: userId } });
+		if (!user) {
+			throw new AppError(
+				HTTP_CODE.NOT_FOUND,
+				"User not found",
+				undefined,
+				ErrorCode.AUTH_USER_NOT_FOUND,
+			);
+		}
+		const valid = await verifyPassword(input.password, user.password);
+		if (!valid) {
+			throw new AppError(
+				HTTP_CODE.BAD_REQUEST,
+				"Invalid password",
+				undefined,
+				ErrorCode.AUTH_USER_NOT_FOUND,
+			);
+		}
+		await prisma.user.update({
+			where: { id: userId },
+			data: { enable2FA: false, twoFactorSecret: null },
+		});
 	}
 }

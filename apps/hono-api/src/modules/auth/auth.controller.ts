@@ -16,6 +16,8 @@ import {
 	verificationEmailSchema,
 	forgotPasswordSchema,
 	resetPasswordSchema,
+	enable2FASchema,
+	disable2FASchema,
 } from "./auth.validator";
 import type { AuthEnv } from "./jwt.middleware";
 
@@ -142,6 +144,73 @@ export function createAuthController(service: AuthService) {
 				code: HTTP_CODE.OK,
 				message: "OK",
 				data: { user },
+			});
+		},
+
+		async listSessions(c: Context<{ Variables: AuthEnv }>) {
+			const userId = c.get("userId");
+			const sessionId = c.get("sessionId");
+			const sessions = await service.listSessions(userId, sessionId);
+			return c.json({
+				success: true,
+				code: HTTP_CODE.OK,
+				message: "OK",
+				data: { sessions },
+			});
+		},
+
+		async deleteSession(c: Context<{ Variables: AuthEnv }>) {
+			const userId = c.get("userId");
+			const sessionId = c.req.param("id");
+			if (!sessionId) {
+				throw new AppError(
+					HTTP_CODE.BAD_REQUEST,
+					"Session ID is required",
+					undefined,
+					ErrorCode.VALIDATION_ERROR,
+				);
+			}
+			await service.deleteSession(userId, sessionId);
+			return c.json({
+				success: true,
+				code: HTTP_CODE.OK,
+				message: "Session deleted",
+			});
+		},
+
+		async setup2FA(c: Context<{ Variables: AuthEnv }>) {
+			const userId = c.get("userId");
+			const user = await service.getCurrentUser(userId);
+			const { secret, dataUrl } = await service.setup2FA(userId, user.email);
+			return c.json({
+				success: true,
+				code: HTTP_CODE.OK,
+				message: "2FA setup started",
+				data: { secret, dataUrl },
+			});
+		},
+
+		async enable2FA(c: Context<{ Variables: AuthEnv }>) {
+			const userId = c.get("userId");
+			const body = await c.req.json().catch(() => ({}));
+			const input = enable2FASchema.parse(body);
+			await service.enable2FA(userId, input);
+			return c.json({
+				success: true,
+				code: HTTP_CODE.OK,
+				message: "2FA enabled",
+			});
+		},
+
+		async disable2FA(c: Context<{ Variables: AuthEnv }>) {
+			const userId = c.get("userId");
+			const body = await c.req.json().catch(() => ({}));
+			const input = disable2FASchema.parse(body);
+			await service.disable2FA(userId, input);
+			return c.json({
+				success: true,
+				code: HTTP_CODE.OK,
+				message: "2FA disabled",
 			});
 		},
 	};

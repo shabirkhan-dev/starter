@@ -18,4 +18,11 @@ auth.get("/refresh", (c) => authController.refreshToken(c));
 auth.post("/logout", authenticateJWT, (c) => authController.logout(c));
 auth.get("/me", authenticateJWT, (c) => authController.me(c));
 
+// Sessions and 2FA (authenticated)
+auth.get("/sessions", authenticateJWT, (c) => authController.listSessions(c));
+auth.delete("/sessions/:id", authenticateJWT, (c) => authController.deleteSession(c));
+auth.post("/2fa/setup", authenticateJWT, (c) => authController.setup2FA(c));
+auth.post("/2fa/enable", authenticateJWT, (c) => authController.enable2FA(c));
+auth.post("/2fa/disable", authenticateJWT, (c) => authController.disable2FA(c));
+
 export default auth;

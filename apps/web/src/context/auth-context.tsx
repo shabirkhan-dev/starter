@@ -20,6 +20,7 @@ interface AuthContextValue extends AuthState {
 	login: (payload: LoginRequest) => Promise<void>;
 	register: (payload: RegisterRequest) => Promise<void>;
 	logout: () => void;
+	refreshUser: () => Promise<void>;
 	clearError: () => void;
 }
 
@@ -66,6 +67,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		const u = await api.me(kind, t);
 		setUser(u);
 	}, []);
+
+	const refreshUser = useCallback(async () => {
+		if (token) {
+			const u = await api.me(apiKind, token);
+			setUser(u);
+		}
+	}, [apiKind, token]);
 
 	useEffect(() => {
 		const { api: storedApi, token: storedToken } = loadStored();
@@ -138,6 +146,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		login,
 		register,
 		logout,
+		refreshUser,
 		clearError: () => setError(null),
 	};
 

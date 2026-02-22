@@ -95,12 +95,14 @@ function fromHonoUser(u: {
 	name: string;
 	email: string;
 	isEmailVerified: boolean;
+	enable2FA?: boolean;
 }): User {
 	return {
 		id: u.id,
 		email: u.email,
 		username: u.name,
 		is_active: u.isEmailVerified,
+		...(u.enable2FA !== undefined && { enable2FA: u.enable2FA }),
 	};
 }
 
@@ -168,10 +170,104 @@ export async function me(api: ApiKind, token: string): Promise<User> {
 			throw new Error(typeof message === "string" ? message : "Not authenticated");
 		}
 		const data = (await res.json()) as HonoResponse<{
-			user: { id: string; name: string; email: string; isEmailVerified: boolean };
+			user: {
+				id: string;
+				name: string;
+				email: string;
+				isEmailVerified: boolean;
+				enable2FA?: boolean;
+			};
 		}>;
 		if (!data.data?.user) throw new Error("Not authenticated");
 		return fromHonoUser(data.data.user);
 	}
 	return request<User>(baseUrl, "/auth/me", { headers: {}, token });
+}
+
+// --- Hono-only: sessions and 2FA (use credentials: include) ---
+
+export interface SessionInfo {
+	id: string;
+	userAgent: string | null;
+	createdAt: string;
+	expiredAt: string;
+	current: boolean;
+}
+
+export async function getSessions(baseUrl: string): Promise<{ sessions: SessionInfo[] }> {
+	const res = await fetch(`${baseUrl}/auth/sessions`, {
+		method: "GET",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+	});
+	if (!res.ok) {
+		const body = await res.json().catch(() => ({}));
+		const message =
+			(body as HonoResponse<unknown>)?.message ?? res.statusText ?? "Failed to load sessions";
+		throw new Error(typeof message === "string" ? message : "Failed to load sessions");
+	}
+	const data = (await res.json()) as HonoResponse<{ sessions: SessionInfo[] }>;
+	if (!data.data?.sessions) throw new Error("Invalid response");
+	return { sessions: data.data.sessions };
+}
+
+export async function deleteSession(baseUrl: string, sessionId: string): Promise<void> {
+	const res = await fetch(`${baseUrl}/auth/sessions/${encodeURIComponent(sessionId)}`, {
+		method: "DELETE",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+	});
+	if (!res.ok) {
+		const body = await res.json().catch(() => ({}));
+		const message =
+			(body as HonoResponse<unknown>)?.message ?? res.statusText ?? "Failed to delete session";
+		throw new Error(typeof message === "string" ? message : "Failed to delete session");
+	}
+}
+
+export async function setup2FA(baseUrl: string): Promise<{ secret: string; dataUrl: string }> {
+	const res = await fetch(`${baseUrl}/auth/2fa/setup`, {
+		method: "POST",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+	});
+	if (!res.ok) {
+		const body = await res.json().catch(() => ({}));
+		const message =
+			(body as HonoResponse<unknown>)?.message ?? res.statusText ?? "Failed to setup 2FA";
+		throw new Error(typeof message === "string" ? message : "Failed to setup 2FA");
+	}
+	const data = (await res.json()) as HonoResponse<{ secret: string; dataUrl: string }>;
+	if (!data.data?.secret || !data.data?.dataUrl) throw new Error("Invalid response");
+	return { secret: data.data.secret, dataUrl: data.data.dataUrl };
+}
+
+export async function enable2FA(baseUrl: string, code: string): Promise<void> {
+	const res = await fetch(`${baseUrl}/auth/2fa/enable`, {
+		method: "POST",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ code }),
+	});
+	if (!res.ok) {
+		const body = await res.json().catch(() => ({}));
+		const message =
+			(body as HonoResponse<unknown>)?.message ?? res.statusText ?? "Failed to enable 2FA";
+		throw new Error(typeof message === "string" ? message : "Failed to enable 2FA");
+	}
+}
+
+export async function disable2FA(baseUrl: string, password: string): Promise<void> {
+	const res = await fetch(`${baseUrl}/auth/2fa/disable`, {
+		method: "POST",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ password }),
+	});
+	if (!res.ok) {
+		const body = await res.json().catch(() => ({}));
+		const message =
+			(body as HonoResponse<unknown>)?.message ?? res.statusText ?? "Failed to disable 2FA";
+		throw new Error(typeof message === "string" ? message : "Failed to disable 2FA");
+	}
 }
