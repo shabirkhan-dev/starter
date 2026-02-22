@@ -49,11 +49,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		if (typeof window !== "undefined") localStorage.setItem(STORAGE_API, next);
 	}, []);
 
-	const logout = useCallback(() => {
+	const logout = useCallback(async () => {
+		if (typeof window !== "undefined" && apiKind === "hono" && token) {
+			try {
+				await api.logoutHono(api.getBaseUrl("hono"));
+			} catch {
+				// Best-effort; clear local state regardless
+			}
+		}
 		setToken(null);
 		setUser(null);
 		if (typeof window !== "undefined") localStorage.removeItem(STORAGE_TOKEN);
-	}, []);
+	}, [apiKind, token]);
 
 	const fetchUser = useCallback(async (kind: ApiKind, t: string) => {
 		const u = await api.me(kind, t);
@@ -69,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				.me(storedApi, storedToken)
 				.then((u) => setUser(u))
 				.catch(() => {
-					localStorage.removeItem(STORAGE_TOKEN);
+					if (typeof window !== "undefined") localStorage.removeItem(STORAGE_TOKEN);
 					setToken(null);
 				})
 				.finally(() => setLoading(false));
@@ -77,6 +84,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			setLoading(false);
 		}
 	}, []);
+
+	// Proactive refresh for Hono: refresh access token before expiry (e.g. every 14 min for 15m expiry)
+	useEffect(() => {
+		if (apiKind !== "hono" || token !== "cookie" || !user) return;
+		const intervalMs = 14 * 60 * 1000;
+		const id = setInterval(() => {
+			api.refreshHono(api.getBaseUrl("hono")).catch(() => {
+				// On failure, next me() will 401 and user will be cleared
+			});
+		}, intervalMs);
+		return () => clearInterval(id);
+	}, [apiKind, token, user]);
 
 	const login = useCallback(
 		async (payload: LoginRequest) => {

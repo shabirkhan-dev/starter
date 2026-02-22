@@ -50,3 +50,18 @@ export function parseExpiresIn(expiresIn: string): Date {
 					: value * ONE_DAY_MS;
 	return addMs(now(), ms);
 }
+
+/** Parses duration string (e.g. "15m") to seconds for cookie maxAge. */
+export function expiresInToSeconds(expiresIn: string): number {
+	const match = /^(\d+)(s|m|h|d)$/.exec(expiresIn.trim().toLowerCase());
+	if (!match) return 30 * 24 * 60 * 60;
+	const value = Number(match[1]);
+	const unit = match[2];
+	return unit === "s"
+		? value
+		: unit === "m"
+			? value * 60
+			: unit === "h"
+				? value * 60 * 60
+				: value * 24 * 60 * 60;
+}

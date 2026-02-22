@@ -63,6 +63,7 @@ export function createAuthController(service: AuthService) {
 		async refreshToken(c: Context) {
 			const refreshToken = getCookie(c, "refreshToken");
 			if (!refreshToken) {
+				clearAuthenticationCookies(c);
 				throw new AppError(
 					HTTP_CODE.UNAUTHORIZED,
 					"Missing refresh token",
@@ -71,16 +72,21 @@ export function createAuthController(service: AuthService) {
 				);
 			}
 
-			const { accessToken, newRefreshToken } = await service.refreshToken(refreshToken);
-			if (newRefreshToken) {
-				setCookie(c, "refreshToken", newRefreshToken, getRefreshTokenCookieOptions());
+			try {
+				const { accessToken, newRefreshToken } = await service.refreshToken(refreshToken);
+				if (newRefreshToken) {
+					setCookie(c, "refreshToken", newRefreshToken, getRefreshTokenCookieOptions());
+				}
+				setCookie(c, "accessToken", accessToken, getAccessTokenCookieOptions());
+				return c.json({
+					success: true,
+					code: HTTP_CODE.OK,
+					message: "Token refreshed successfully",
+				});
+			} catch (e) {
+				clearAuthenticationCookies(c);
+				throw e;
 			}
-			setCookie(c, "accessToken", accessToken, getAccessTokenCookieOptions());
-			return c.json({
-				success: true,
-				code: HTTP_CODE.OK,
-				message: "Token refreshed successfully",
-			});
 		},
 
 		async verifyEmail(c: Context) {

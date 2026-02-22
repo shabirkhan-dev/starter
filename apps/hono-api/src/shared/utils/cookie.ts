@@ -1,5 +1,7 @@
 import type { Context } from "hono";
 import { deleteCookie, setCookie } from "hono/cookie";
+import { appConfig } from "@/shared/configs/app-config";
+import { expiresInToSeconds } from "@/shared/utils/date-time";
 
 /** Path used for refresh-token flow. Clear auth cookies when errors occur here. */
 export const REFRESH_PATH = "/auth/refresh";
@@ -14,14 +16,19 @@ const COOKIE_BASE = {
 	sameSite: "Lax" as const,
 };
 
-/** Options for access token cookie (short-lived). */
+/** Options for access token cookie (short-lived, maxAge matches JWT expiry). */
 export function getAccessTokenCookieOptions(): {
 	path: string;
 	httpOnly: boolean;
 	secure: boolean;
 	sameSite: "Lax";
+	maxAge: number;
 } {
-	return { ...COOKIE_BASE, secure: process.env.NODE_ENV === "production" };
+	return {
+		...COOKIE_BASE,
+		secure: process.env.NODE_ENV === "production",
+		maxAge: expiresInToSeconds(appConfig.jwt.expiresIn),
+	};
 }
 
 /** Options for refresh token cookie (long-lived). */

@@ -35,6 +35,35 @@ function isHonoCookieToken(token: string): boolean {
 	return token === "cookie" || !token;
 }
 
+/** Refresh Hono access token using refresh token cookie. Throws on failure. */
+export async function refreshHono(baseUrl: string): Promise<void> {
+	const res = await fetch(`${baseUrl}/auth/refresh`, {
+		method: "GET",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+	});
+	if (!res.ok) {
+		const body = await res.json().catch(() => ({}));
+		const message = (body as HonoResponse<unknown>)?.message ?? res.statusText ?? "Refresh failed";
+		throw new Error(typeof message === "string" ? message : "Refresh failed");
+	}
+}
+
+/** Logout on Hono: invalidate session and clear cookies. Call with credentials. */
+export async function logoutHono(baseUrl: string): Promise<void> {
+	const res = await fetch(`${baseUrl}/auth/logout`, {
+		method: "POST",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+	});
+	if (!res.ok) {
+		// Best-effort; clear local state even if backend fails
+		const body = await res.json().catch(() => ({}));
+		const message = (body as HonoResponse<unknown>)?.message ?? res.statusText ?? "Logout failed";
+		throw new Error(typeof message === "string" ? message : "Logout failed");
+	}
+}
+
 async function request<T>(
 	baseUrl: string,
 	path: string,
@@ -118,11 +147,31 @@ export async function login(api: ApiKind, payload: LoginRequest): Promise<TokenR
 export async function me(api: ApiKind, token: string): Promise<User> {
 	const baseUrl = getBaseUrl(api);
 	if (api === "hono" && isHonoCookieToken(token)) {
-		const res = await request<
-			HonoResponse<{ user: { id: string; name: string; email: string; isEmailVerified: boolean } }>
-		>(baseUrl, "/auth/me", { method: "GET", useCredentials: true });
-		if (!res.data?.user) throw new Error("Not authenticated");
-		return fromHonoUser(res.data.user);
+		const url = `${baseUrl}/auth/me`;
+		let res = await fetch(url, {
+			method: "GET",
+			credentials: "include",
+			headers: { "Content-Type": "application/json" },
+		});
+		if (res.status === 401) {
+			await refreshHono(baseUrl);
+			res = await fetch(url, {
+				method: "GET",
+				credentials: "include",
+				headers: { "Content-Type": "application/json" },
+			});
+		}
+		if (!res.ok) {
+			const body = await res.json().catch(() => ({}));
+			const message =
+				(body as HonoResponse<unknown>)?.message ?? res.statusText ?? "Not authenticated";
+			throw new Error(typeof message === "string" ? message : "Not authenticated");
+		}
+		const data = (await res.json()) as HonoResponse<{
+			user: { id: string; name: string; email: string; isEmailVerified: boolean };
+		}>;
+		if (!data.data?.user) throw new Error("Not authenticated");
+		return fromHonoUser(data.data.user);
 	}
 	return request<User>(baseUrl, "/auth/me", { headers: {}, token });
 }
