@@ -31,7 +31,9 @@ One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** i
 | `bun run lint` | Lint: Biome + scripts (ShellCheck, luacheck, ruff) |
 | `bun run format` | Format: Biome + scripts + Rust + C |
 | `bun run typecheck` | Typecheck (TS) |
-| `bun run test` | Run tests (e.g. `cargo test` in apps/rust) |
+| `bun run test` | Run workspace tests (Turbo + script tests) |
+| `bun run test:coverage` | Run TS coverage + all language tests |
+| `bun run test:e2e:web` | Run Playwright e2e for web app |
 
 ## Docker (Postgres + Hono API)
 
@@ -47,14 +49,17 @@ See **[docs/docker.md](docs/docker.md)** for details and env options.
 ## Reproducible environment
 
 - **Dev Container:** [.devcontainer/](.devcontainer/) — Bun, Rust, C, Python, Lua, shell tools. In VS Code/Cursor: **Reopen in Container**. See [.devcontainer/README.md](.devcontainer/README.md).
-- **CI:** [.github/workflows/ci.yml](.github/workflows/ci.yml) — lint, typecheck, build, test on push/PR to `main`.
+- **CI:** [.github/workflows/ci.yml](.github/workflows/ci.yml) — split gates for lint, typecheck, coverage tests, and web e2e with artifacts.
+- **CD:** [.github/workflows/cd.yml](.github/workflows/cd.yml) — staged deploy workflow template (staging on `main`, production on version tags).
 - **Git hooks:** Lefthook — format, lint, typecheck, large-file guard, secret scan, commit-msg checks. Installed by `bun run prepare`.
 
 ## Docs
 
 - **[PROJECT.md](PROJECT.md)** — Full layout, tooling, and conventions.
-- **[docs/docker.md](docs/docker.md)** — Docker Compose (Postgres + Python API + Rust API).
+- **[docs/docker.md](docs/docker.md)** — Docker Compose (Postgres + Hono API).
 - **[docs/QoL.md](docs/QoL.md)** — QoL stack (hooks, task runner, EditorConfig, CI, per-language).
+- **[docs/architecture/README.md](docs/architecture/README.md)** — Architecture baseline and boundary rules.
+- **[docs/overrides.md](docs/overrides.md)** — How to intentionally override starter defaults.
 - **[AGENTS.md](AGENTS.md)** — Instructions for AI agents working in this repo.
 
 ## License

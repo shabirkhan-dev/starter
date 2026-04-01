@@ -46,9 +46,11 @@ One interface: **`bun run <task>`** (or **`just <task>`** if [just](https://gith
 | `bun run format` | Format: Biome + scripts (shfmt, stylua, ruff) + Rust (cargo fmt) + C (clang-format) |
 | `bun run lint:fix` | Lint with auto-fix where supported |
 | `bun run typecheck` | Typecheck (TS) |
-| `bun run test` | Run tests (e.g. `cargo test` in apps/rust) |
+| `bun run test` | Run workspace tests (Turbo + script tests) |
+| `bun run test:coverage` | Run TS coverage + all language tests |
+| `bun run test:e2e:web` | Run Playwright e2e for web app |
 
-**Hono API (apps/hono-api):** Hono + Prisma on port 3000. Set `DATABASE_URL` in `apps/hono-api/.env`; see [apps/hono-api/README.md](apps/hono-api/README.md).
+**Hono API (apps/hono-api):** Hono + Prisma default on port 8080 (configurable via `PORT`). Set `DATABASE_URL` in `apps/hono-api/.env`; see [apps/hono-api/README.md](apps/hono-api/README.md).
 
 ## Tooling and config
 
@@ -59,7 +61,8 @@ One interface: **`bun run <task>`** (or **`just <task>`** if [just](https://gith
 - **Scripts**: `scripts/` at root: **bash** (ShellCheck, shfmt), **lua** (luacheck, stylua), **python** (ruff). Included in root `bun run lint` and `bun run format`.
 - **Lefthook**: Pre-commit runs format, lint, typecheck, large-file check, secret scan; commit-msg enforces message length.
 - **EditorConfig**: `.editorconfig` enforces line endings (LF), indent style, charset (UTF-8), final newline across editors.
-- **CI**: `.github/workflows/ci.yml` runs lint, typecheck, build, test on push/PR to `main`.
+- **CI**: `.github/workflows/ci.yml` runs split gates (lint, typecheck, coverage test, web e2e) on push/PR to `main`.
+- **CD**: `.github/workflows/cd.yml` provides staged deploy workflow template for `main` and version tags.
 - **Dev Container**: `.devcontainer/` provides a reproducible environment (Bun, Rust, C, Python, Lua, shellcheck, shfmt, ruff, stylua, luacheck, just). Reopen in Container in VS Code/Cursor; see `.devcontainer/README.md`.
 - **Docker**: Root `docker-compose.yml` runs Postgres + Hono API (3000). Copy `env.docker.example` to `.env` and see **`docs/docker.md`** for steps.
 - **VS Code**: Project settings in `.vscode/settings.json` (e.g. `css.lint.unknownAtRules: "ignore"` for Tailwind).
@@ -72,4 +75,6 @@ See **`docs/QoL.md`** for the full QoL stack (hooks, task runner, EditorConfig, 
 
 - See `AGENTS.md` for universal AI agent instructions (works with any AI tool).
 - See `.cursor/rules/` for Cursor-specific rules (mirrors content from `AGENTS.md`).
+- See `docs/architecture/README.md` for enforced architecture boundaries and layering.
+- See `docs/overrides.md` for project-specific architecture override policy.
 - Use workspace packages as `@starter/<package-name>` (e.g. `@starter/ui`, `@starter/tailwind-config`).

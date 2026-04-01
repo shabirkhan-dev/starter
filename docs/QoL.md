@@ -9,7 +9,8 @@ Consistency, fast feedback, and automation across TS, Rust, C, Lua, Bash, and Py
 | **Git hooks** | Lefthook: format, lint, typecheck, large-files, secrets, commit-msg (see `scripts/git-hooks/`) |
 | **Task runner** | Root `justfile` wraps `bun run`; use `just lint`, `just format`, `just test`, or `bun run <task>` |
 | **Editor consistency** | `.editorconfig`: LF, indent, charset, final newline |
-| **CI** | `.github/workflows/ci.yml`: lint, typecheck, build, test on push/PR to `main` |
+| **CI** | `.github/workflows/ci.yml`: split quality gates (lint, typecheck, coverage tests, web e2e) on push/PR to `main` |
+| **CD** | `.github/workflows/cd.yml`: staged deploy workflow template (staging on `main`, production on version tags) |
 | **Dev Container** | `.devcontainer/`: reproducible env (Bun, Rust, C, Python, Lua, shell tools). Reopen in Container; see `.devcontainer/README.md` |
 
 ## Per-language
@@ -30,7 +31,9 @@ From repo root:
 - **`bun run format`** — Biome + scripts (shfmt, stylua, ruff) + cargo fmt + clang-format
 - **`bun run lint`** — Turbo lint + scripts (shellcheck, luacheck, ruff)
 - **`bun run typecheck`** — TS only
-- **`bun run test`** — Turbo test (e.g. cargo test)
+- **`bun run test`** — Turbo tests + script tests
+- **`bun run test:coverage`** — TS coverage runs + all language tests
+- **`bun run test:e2e:web`** — Playwright browser tests for `apps/web`
 - **`bun run build`** — Turbo build + C app
 
 Optional: install [just](https://github.com/casey/just) and use `just lint`, `just format`, `just test`, `just build`, etc.

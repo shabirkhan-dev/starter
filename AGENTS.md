@@ -53,6 +53,9 @@ starter/
 | `bun run format` | Format: Biome + shfmt + stylua + ruff + cargo fmt + clang-format |
 | `bun run typecheck` | TypeScript typecheck |
 | `bun run test` | Run tests (e.g. cargo test) |
+| `bun run test:coverage` | Run TS coverage + all language tests |
+| `bun run test:e2e:web` | Run web Playwright e2e tests |
+| `bun run architecture:check` | Enforce architecture import boundaries |
 
 Optional: install [just](https://github.com/casey/just) and use `just lint`, `just format`, etc.
 
@@ -85,7 +88,7 @@ Optional: install [just](https://github.com/casey/just) and use `just lint`, `ju
 ### Git and commits
 
 - **Pre-commit hooks** (Lefthook): auto-format, lint, typecheck, large-file guard (2 MB max),
-  secret scan. Hooks run automatically if installed via `bun run prepare`.
+  secret scan, architecture check. Hooks run automatically if installed via `bun run prepare`.
 - **Commit messages**: Enforced by `commit-msg` hook — must be 10–200 chars, no WIP/fixup.
 - **Do not commit**: build output (`.next/`, `dist/`, `target/`), `node_modules/`, `.env` files,
   cache dirs. These are in `.gitignore`.
@@ -122,6 +125,8 @@ Postgres on 5432, Hono API on 3001 (host). See `docs/docker.md`.
 
 - `PROJECT.md` — detailed layout, tooling, and commands.
 - `docs/QoL.md` — full QoL stack (hooks, CI, per-language tools).
+- `docs/architecture/README.md` — architecture baseline and enforceable boundaries.
+- `docs/overrides.md` — policy for project-specific architecture overrides.
 - `docs/docker.md` — Docker Compose setup.
 - `biome.json` — Biome config (lint rules, formatter settings).
 - `lefthook.yml` — Git hook definitions.

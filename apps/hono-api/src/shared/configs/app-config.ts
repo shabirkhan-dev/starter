@@ -2,11 +2,14 @@ import type { AppConfig } from "@/shared/interfaces/app-config";
 import { getEnv } from "@/shared/utils/get-env";
 
 function loadAppConfig(): AppConfig {
+	const portRaw = getEnv("PORT", "8080");
+	const port = Number.parseInt(portRaw, 10);
+
 	return {
 		name: getEnv("APP_NAME", "hono-api"),
 		version: getEnv("APP_VERSION", "0.0.0"),
 		env: getEnv("NODE_ENV", "development"),
-		port: 8080, // Backend API always uses 8080
+		port: Number.isNaN(port) ? 8080 : port,
 		host: getEnv("HOST", "0.0.0.0"),
 		appOrigin: getEnv("APP_ORIGIN", "localhost"),
 		basePath: getEnv("BASE_PATH", "/api/v1"),

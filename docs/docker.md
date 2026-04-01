@@ -1,6 +1,6 @@
 # Docker: Postgres + Hono API
 
-Run PostgreSQL and Hono API (port 3000) with Docker Compose.
+Run PostgreSQL and Hono API with Docker Compose.
 
 ## Setup
 
@@ -26,10 +26,10 @@ Run PostgreSQL and Hono API (port 3000) with Docker Compose.
 
 ## Ports
 
-| Service   | Port |
-|----------|------|
-| Postgres | 5432 |
-| Hono API | 3000 |
+| Service   | Host Port | Container Port |
+|----------|-----------|----------------|
+| Postgres | 5432      | 5432           |
+| Hono API | 3001      | 3000           |
 
 ## Env file
 

@@ -1,9 +1,9 @@
 /*
  * Starter Kit C app – entry point.
  */
+#include "message.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "message.h"
 
 int main(void) {
     printf("%s\n", starter_message());
