@@ -29,6 +29,7 @@ scripts/
 | `bun run scripts:run:bash` | Run `scripts/bash/main.sh` |
 | `bun run scripts:run:lua` | Run `scripts/lua/main.lua` |
 | `bun run scripts:run:python` | Run `scripts/python/main.py` |
+| `bun run test:scripts` | Run script tests for bash, lua, and python |
 
 ## Prerequisites
 

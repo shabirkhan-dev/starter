@@ -3,8 +3,9 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include "message.h"
 
 int main(void) {
-    printf("Hello from Starter Kit C app\n");
+    printf("%s\n", starter_message());
     return EXIT_SUCCESS;
 }

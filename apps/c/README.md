@@ -13,6 +13,7 @@ C binary in the starter monorepo. Lives under **`apps/c`**. Turbo can run `build
 |-----------|---------------|---------|
 | `bun run build` | `just build` | Build binary to `build/starter-c` |
 | `bun run dev` | `just run` | Build and run |
+| `bun run test` (Turbo) | `bun run test` | Compile and run C unit tests |
 | — | `just lint` | clang-tidy |
 | — | `just format` | clang-format |
 | — | `just clean` | Remove build dir |

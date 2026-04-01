@@ -45,3 +45,15 @@ impl fmt::Display for Level {
 
 pub const RESET: &str = "\x1b[0m";
 pub const DIM: &str = "\x1b[2m";
+
+#[cfg(test)]
+mod tests {
+	use super::Level;
+
+	#[test]
+	fn should_log_respects_min_level() {
+		assert!(Level::Info.should_log(Level::Debug));
+		assert!(!Level::Debug.should_log(Level::Info));
+		assert!(!Level::None.should_log(Level::Debug));
+	}
+}
