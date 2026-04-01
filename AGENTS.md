@@ -1,9 +1,128 @@
 # Agent instructions (Starter Kit)
 
-When working in this repo:
+Universal instructions for AI agents (Cursor, Copilot, Claude Code, Windsurf, Cline, Aider, etc.).
+Read this file first when working in this repo.
 
-1. **Read project context**: Prefer `PROJECT.md` and `.cursor/rules/` for structure, tooling, and conventions.
-2. **Tooling**: Use **Bun** for scripts and installs. Use **Biome** for lint/format (no ESLint/Prettier). Respect root `biome.json` and `lefthook.yml` (pre-commit runs `biome check --write .`).
-3. **Scope**: This is a Turborepo. Apps live in `apps/` (e.g. `apps/web`), shared code in `packages/` (e.g. `packages/ui`, `packages/tailwind-config`, `packages/typescript-config`). Prefer changing shared packages when changes apply across apps.
-4. **Style**: Follow rules in `.cursor/rules/` (project conventions and clean code). Use tabs, line width 100, and workspace imports like `@starter/ui`.
-5. **Before finishing**: Ensure `bun run lint` and `bun run format` pass from repo root; don’t leave lint/format errors.
+## Project overview
+
+Monorepo starter kit managed with **Turborepo + Bun**. Four apps, shared packages, and
+multi-language scripts, all wired into a single lint/format/build/test surface.
+
+## Repository layout
+
+```
+starter/
+├── apps/
+│   ├── web/             # Next.js (React, Tailwind, shadcn-style UI)
+│   ├── hono-api/        # Hono + Prisma + PostgreSQL REST API
+│   ├── rust/            # Rust binary (Cargo, Axum)
+│   └── c/               # C binary (clang-format, clang-tidy)
+├── packages/
+│   ├── ui/              # Shared React components (shadcn-style, re-exported)
+│   ├── tailwind-config/ # Shared Tailwind theme (theme.css)
+│   ├── typescript-config/ # Shared tsconfig bases (base.json, nextjs.json)
+│   └── logger/          # Shared logger (TS + Rust)
+├── scripts/             # Utility scripts: bash/, lua/, python/
+├── docs/                # Extra docs: docker.md, QoL.md
+├── .cursor/rules/       # Cursor-specific rules (also summarised below)
+├── .devcontainer/       # Dev Container config (Bun, Rust, C, Python, Lua, etc.)
+├── .github/workflows/   # CI (lint, typecheck, build, test)
+└── (root config)        # biome.json, turbo.json, lefthook.yml, justfile, .editorconfig, etc.
+```
+
+## Tooling and commands
+
+| Tool | Purpose | Config |
+|------|---------|--------|
+| **Bun** | Package manager and script runner (not npm/yarn/pnpm) | `package.json` workspaces |
+| **Turborepo** | Monorepo orchestration | `turbo.json` |
+| **Biome** | Lint + format for TS/JS | `biome.json` (tabs, line width 100) |
+| **Lefthook** | Git hooks (pre-commit, commit-msg) | `lefthook.yml` |
+| **EditorConfig** | Consistent indent/charset/line endings | `.editorconfig` |
+
+**Run everything from repo root:**
+
+| Command | What it does |
+|---------|-------------|
+| `bun install` | Install all dependencies |
+| `bun run prepare` | Install git hooks (lefthook) |
+| `bun run dev` | Start all dev servers (Turbo) |
+| `bun run build` | Build all apps (Turbo + C) |
+| `bun run lint` | Lint: Biome (TS/JS) + ShellCheck + luacheck + ruff |
+| `bun run lint:fix` | Lint with auto-fix |
+| `bun run format` | Format: Biome + shfmt + stylua + ruff + cargo fmt + clang-format |
+| `bun run typecheck` | TypeScript typecheck |
+| `bun run test` | Run tests (e.g. cargo test) |
+
+Optional: install [just](https://github.com/casey/just) and use `just lint`, `just format`, etc.
+
+## Conventions
+
+### Code style
+
+- **Formatter**: Biome. Tabs, line width 100. Applies to `apps/**/*.ts(x)`, `packages/**/*.ts(x)`,
+  root config files. Run `bun run format` or rely on pre-commit hook.
+- **No ESLint/Prettier**: Biome is the only lint/format tool for TS/JS in this project.
+- **Naming**: PascalCase for components; files match component name. Hooks use `use*` prefix;
+  utility functions are plain named exports.
+- **Imports**: Prefer workspace imports as `@starter/<package>` (e.g. `@starter/ui`,
+  `@starter/tailwind-config`). Group: external → workspace → relative. No unused imports.
+- **Types**: Explicit types for props and public APIs. Avoid `any`; use `unknown` and narrow.
+- **Errors**: Handle explicitly — log and rethrow, or use result types. No silent catches.
+- **Size**: Small, single-responsibility functions and components. Extract when complexity grows.
+
+### Project structure
+
+- **Monorepo**: Apps in `apps/`, shared code in `packages/`. When a change applies across apps,
+  prefer changing a shared package.
+- **New apps**: Add under `apps/`, wire into `turbo.json` tasks if needed.
+- **New packages**: Add under `packages/`, export via `@starter/<name>`.
+- **Shared UI**: `packages/ui` uses shadcn-style components. Shared Tailwind theme is in
+  `packages/tailwind-config/theme.css`.
+- **TypeScript config**: Extend from `packages/typescript-config/base.json` (or `nextjs.json`
+  for Next.js apps).
+
+### Git and commits
+
+- **Pre-commit hooks** (Lefthook): auto-format, lint, typecheck, large-file guard (2 MB max),
+  secret scan. Hooks run automatically if installed via `bun run prepare`.
+- **Commit messages**: Enforced by `commit-msg` hook — must be 10–200 chars, no WIP/fixup.
+- **Do not commit**: build output (`.next/`, `dist/`, `target/`), `node_modules/`, `.env` files,
+  cache dirs. These are in `.gitignore`.
+- **Separate concerns**: Don't mix lint/format-only fixes with feature changes in the same commit.
+
+### Per-language notes
+
+| Language | Lint | Format | Test |
+|----------|------|--------|------|
+| **TypeScript/JS** | Biome | Biome | Vitest/Jest (if added) |
+| **Rust** | Clippy | rustfmt | `cargo test` |
+| **C** | clang-tidy | clang-format | (manual) |
+| **Bash** | ShellCheck | shfmt | — |
+| **Lua** | luacheck | stylua | — |
+| **Python** | ruff check | ruff format | — |
+
+### Docker
+
+PostgreSQL + Hono API via Docker Compose. Setup:
+```bash
+cp env.docker.example .env
+docker compose up --build
+```
+Postgres on 5432, Hono API on 3001 (host). See `docs/docker.md`.
+
+## Before finishing any task
+
+1. Run `bun run lint` from repo root — fix any errors.
+2. Run `bun run format` from repo root — ensure formatting is clean.
+3. If you changed TypeScript, run `bun run typecheck`.
+4. Do not leave dead code, unused imports, or `any` types.
+
+## Key files to read for deeper context
+
+- `PROJECT.md` — detailed layout, tooling, and commands.
+- `docs/QoL.md` — full QoL stack (hooks, CI, per-language tools).
+- `docs/docker.md` — Docker Compose setup.
+- `biome.json` — Biome config (lint rules, formatter settings).
+- `lefthook.yml` — Git hook definitions.
+- `turbo.json` — Turborepo pipeline config.

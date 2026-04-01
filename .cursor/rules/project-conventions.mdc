@@ -6,8 +6,12 @@ alwaysApply: true
 # Starter Kit Conventions
 
 - **Monorepo**: Turborepo with `apps/*` and `packages/*`. Run from root: `bun run dev`, `bun run build`, `bun run lint`, `bun run format`.
-- **Package manager**: Bun. Use `bun` for install/run, not npm/yarn/pnpm.
-- **Lint/format**: Biome only. Config: root `biome.json`. Pre-commit (lefthook) runs `biome check --write .`.
-- **Style**: Tabs, line width 100. Biome formatter + linter apply to `apps/**/*.ts(x)`, `packages/**/*.ts(x)`, `*.config.ts`, `*.config.mjs`.
-- **Shared UI**: `packages/ui` (shadcn-style). Shared Tailwind: `packages/tailwind-config`. TypeScript bases: `packages/typescript-config`.
-- **Apps**: `apps/web` is the Next.js app. Add new apps under `apps/` and wire in `turbo.json` if needed.
+- **Package manager**: Bun only. Use `bun` for install/run — never npm, yarn, or pnpm.
+- **Lint/format**: Biome only (no ESLint/Prettier). Config: root `biome.json`. Pre-commit hook (lefthook) runs `biome check --write .`.
+- **Style**: Tabs, line width 100. Biome applies to `apps/**/*.ts(x)`, `packages/**/*.ts(x)`, `*.config.ts`, `*.config.mjs`.
+- **Shared packages**: `packages/ui` (shadcn-style components), `packages/tailwind-config` (theme.css), `packages/typescript-config` (tsconfig bases), `packages/logger` (TS + Rust logger).
+- **Apps**: `apps/web` (Next.js), `apps/hono-api` (Hono + Prisma + PostgreSQL), `apps/rust` (Cargo), `apps/c` (clang). Add new apps under `apps/` and wire in `turbo.json`.
+- **Workspace imports**: Use `@starter/<package>` (e.g. `@starter/ui`, `@starter/logger`). Prefer shared packages over duplicating code across apps.
+- **Git hooks**: Lefthook handles format, lint, typecheck, large-file guard (2 MB), secret scan, and commit-msg checks. Install with `bun run prepare`.
+- **Before finishing**: Run `bun run lint` and `bun run format` from root. Don't leave errors. Separate lint/format fixes from feature commits.
+- **Full reference**: See `AGENTS.md` at repo root for universal agent instructions.

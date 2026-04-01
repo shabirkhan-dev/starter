@@ -70,5 +70,6 @@ See **`docs/QoL.md`** for the full QoL stack (hooks, task runner, EditorConfig, 
 
 ## Conventions and clean code
 
-- See `.cursor/rules/` for project conventions and clean-code guidelines.
+- See `AGENTS.md` for universal AI agent instructions (works with any AI tool).
+- See `.cursor/rules/` for Cursor-specific rules (mirrors content from `AGENTS.md`).
 - Use workspace packages as `@starter/<package-name>` (e.g. `@starter/ui`, `@starter/tailwind-config`).
