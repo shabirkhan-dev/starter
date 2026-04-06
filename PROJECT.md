@@ -10,6 +10,7 @@ Monorepo starter kit for your projects: Next.js app(s), shared UI, and shared co
 starter/
 ├── apps/
 │   ├── web/          # Next.js app (main app)
+│   ├── mobile/       # Expo Router + NativeWind app
 │   ├── hono-api/     # Hono + Prisma + PostgreSQL API
 │   ├── rust/         # Rust binary (Cargo; run via cargo or Turbo)
 │   └── c/            # C binary (clang-format, clang-tidy)

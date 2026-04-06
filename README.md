@@ -1,6 +1,6 @@
 # Starter Kit
 
-Monorepo starter: **Turborepo + Bun** with Next.js, **Hono + Prisma + PostgreSQL**, Rust, C, and scripts (Bash, Lua, Python). Shared UI, lint/format everywhere, git hooks, CI, and an optional dev container.
+Monorepo starter: **Turborepo + Bun** with Next.js, **Expo React Native (Expo Router + NativeWind)**, **Hono + Prisma + PostgreSQL**, Rust, C, and scripts (Bash, Lua, Python). Shared UI, lint/format everywhere, git hooks, CI, and an optional dev container.
 
 ## Quick start
 
@@ -18,7 +18,7 @@ bun run dev      # start Next.js + other dev servers
 
 | Area | Contents |
 |------|----------|
-| **apps/** | `web` (Next.js), `hono-api` (Hono + Prisma + PostgreSQL), `rust` (Cargo), `c` (C) |
+| **apps/** | `web` (Next.js), `mobile` (Expo Router + NativeWind), `hono-api` (Hono + Prisma + PostgreSQL), `rust` (Cargo), `c` (C) |
 | **packages/** | `ui` (shared React/shadcn), `tailwind-config`, `typescript-config` |
 | **scripts/** | Bash, Lua, Python (ShellCheck, shfmt, luacheck, stylua, ruff) |
 

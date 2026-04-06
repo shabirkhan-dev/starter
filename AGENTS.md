@@ -14,6 +14,7 @@ multi-language scripts, all wired into a single lint/format/build/test surface.
 starter/
 ├── apps/
 │   ├── web/             # Next.js (React, Tailwind, shadcn-style UI)
+│   ├── mobile/          # Expo Router + NativeWind app (TypeScript)
 │   ├── hono-api/        # Hono + Prisma + PostgreSQL REST API
 │   ├── rust/            # Rust binary (Cargo, Axum)
 │   └── c/               # C binary (clang-format, clang-tidy)
@@ -84,6 +85,10 @@ Optional: install [just](https://github.com/casey/just) and use `just lint`, `ju
   `packages/tailwind-config/theme.css`.
 - **TypeScript config**: Extend from `packages/typescript-config/base.json` (or `nextjs.json`
   for Next.js apps).
+- **Expo mobile structure**: Use `src/app` for routes, `src/components/ui` for UI primitives,
+  and `src/components` for non-UI reusable components.
+- **Safe area in mobile**: Use `react-native-safe-area-context` instead of deprecated
+  `react-native` `SafeAreaView`.
 
 ### Git and commits
 
@@ -127,6 +132,7 @@ Postgres on 5432, Hono API on 3001 (host). See `docs/docker.md`.
 - `docs/QoL.md` — full QoL stack (hooks, CI, per-language tools).
 - `docs/architecture/README.md` — architecture baseline and enforceable boundaries.
 - `docs/overrides.md` — policy for project-specific architecture overrides.
+- `.cursor/skills/expo-mobile/SKILL.md` — Expo Router + EAS development build guidance for `apps/mobile`.
 - `docs/docker.md` — Docker Compose setup.
 - `biome.json` — Biome config (lint rules, formatter settings).
 - `lefthook.yml` — Git hook definitions.

@@ -1,0 +1,21 @@
+{
+	"expo": {
+		"name": "starter-mobile",
+		"slug": "starter-mobile",
+		"version": "1.0.0",
+		"scheme": "starter-mobile",
+		"orientation": "portrait",
+		"userInterfaceStyle": "automatic",
+		"splash": {
+			"resizeMode": "contain",
+			"backgroundColor": "#ffffff"
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true
+		},
+		"android": {},
+		"web": {},
+		"plugins": ["expo-router"]
+	}
+}
