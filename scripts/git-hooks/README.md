@@ -14,7 +14,7 @@ Each shell hook prints lines prefixed with **`[git-hooks]`** so you always see w
 | **typecheck** | `bun run typecheck` |
 | **architecture** | `bun run architecture:check` |
 | **large-files** | Fails if any staged file is larger than `MAX_SIZE_MB` (default **2**); reports OK when under limit |
-| **secrets** | Scans **added** lines in the staged diff for common secret patterns (private keys, AWS-style keys, long `api_key` / `password` assignments, etc.) |
+| **secrets** | Scans **added** lines in the staged diff for common secret patterns (private keys, AWS-style keys, long `api_key` / `password` assignments, etc.). The diff of `scripts/git-hooks/check-secrets.sh` itself is excluded so regex literals in that file do not false-positive. |
 
 ## Commit-msg
 
