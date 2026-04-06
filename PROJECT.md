@@ -27,6 +27,7 @@ starter/
 ├── turbo.json        # Turborepo pipeline
 ├── package.json      # Root workspaces + scripts
 ├── .github/workflows # CI (lint, typecheck, build, test)
+├── docker/           # Compose fragments (docker/compose/*.yml); root docker-compose.yml includes them
 ├── AGENTS.md         # Instructions for AI agents
 ├── PROJECT.md        # This file
 ├── CHANGELOG.md      # Changelog (Keep a Changelog format)
@@ -65,7 +66,7 @@ One interface: **`bun run <task>`** (or **`just <task>`** if [just](https://gith
 - **CI**: `.github/workflows/ci.yml` runs split gates (lint, typecheck, coverage test, web e2e) on push/PR to `main`.
 - **CD**: `.github/workflows/cd.yml` provides staged deploy workflow template for `main` and version tags.
 - **Dev Container**: `.devcontainer/` provides a reproducible environment (Bun, Rust, C, Python, Lua, shellcheck, shfmt, ruff, stylua, luacheck, just). Reopen in Container in VS Code/Cursor; see `.devcontainer/README.md`.
-- **Docker**: Root `docker-compose.yml` runs Postgres + Hono API (3000). Copy `env.docker.example` to `.env` and see **`docs/docker.md`** for steps.
+- **Docker**: Root `docker-compose.yml` includes **`docker/compose/`** (Postgres + Hono API; API on host **3001**). Copy `env.docker.example` to `.env` and see **`docs/docker.md`**.
 - **VS Code**: Project settings in `.vscode/settings.json` (e.g. `css.lint.unknownAtRules: "ignore"` for Tailwind).
 
 ## QoL stack

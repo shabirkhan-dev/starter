@@ -37,14 +37,14 @@ One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** i
 
 ## Docker (Postgres + Hono API)
 
-Run Postgres and Hono API (3000):
+Run Postgres and Hono API (API on host port **3001**):
 
 ```bash
 cp env.docker.example .env
 docker compose up --build
 ```
 
-See **[docs/docker.md](docs/docker.md)** for details and env options.
+Compose files live under **[docker/](docker/)** (modular fragments). See **[docs/docker.md](docs/docker.md)** for details and env options.
 
 ## Reproducible environment
 

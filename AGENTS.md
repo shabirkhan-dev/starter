@@ -24,6 +24,7 @@ starter/
 │   ├── typescript-config/ # Shared tsconfig bases (base.json, nextjs.json)
 │   └── logger/          # Shared logger (TS + Rust)
 ├── scripts/             # Utility scripts: bash/, lua/, python/
+├── docker/              # Docker Compose fragments (see docker/README.md)
 ├── docs/                # Extra docs: docker.md, QoL.md
 ├── .cursor/rules/       # Cursor-specific rules (also summarised below)
 ├── .devcontainer/       # Dev Container config (Bun, Rust, C, Python, Lua, etc.)
@@ -112,7 +113,7 @@ Optional: install [just](https://github.com/casey/just) and use `just lint`, `ju
 
 ### Docker
 
-PostgreSQL + Hono API via Docker Compose. Setup:
+PostgreSQL + Hono API via Docker Compose. Fragments live under `docker/compose/` and are merged by the root `docker-compose.yml` (Compose v2.20+). Setup:
 ```bash
 cp env.docker.example .env
 docker compose up --build
@@ -134,6 +135,7 @@ Postgres on 5432, Hono API on 3001 (host). See `docs/docker.md`.
 - `docs/overrides.md` — policy for project-specific architecture overrides.
 - `.cursor/skills/expo-mobile/SKILL.md` — Expo Router + EAS development build guidance for `apps/mobile`.
 - `docs/docker.md` — Docker Compose setup.
+- `docker/README.md` — Compose fragment layout and `-f` fallback.
 - `biome.json` — Biome config (lint rules, formatter settings).
 - `lefthook.yml` — Git hook definitions.
 - `turbo.json` — Turborepo pipeline config.
