@@ -5,18 +5,21 @@
  */
 import type { ApiKind, LoginRequest, RegisterRequest, TokenResponse, User } from "./auth-types";
 
-const PYTHON_API =
-	typeof process !== "undefined" && process.env.NEXT_PUBLIC_PYTHON_API_URL
-		? process.env.NEXT_PUBLIC_PYTHON_API_URL
-		: "http://localhost:8000";
-const RUST_API =
-	typeof process !== "undefined" && process.env.NEXT_PUBLIC_RUST_API_URL
-		? process.env.NEXT_PUBLIC_RUST_API_URL
-		: "http://localhost:8001";
-const HONO_API =
-	typeof process !== "undefined" && process.env.NEXT_PUBLIC_HONO_API_URL
-		? process.env.NEXT_PUBLIC_HONO_API_URL
-		: "http://localhost:8080";
+function resolveApiUrl(envKey: string, fallback: string): string {
+	const raw =
+		typeof process !== "undefined" && process.env[envKey] ? process.env[envKey] : fallback;
+
+	try {
+		const url = new URL(raw);
+		return url.origin;
+	} catch {
+		throw new Error(`Invalid URL provided for ${envKey}: ${raw}`);
+	}
+}
+
+const PYTHON_API = resolveApiUrl("NEXT_PUBLIC_PYTHON_API_URL", "http://localhost:8000");
+const RUST_API = resolveApiUrl("NEXT_PUBLIC_RUST_API_URL", "http://localhost:8001");
+const HONO_API = resolveApiUrl("NEXT_PUBLIC_HONO_API_URL", "http://localhost:8080");
 
 export function getBaseUrl(api: ApiKind): string {
 	if (api === "python") return PYTHON_API;

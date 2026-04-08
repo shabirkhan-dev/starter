@@ -2,7 +2,7 @@
 cc := "cc"
 cflags := "-std=c17 -Wall -Wextra -pedantic"
 binary := "build/starter-c"
-src := "src/main.c"
+src := "src/main.c src/message.c"
 
 default: build
 
@@ -17,11 +17,11 @@ run: build
 
 # Lint (requires clang-tidy)
 lint:
-	clang-tidy {{src}} -- {{cflags}} -I.
+	clang-tidy src/main.c src/message.c -- {{cflags}} -I.
 
 # Format (requires clang-format)
 format:
-	clang-format -i {{src}}
+	clang-format -i src/main.c src/message.c
 
 # Remove build output
 clean:

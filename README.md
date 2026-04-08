@@ -1,6 +1,6 @@
 # Starter Kit
 
-Monorepo starter: **Turborepo + Bun** with Next.js, **Expo React Native (Expo Router + NativeWind)**, **Hono + Prisma + PostgreSQL**, Rust, C, and scripts (Bash, Lua, Python). Shared UI, lint/format everywhere, git hooks, CI, and an optional dev container.
+Monorepo starter: **Turborepo + Bun** with Next.js, **Expo React Native (Expo Router + NativeWind)**, **Hono + Prisma + PostgreSQL**, PWA, Rust, C, and scripts (Bash, Lua, Python). Shared packages, lint/format everywhere, git hooks, CI/security workflows, and an optional dev container.
 
 ## Quick start
 
@@ -18,8 +18,8 @@ bun run dev      # start Next.js + other dev servers
 
 | Area | Contents |
 |------|----------|
-| **apps/** | `web` (Next.js), `mobile` (Expo Router + NativeWind), `hono-api` (Hono + Prisma + PostgreSQL), `rust` (Cargo), `c` (C) |
-| **packages/** | `ui` (shared React/shadcn), `tailwind-config`, `typescript-config` |
+| **apps/** | `web` (Next.js), `mobile` (Expo Router + NativeWind), `hono-api` (Hono + Prisma + PostgreSQL), `pwa` (Bun + service worker), `rust` (Cargo), `c` (C) |
+| **packages/** | `logger` (TS + Rust logger), `tailwind-config`, `typescript-config` |
 | **scripts/** | Bash, Lua, Python (ShellCheck, shfmt, luacheck, stylua, ruff) |
 
 One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** if just is installed).
@@ -34,6 +34,7 @@ One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** i
 | `bun run test` | Run workspace tests (Turbo + script tests) |
 | `bun run test:coverage` | Run TS coverage + all language tests |
 | `bun run test:e2e:web` | Run Playwright e2e for web app |
+| `bun run architecture:check` | Enforce architecture boundary rules |
 
 ## Docker (Postgres + Hono API)
 
@@ -46,11 +47,29 @@ docker compose up --build
 
 Compose files live under **[docker/](docker/)** (modular fragments). See **[docs/docker.md](docs/docker.md)** for details and env options.
 
+## App commands (optional)
+
+You can run any app directly with `bun --cwd <path> run <script>`.
+
+- `bun --cwd apps/web run dev` — Next.js dev server.
+- `bun --cwd apps/mobile run start` — Expo dev server (`android`, `ios`, and `web` scripts also available).
+- `bun --cwd apps/hono-api run dev` — Hono API dev server (`db:migrate`/`db:studio` for Prisma workflows).
+- `bun --cwd apps/pwa run dev` — PWA local server.
+- `bun --cwd apps/rust run dev` — Rust app via Cargo.
+- `bun --cwd apps/c run dev` — C app binary.
+
+## Setup notes
+
+- **Required:** [Bun](https://bun.sh) `1.3.11`.
+- **Optional:** [just](https://github.com/casey/just), Docker Compose `v2.20+`, Rust toolchain (`1.83`) for `apps/rust`, and clang tooling for `apps/c`.
+- **TypeScript baseline:** root `tsconfig.json` extends `@starter/typescript-config/base.json`.
+
 ## Reproducible environment
 
 - **Dev Container:** [.devcontainer/](.devcontainer/) — Bun, Rust, C, Python, Lua, shell tools. In VS Code/Cursor: **Reopen in Container**. See [.devcontainer/README.md](.devcontainer/README.md).
 - **CI:** [.github/workflows/ci.yml](.github/workflows/ci.yml) — split gates for lint, typecheck, coverage tests, and web e2e with artifacts.
 - **CD:** [.github/workflows/cd.yml](.github/workflows/cd.yml) — staged deploy workflow template (staging on `main`, production on version tags).
+- **Security:** [.github/workflows/security.yml](.github/workflows/security.yml) + [.github/dependabot.yml](.github/dependabot.yml) — dependency review, CodeQL, and automated dependency updates.
 - **Git hooks:** Lefthook — format, lint, typecheck, large-file guard, secret scan, commit-msg checks. Installed by `bun run prepare`.
 
 ## Docs

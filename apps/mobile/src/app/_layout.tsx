@@ -1,12 +1,15 @@
-import "../../global.css";
-import "react-native-reanimated";
-import { Stack } from "expo-router";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { useColorScheme } from "react-native";
 
-export default function RootLayout() {
+import { AnimatedSplashOverlay } from "@/components/animated-icon";
+import AppTabs from "@/components/app-tabs";
+
+export default function TabLayout() {
+	const colorScheme = useColorScheme();
 	return (
-		<SafeAreaProvider>
-			<Stack screenOptions={{ headerTitle: "Starter Mobile" }} />
-		</SafeAreaProvider>
+		<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+			<AnimatedSplashOverlay />
+			<AppTabs />
+		</ThemeProvider>
 	);
 }

@@ -133,7 +133,9 @@ Postgres on 5432, Hono API on 3001 (host). See `docs/docker.md`.
 - `docs/QoL.md` — full QoL stack (hooks, CI, per-language tools).
 - `docs/architecture/README.md` — architecture baseline and enforceable boundaries.
 - `docs/overrides.md` — policy for project-specific architecture overrides.
-- `.cursor/skills/expo-mobile/SKILL.md` — Expo Router + EAS development build guidance for `apps/mobile`.
+- `.cursor/skills/expo-mobile/SKILL.md` — Expo Router + EAS + official Expo Skills / LLM doc links for `apps/mobile`.
+- `.cursor/rules/expo-ai-agents.mdc` — Expo remote skills URL, skill table, `llms.txt` bundles (when working under `apps/mobile/**`).
+- `apps/mobile/AGENTS.md` — Short index for agents opening the mobile app folder.
 - `docs/docker.md` — Docker Compose setup.
 - `docker/README.md` — Compose fragment layout and `-f` fallback.
 - `biome.json` — Biome config (lint rules, formatter settings).

@@ -11,3 +11,11 @@ export function getEnv(key: string, defaultValue?: string): string | undefined {
 	if (fromBun !== undefined && fromBun !== "") return fromBun;
 	return defaultValue;
 }
+
+export function requireEnv(key: string): string {
+	const value = getEnv(key);
+	if (!value) {
+		throw new Error(`Missing required environment variable: ${key}`);
+	}
+	return value;
+}
