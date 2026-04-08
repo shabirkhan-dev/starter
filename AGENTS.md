@@ -18,6 +18,8 @@ starter/
 │   ├── hono-api/        # Hono + Prisma + PostgreSQL REST API
 │   ├── rust/            # Rust binary (Cargo, Axum)
 │   └── c/               # C binary (clang-format, clang-tidy)
+│   └── docs/               # Documentation for the starter kit
+
 ├── packages/
 │   ├── ui/              # Shared React components (shadcn-style, re-exported)
 │   ├── tailwind-config/ # Shared Tailwind theme (theme.css)

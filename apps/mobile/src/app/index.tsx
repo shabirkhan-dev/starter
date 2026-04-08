@@ -8,6 +8,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { WebBadge } from "@/components/web-badge";
 import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
+import { SaveButton } from "@/components/ui/save-button";
 
 function getDevMenuHint() {
 	if (Platform.OS === "web") {
@@ -37,6 +38,7 @@ export default function HomeScreen() {
 					<ThemedText type="title" style={styles.title}>
 						Welcome to&nbsp;Expo
 					</ThemedText>
+					<SaveButton />
 					<ThemedText type="subtitle" className="text-center text-2xl font-bold text-green-200">
 						Welcome to the future of mobile development
 					</ThemedText>
