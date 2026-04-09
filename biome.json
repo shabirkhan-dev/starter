@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.14/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.4.10/schema.json",
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
@@ -27,5 +27,29 @@
 		"rules": {
 			"recommended": true
 		}
-	}
+	},
+	"overrides": [
+		{
+			"includes": ["apps/nest-api/**/*.ts"],
+			"javascript": {
+				"formatter": {
+					"quoteStyle": "single",
+					"trailingCommas": "all"
+				}
+			},
+			"linter": {
+				"rules": {
+					"style": {
+						"useImportType": "off"
+					},
+					"suspicious": {
+						"noExplicitAny": "off"
+					},
+					"nursery": {
+						"noFloatingPromises": "warn"
+					}
+				}
+			}
+		}
+	]
 }
