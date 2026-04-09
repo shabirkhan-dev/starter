@@ -32,6 +32,9 @@
 		{
 			"includes": ["apps/nest-api/**/*.ts"],
 			"javascript": {
+				"parser": {
+					"unsafeParameterDecoratorsEnabled": true
+				},
 				"formatter": {
 					"quoteStyle": "single",
 					"trailingCommas": "all"
