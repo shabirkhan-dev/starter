@@ -9,6 +9,7 @@ const MIME: Record<string, string> = {
 	".js": "application/javascript; charset=utf-8",
 	".svg": "image/svg+xml",
 	".webmanifest": "application/manifest+json",
+	".map": "application/json; charset=utf-8",
 };
 
 Bun.serve({
@@ -27,4 +28,4 @@ Bun.serve({
 	},
 });
 
-console.log(`PWA server http://localhost:${PORT}`);
+console.log(`PWA (dist) http://localhost:${PORT}`);

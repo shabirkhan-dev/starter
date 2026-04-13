@@ -5,10 +5,10 @@
 	"type": "module",
 	"scripts": {
 		"build": "bun run build:app && bun run build:sw && bun run scripts/copy-assets.ts",
-		"build:app": "bun build src/main.ts --outfile=dist/main.js --minify --target=browser",
-		"build:sw": "bun build src/sw.ts --outfile=dist/sw.js --minify --target=browser",
+		"build:app": "bun build src/main.ts --outdir=dist --minify --target=browser --sourcemap",
+		"build:sw": "bun build src/service-worker/sw.ts --outfile=dist/sw.js --minify --target=browser",
 		"dev": "bun --hot src/dev-server.ts",
-		"start": "bun src/server.ts",
+		"start": "bun scripts/serve-dist.ts",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.sw.json"

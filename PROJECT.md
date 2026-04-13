@@ -1,82 +1,188 @@
-# Starter Kit – Project overview
+# Starter Kit - Project overview
 
-## What this is
+This document is the deeper technical reference for the Starter Kit monorepo.
+For quick setup/use, start with `README.md`.
 
-Monorepo starter kit for your projects: Next.js app(s), shared UI, and shared config. Managed with Turborepo and Bun.
+## What this repository includes
+
+Monorepo starter managed by **Bun + Turborepo**, with:
+
+- Multiple app templates (web, mobile, API, docs, PWA, systems-language apps)
+- Shared workspace packages (`@starter/*`)
+- Polyglot scripts and quality tooling
+- Architecture boundary checks
+- Git hooks and CI/CD/security pipelines
+- Optional Docker and Dev Container workflows
 
 ## Repository layout
 
-```
+```text
 starter/
-├── apps/
-│   ├── web/          # Next.js app (main app)
-│   ├── mobile/       # Expo Router + NativeWind app
-│   ├── hono-api/     # Hono + Prisma + PostgreSQL API
-│   ├── rust/         # Rust binary (Cargo; run via cargo or Turbo)
-│   └── c/            # C binary (clang-format, clang-tidy)
-├── scripts/          # Scripts by language: bash/, lua/, python/ (ShellCheck, shfmt, luacheck, stylua, ruff)
+├── apps/                     # Runnable applications
+│   ├── web/                  # Next.js app
+│   ├── mobile/               # Expo Router + NativeWind app
+│   ├── hono-api/             # Hono + Prisma + PostgreSQL API
+│   ├── fastapi/              # FastAPI service (Python + uv)
+│   ├── nest-api/             # NestJS API scaffold
+│   ├── pwa/                  # PWA app (Bun + service worker)
+│   ├── docs/                 # Documentation app (Next.js + Fumadocs)
+│   ├── rust/                 # Rust binary app (Cargo)
+│   └── c/                    # C binary app (clang toolchain)
 ├── packages/
-│   ├── ui/           # Shared React UI (shadcn-style components)
-│   ├── tailwind-config/  # Shared Tailwind theme (e.g. theme.css)
-│   └── typescript-config/  # Shared tsconfig bases
-├── .devcontainer/    # Dev Container (Bun, Rust, C, Python, Lua, shell tools)
-├── .editorconfig     # Editor consistency (line endings, indent, charset)
-├── biome.json        # Lint + format (Biome)
-├── justfile          # Optional task runner: `just lint`, `just format`, etc.
-├── lefthook.yml      # Git hooks (format, lint, typecheck, large-files, secrets, commit-msg)
-├── turbo.json        # Turborepo pipeline
-├── package.json      # Root workspaces + scripts
-├── .github/workflows # CI (lint, typecheck, build, test)
-├── docker/           # Compose fragments (docker/compose/*.yml); root docker-compose.yml includes them
-├── AGENTS.md         # Instructions for AI agents
-├── PROJECT.md        # This file
-├── CHANGELOG.md      # Changelog (Keep a Changelog format)
-├── LICENSE-MIT       # MIT license
-├── LICENSE-Apache-2.0 # Apache License 2.0 (dual license)
-└── .cursor/rules/    # Cursor rules (conventions, clean code)
+│   ├── logger/               # Shared logger (TypeScript + Rust)
+│   ├── tailwind-config/      # Shared Tailwind theme/tokens
+│   └── typescript-config/    # Shared TS config bases
+├── scripts/                  # Bash, Lua, Python scripts and tests
+├── docs/                     # Architecture, Docker, QoL docs
+├── docker/                   # Docker Compose fragments
+├── .github/workflows/        # CI/CD/security workflows
+├── .devcontainer/            # Reproducible development environment
+├── biome.json                # Formatter/linter config (TS/JS)
+├── lefthook.yml              # Git hooks
+├── turbo.json                # Turborepo pipeline
+├── package.json              # Root scripts + workspaces
+└── AGENTS.md                 # Universal AI agent guidance
 ```
 
-## Commands (run from root)
+## Apps and stacks
 
-One interface: **`bun run <task>`** (or **`just <task>`** if [just](https://github.com/casey/just) is installed).
+| App | Stack | Notes |
+| --- | --- | --- |
+| `apps/web` | Next.js 16, React 19, Tailwind 4 | Includes unit/integration and Playwright e2e flow |
+| `apps/mobile` | Expo SDK 55, Expo Router, React Native, NativeWind | Mobile-first file-based routing |
+| `apps/hono-api` | Hono, Prisma, PostgreSQL | Bun-first API with DB tooling |
+| `apps/fastapi` | FastAPI, uv, Ruff, pytest | Python API option |
+| `apps/nest-api` | NestJS 11, JWT/auth modules, Jest | TypeScript API scaffold |
+| `apps/pwa` | Bun build, TS, service worker | Lightweight browser app |
+| `apps/docs` | Next.js + Fumadocs + MDX | Project docs site |
+| `apps/rust` | Cargo, clippy, rustfmt | Rust application template |
+| `apps/c` | C17, clang-format, clang-tidy | C application template |
+
+## Shared packages
+
+| Package | Workspace import | Purpose |
+| --- | --- | --- |
+| `packages/logger` | `@starter/logger` | Shared structured logger for TypeScript and Rust |
+| `packages/tailwind-config` | `@starter/tailwind-config` | Shared design tokens/theme |
+| `packages/typescript-config` | `@starter/typescript-config` | Reusable TypeScript config presets |
+
+## Root command surface
+
+Run commands from repo root:
 
 | Command | Purpose |
-|--------|---------|
-| `bun run dev` | Start dev (Turbo: Next.js, Rust, etc.) |
-| `bun run build` | Build all (Turbo + C app) |
-| `bun run lint` | Lint: Turbo (Biome) + scripts (ShellCheck, luacheck, ruff) |
-| `bun run format` | Format: Biome + scripts (shfmt, stylua, ruff) + Rust (cargo fmt) + C (clang-format) |
-| `bun run lint:fix` | Lint with auto-fix where supported |
-| `bun run typecheck` | Typecheck (TS) |
-| `bun run test` | Run workspace tests (Turbo + script tests) |
-| `bun run test:coverage` | Run TS coverage + all language tests |
-| `bun run test:e2e:web` | Run Playwright e2e for web app |
+| --- | --- |
+| `bun run dev` | Start `dev` tasks via Turborepo |
+| `bun run build` | Build workspace targets |
+| `bun run start` | Start runtime targets |
+| `bun run lint` | Lint workspace + scripts |
+| `bun run lint:fix` | Apply lint autofixes |
+| `bun run format` | Format TS/JS + shell/Lua/Python + Rust + C |
+| `bun run typecheck` | TypeScript type checking |
+| `bun run test` | Run tests in workspace + scripts |
+| `bun run test:coverage` | Run full coverage-oriented pass |
+| `bun run test:e2e:web` | Web Playwright e2e |
+| `bun run architecture:check` | Enforce architecture boundaries |
+| `bun run preflight` | Lint + typecheck + test |
+| `bun run prepare` | Install git hooks (Lefthook) |
 
-**Hono API (apps/hono-api):** Hono + Prisma default on port 8080 (configurable via `PORT`). Set `DATABASE_URL` in `apps/hono-api/.env`; see [apps/hono-api/README.md](apps/hono-api/README.md).
+### Running one app directly
 
-## Tooling and config
+Use:
 
-- **Biome**: Single formatter/linter for TS/JS; config in root `biome.json`. Covers `apps/**`, `packages/**`, and root config files.
-- **Rust**: `apps/rust` uses `rust-toolchain.toml`, `rustfmt.toml`, and Clippy; run `cargo fmt`, `cargo clippy`, `cargo test` in that directory.
-- **C**: `apps/c` uses `clang-format`, `clang-tidy`; run `bun run build` / `bun run format` in that directory (or `just build` / `just format` if just is installed).
-- **Hono API**: `apps/hono-api` is Hono + Prisma + PostgreSQL. Run `cd apps/hono-api && bun run dev`; lint/format via Turbo. See [apps/hono-api/README.md](apps/hono-api/README.md).
-- **Scripts**: `scripts/` at root: **bash** (ShellCheck, shfmt), **lua** (luacheck, stylua), **python** (ruff). Included in root `bun run lint` and `bun run format`.
-- **Lefthook**: Pre-commit runs format, lint, typecheck, large-file check, secret scan; commit-msg enforces message length.
-- **EditorConfig**: `.editorconfig` enforces line endings (LF), indent style, charset (UTF-8), final newline across editors.
-- **CI**: `.github/workflows/ci.yml` runs split gates (lint, typecheck, coverage test, web e2e) on push/PR to `main`.
-- **CD**: `.github/workflows/cd.yml` provides staged deploy workflow template for `main` and version tags.
-- **Dev Container**: `.devcontainer/` provides a reproducible environment (Bun, Rust, C, Python, Lua, shellcheck, shfmt, ruff, stylua, luacheck, just). Reopen in Container in VS Code/Cursor; see `.devcontainer/README.md`.
-- **Docker**: Root `docker-compose.yml` includes **`docker/compose/`** (Postgres + Hono API; API on host **3001**). Copy `env.docker.example` to `.env` and see **`docs/docker.md`**.
-- **VS Code**: Project settings in `.vscode/settings.json` (e.g. `css.lint.unknownAtRules: "ignore"` for Tailwind).
+```bash
+bun --cwd <app-path> run <script>
+```
 
-## QoL stack
+Examples:
 
-See **`docs/QoL.md`** for the full QoL stack (hooks, task runner, EditorConfig, CI, per-language tools).
+- `bun --cwd apps/web run dev`
+- `bun --cwd apps/mobile run start`
+- `bun --cwd apps/hono-api run dev`
+- `bun --cwd apps/fastapi run dev`
+- `bun --cwd apps/docs run dev`
+- `bun --cwd apps/pwa run dev`
+- `bun --cwd apps/rust run dev`
+- `bun --cwd apps/c run dev`
 
-## Conventions and clean code
+## Tooling and quality system
 
-- See `AGENTS.md` for universal AI agent instructions (works with any AI tool).
-- See `.cursor/rules/` for Cursor-specific rules (mirrors content from `AGENTS.md`).
-- See `docs/architecture/README.md` for enforced architecture boundaries and layering.
-- See `docs/overrides.md` for project-specific architecture override policy.
-- Use workspace packages as `@starter/<package-name>` (e.g. `@starter/ui`, `@starter/tailwind-config`).
+### Monorepo and package management
+
+- **Bun** is the only package manager (`bun@1.3.11`)
+- Workspaces: `apps/*` and `packages/*`
+- **Turborepo** orchestrates shared tasks (`turbo.json`)
+
+### Linting and formatting
+
+- **Biome** is the TS/JS formatter+linter (`biome.json`)
+- Formatting style: tabs, line width 100
+- Root `format` and `lint` scripts also run language-specific tools
+
+### Language-specific tools
+
+- **Bash:** `shellcheck`, `shfmt`
+- **Lua:** `luacheck`, `stylua`
+- **Python:** `ruff`, `pytest`
+- **Rust:** `cargo fmt`, `cargo clippy`, `cargo test`
+- **C:** `clang-format`, `clang-tidy`, compiler-based tests
+
+### Git hooks
+
+Configured in `lefthook.yml`:
+
+- Pre-commit: trailing whitespace fix, format, lint:fix, typecheck, architecture check
+- Safety checks: large file guard, secret scan
+- Commit-msg hook: message quality rules
+
+Install hooks with:
+
+```bash
+bun run prepare
+```
+
+### Architecture enforcement
+
+- Rule checks run via `bun run architecture:check`
+- Script location: `scripts/architecture/check-boundaries.sh`
+- See `docs/architecture/README.md` for boundaries and allowed dependency flow
+
+## CI/CD and security
+
+- **CI:** `.github/workflows/ci.yml` runs lint/typecheck/test/e2e jobs
+- **CD:** `.github/workflows/cd.yml` is a staged deploy template (`main` and version tags)
+- **Security:** `.github/workflows/security.yml` + Dependabot + CodeQL
+
+## Docker workflow
+
+Postgres + Hono API are composed through root `docker-compose.yml` with fragment files under
+`docker/compose/`.
+
+```bash
+cp env.docker.example .env
+docker compose up --build
+```
+
+More details: `docs/docker.md` and `docker/README.md`.
+
+## Dev Container workflow
+
+`.devcontainer/` provides a reproducible setup with Bun, Rust, C, Python, Lua, and related tools.
+
+- Open in VS Code/Cursor and choose **Reopen in Container**
+- See `.devcontainer/README.md` for exact toolchain and post-create steps
+
+## Conventions and development rules
+
+- Primary repository guidance: `AGENTS.md`
+- Cursor-specific rules: `.cursor/rules/`
+- Architecture baseline: `docs/architecture/README.md`
+- Override process: `docs/overrides.md`
+- Use workspace imports as `@starter/<package>`
+
+## Related docs
+
+- `README.md` - quick start and high-level navigation
+- `docs/QoL.md` - quality-of-life stack details
+- `scripts/README.md` - script usage and structure
+- `apps/*/README.md` - per-app setup and workflows

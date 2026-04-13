@@ -1,8 +1,11 @@
 import { join } from "node:path";
+import "../scripts/watch-html";
 
 const PORT = Number(process.env.PORT) || 3002;
-const publicDir = join(import.meta.dir, "../public");
-const srcDir = join(import.meta.dir, ".");
+const appRoot = join(import.meta.dir, "..");
+const publicDir = join(appRoot, "public");
+const srcDir = join(appRoot, "src");
+const indexHtml = join(appRoot, "index.html");
 
 const MIME: Record<string, string> = {
 	".html": "text/html; charset=utf-8",
@@ -12,19 +15,50 @@ const MIME: Record<string, string> = {
 	".webmanifest": "application/manifest+json",
 };
 
-async function bundle(path: string): Promise<Response> {
+async function bundleMain(): Promise<{ js: ArrayBuffer; css: ArrayBuffer | null }> {
 	const result = await Bun.build({
-		entrypoints: [path],
+		entrypoints: [join(srcDir, "main.ts")],
+		target: "browser",
+		minify: false,
+		sourcemap: "inline",
+	});
+	let js: ArrayBuffer | undefined;
+	let css: ArrayBuffer | undefined;
+	for (const out of result.outputs) {
+		if (out.path.endsWith(".js")) {
+			js = await out.arrayBuffer();
+		} else if (out.path.endsWith(".css")) {
+			css = await out.arrayBuffer();
+		}
+	}
+	if (!js) {
+		throw new Error("Bundle produced no JS output");
+	}
+	return { js, css: css ?? null };
+}
+
+let mainBundleInFlight: Promise<{ js: ArrayBuffer; css: ArrayBuffer | null }> | null = null;
+
+function getMainBundle(): Promise<{ js: ArrayBuffer; css: ArrayBuffer | null }> {
+	if (!mainBundleInFlight) {
+		mainBundleInFlight = bundleMain().finally(() => {
+			mainBundleInFlight = null;
+		});
+	}
+	return mainBundleInFlight;
+}
+
+async function bundleServiceWorker(): Promise<ArrayBuffer> {
+	const result = await Bun.build({
+		entrypoints: [join(srcDir, "service-worker/sw.ts")],
 		target: "browser",
 		minify: false,
 	});
 	const out = result.outputs[0];
 	if (!out) {
-		return new Response("Bundle failed", { status: 500 });
+		throw new Error("Service worker bundle failed");
 	}
-	return new Response(await out.arrayBuffer(), {
-		headers: { "Content-Type": "application/javascript; charset=utf-8" },
-	});
+	return out.arrayBuffer();
 }
 
 Bun.serve({
@@ -34,15 +68,45 @@ Bun.serve({
 		const pathname = url.pathname;
 
 		if (pathname === "/") {
-			return new Response(Bun.file(join(srcDir, "index.html")), {
+			return new Response(Bun.file(indexHtml), {
 				headers: { "Content-Type": "text/html; charset=utf-8" },
 			});
 		}
 		if (pathname === "/main.js") {
-			return bundle(join(srcDir, "main.ts"));
+			try {
+				const { js } = await getMainBundle();
+				return new Response(js, {
+					headers: { "Content-Type": "application/javascript; charset=utf-8" },
+				});
+			} catch (e) {
+				const msg = e instanceof Error ? e.message : String(e);
+				return new Response(msg, { status: 500 });
+			}
+		}
+		if (pathname === "/main.css") {
+			try {
+				const { css } = await getMainBundle();
+				if (!css) {
+					return new Response("No CSS output", { status: 404 });
+				}
+				return new Response(css, {
+					headers: { "Content-Type": "text/css; charset=utf-8" },
+				});
+			} catch (e) {
+				const msg = e instanceof Error ? e.message : String(e);
+				return new Response(msg, { status: 500 });
+			}
 		}
 		if (pathname === "/sw.js") {
-			return bundle(join(srcDir, "sw.ts"));
+			try {
+				const body = await bundleServiceWorker();
+				return new Response(body, {
+					headers: { "Content-Type": "application/javascript; charset=utf-8" },
+				});
+			} catch (e) {
+				const msg = e instanceof Error ? e.message : String(e);
+				return new Response(msg, { status: 500 });
+			}
 		}
 		if (pathname === "/styles.css") {
 			return new Response(Bun.file(join(srcDir, "styles.css")), {

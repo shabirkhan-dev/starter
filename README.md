@@ -1,86 +1,137 @@
 # Starter Kit
 
-Monorepo starter: **Turborepo + Bun** with Next.js, **Expo React Native (Expo Router + NativeWind)**, **Hono + Prisma + PostgreSQL**, PWA, Rust, C, and scripts (Bash, Lua, Python). Shared packages, lint/format everywhere, git hooks, CI/security workflows, and an optional dev container.
+Production-ready monorepo starter built with **Bun + Turborepo**.
+
+It includes multiple runnable apps (web, mobile, APIs, docs, systems demos), shared packages,
+polyglot scripts, architecture checks, hooks, CI/CD, security workflows, Docker, and a Dev
+Container.
 
 ## Quick start
 
-**Prerequisites:** [Bun](https://bun.sh) (Node is not required). Optional: [just](https://github.com/casey/just) for `just lint`, `just format`, etc.
+**Prerequisites**
+
+- [Bun](https://bun.sh) `1.3.11`
+- Optional: [just](https://github.com/casey/just), Docker Compose `v2.20+`, Rust, clang toolchain
 
 ```bash
 git clone <this-repo>
 cd <repo>
 bun install
-bun run prepare   # install git hooks (lefthook)
-bun run dev      # start Next.js + other dev servers
+bun run prepare
+bun run dev
 ```
 
-## What's inside
+## Monorepo at a glance
 
-| Area | Contents |
-|------|----------|
-| **apps/** | `web` (Next.js), `mobile` (Expo Router + NativeWind), `hono-api` (Hono + Prisma + PostgreSQL), `pwa` (Bun + service worker), `rust` (Cargo), `c` (C) |
-| **packages/** | `logger` (TS + Rust logger), `tailwind-config`, `typescript-config` |
-| **scripts/** | Bash, Lua, Python (ShellCheck, shfmt, luacheck, stylua, ruff) |
+| Area | Purpose |
+| --- | --- |
+| `apps/` | Runnable products/services: web, mobile, APIs, docs, PWA, and language demos |
+| `packages/` | Shared workspace packages used across apps (`@starter/*`) |
+| `scripts/` | Utility + test scripts in Bash/Lua/Python |
+| `docs/` | Architecture, Docker, QoL, and override documentation |
+| `docker/` | Docker Compose fragments used by root `docker-compose.yml` |
+| `.github/workflows/` | CI, CD, and security automation |
+| `.devcontainer/` | Reproducible development environment |
 
-One-command surface from repo root: **`bun run <task>`** (or **`just <task>`** if just is installed).
+## Apps (each piece)
+
+| App | Stack | What it covers |
+| --- | --- | --- |
+| `apps/web` | Next.js 16, React 19, Tailwind 4 | Main web app + Vitest + Playwright e2e |
+| `apps/mobile` | Expo SDK 55, Expo Router, React Native, NativeWind | Mobile app with file-based routing |
+| `apps/hono-api` | Hono, Prisma, PostgreSQL | Bun-first REST API with DB workflows |
+| `apps/fastapi` | FastAPI, uv, Ruff, pytest | Python API variant |
+| `apps/nest-api` | NestJS 11, JWT/auth modules, Jest | Nest API scaffold (currently being added) |
+| `apps/pwa` | Bun build pipeline, TS, service worker | Lightweight browser-first PWA |
+| `apps/docs` | Next.js + Fumadocs + MDX | Documentation site |
+| `apps/rust` | Cargo, clippy, rustfmt | Rust binary app and tests |
+| `apps/c` | C17, clang-format, clang-tidy | C binary app and checks |
+
+## Shared packages
+
+| Package | Purpose |
+| --- | --- |
+| `packages/logger` | Shared logger for TypeScript and Rust |
+| `packages/tailwind-config` | Shared Tailwind theme/tokens |
+| `packages/typescript-config` | Shared TS config presets (`base`, `nextjs`, `expo`) |
+
+## Root commands (single interface)
+
+Run from repo root with `bun run <task>` (or `just <task>` when available):
 
 | Command | Purpose |
-|--------|---------|
-| `bun run dev` | Start dev (Next.js, Rust, etc.) |
-| `bun run build` | Build all (Turbo + C app) |
-| `bun run lint` | Lint: Biome + scripts (ShellCheck, luacheck, ruff) |
-| `bun run format` | Format: Biome + scripts + Rust + C |
-| `bun run typecheck` | Typecheck (TS) |
-| `bun run test` | Run workspace tests (Turbo + script tests) |
-| `bun run test:coverage` | Run TS coverage + all language tests |
+| --- | --- |
+| `bun run dev` | Start workspace development servers with Turbo |
+| `bun run build` | Build all apps/packages |
+| `bun run start` | Start app `start` scripts through Turbo |
+| `bun run lint` | Lint workspace + script directories |
+| `bun run lint:fix` | Auto-fix lint issues where supported |
+| `bun run format` | Format TS/JS + shell/Lua/Python + Rust + C |
+| `bun run typecheck` | Run TypeScript type checks |
+| `bun run test` | Run workspace tests + script tests |
+| `bun run test:coverage` | Run coverage/multi-language test pass |
 | `bun run test:e2e:web` | Run Playwright e2e for web app |
-| `bun run architecture:check` | Enforce architecture boundary rules |
+| `bun run architecture:check` | Enforce import boundary rules |
+| `bun run preflight` | Lint + typecheck + test |
 
-## Docker (Postgres + Hono API)
+## Tooling and features
 
-Run Postgres and Hono API (API on host port **3001**):
+- **Package manager:** Bun workspaces (`apps/*`, `packages/*`)
+- **Monorepo orchestration:** Turborepo task pipeline
+- **TS/JS lint + format:** Biome (`biome.json`, tabs, line width 100)
+- **Git hooks:** Lefthook (format/lint/typecheck/architecture + file-size + secret scan + commit message checks)
+- **Architecture guardrails:** `scripts/architecture/check-boundaries.sh`
+- **Polyglot quality tooling:**
+  - Bash: ShellCheck + shfmt
+  - Lua: luacheck + stylua
+  - Python: Ruff + pytest
+  - Rust: rustfmt + clippy + cargo test
+  - C: clang-format + clang-tidy
+- **CI/CD + security:** GitHub Actions for CI gates, deploy template, dependency review, CodeQL, Dependabot
+- **Workspace conventions:** shared TS configs, shared Tailwind tokens, shared logger package
+
+## Running apps directly
+
+You can target one app with `bun --cwd <path> run <script>`, for example:
+
+- `bun --cwd apps/web run dev`
+- `bun --cwd apps/mobile run start`
+- `bun --cwd apps/hono-api run dev`
+- `bun --cwd apps/fastapi run dev`
+- `bun --cwd apps/docs run dev`
+- `bun --cwd apps/pwa run dev`
+- `bun --cwd apps/rust run dev`
+- `bun --cwd apps/c run dev`
+
+## Docker
+
+Postgres + Hono API stack:
 
 ```bash
 cp env.docker.example .env
 docker compose up --build
 ```
 
-Compose files live under **[docker/](docker/)** (modular fragments). See **[docs/docker.md](docs/docker.md)** for details and env options.
+- Compose fragments live in `docker/compose/`
+- Root `docker-compose.yml` includes fragment files
+- See [docs/docker.md](docs/docker.md) for env/ports/full usage
 
-## App commands (optional)
+## Reproducible development
 
-You can run any app directly with `bun --cwd <path> run <script>`.
+- **Dev Container:** `.devcontainer/` includes Bun, Rust, C, Python, Lua toolchain
+- **Agent guidance:** `AGENTS.md` + `.cursor/rules/`
+- **Project standards:** EditorConfig + Biome + Lefthook + architecture checks
 
-- `bun --cwd apps/web run dev` — Next.js dev server.
-- `bun --cwd apps/mobile run start` — Expo dev server (`android`, `ios`, and `web` scripts also available).
-- `bun --cwd apps/hono-api run dev` — Hono API dev server (`db:migrate`/`db:studio` for Prisma workflows).
-- `bun --cwd apps/pwa run dev` — PWA local server.
-- `bun --cwd apps/rust run dev` — Rust app via Cargo.
-- `bun --cwd apps/c run dev` — C app binary.
+## Documentation map
 
-## Setup notes
-
-- **Required:** [Bun](https://bun.sh) `1.3.11`.
-- **Optional:** [just](https://github.com/casey/just), Docker Compose `v2.20+`, Rust toolchain (`1.83`) for `apps/rust`, and clang tooling for `apps/c`.
-- **TypeScript baseline:** root `tsconfig.json` extends `@starter/typescript-config/base.json`.
-
-## Reproducible environment
-
-- **Dev Container:** [.devcontainer/](.devcontainer/) — Bun, Rust, C, Python, Lua, shell tools. In VS Code/Cursor: **Reopen in Container**. See [.devcontainer/README.md](.devcontainer/README.md).
-- **CI:** [.github/workflows/ci.yml](.github/workflows/ci.yml) — split gates for lint, typecheck, coverage tests, and web e2e with artifacts.
-- **CD:** [.github/workflows/cd.yml](.github/workflows/cd.yml) — staged deploy workflow template (staging on `main`, production on version tags).
-- **Security:** [.github/workflows/security.yml](.github/workflows/security.yml) + [.github/dependabot.yml](.github/dependabot.yml) — dependency review, CodeQL, and automated dependency updates.
-- **Git hooks:** Lefthook — format, lint, typecheck, large-file guard, secret scan, commit-msg checks. Installed by `bun run prepare`.
-
-## Docs
-
-- **[PROJECT.md](PROJECT.md)** — Full layout, tooling, and conventions.
-- **[docs/docker.md](docs/docker.md)** — Docker Compose (Postgres + Hono API).
-- **[docs/QoL.md](docs/QoL.md)** — QoL stack (hooks, task runner, EditorConfig, CI, per-language).
-- **[docs/architecture/README.md](docs/architecture/README.md)** — Architecture baseline and boundary rules.
-- **[docs/overrides.md](docs/overrides.md)** — How to intentionally override starter defaults.
-- **[AGENTS.md](AGENTS.md)** — Instructions for AI agents working in this repo.
+- [PROJECT.md](PROJECT.md) - project overview and conventions
+- [docs/QoL.md](docs/QoL.md) - developer quality-of-life stack
+- [docs/docker.md](docs/docker.md) - Docker setup and flow
+- [docs/architecture/README.md](docs/architecture/README.md) - architecture baseline and rules
+- [docs/overrides.md](docs/overrides.md) - override policy
+- [scripts/README.md](scripts/README.md) - script layout and usage
 
 ## License
 
-Dual-licensed under **MIT** or **Apache-2.0**, at your option. See [LICENSE-MIT](LICENSE-MIT) and [LICENSE-Apache-2.0](LICENSE-Apache-2.0).
+Dual-licensed under **MIT** or **Apache-2.0** at your option:
+[LICENSE-MIT](LICENSE-MIT), [LICENSE-Apache-2.0](LICENSE-Apache-2.0).

@@ -4,18 +4,16 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#0f172a" />
-		<meta name="description" content="Starter PWA — static HTML, Bun, and a service worker." />
+		<meta name="description" content="Starter PWA" />
 		<link rel="manifest" href="/manifest.webmanifest" />
 		<link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
 		<link rel="stylesheet" href="/styles.css" />
+		<link rel="stylesheet" href="/main.css" />
 		<title>Starter PWA</title>
 	</head>
 	<body>
 		<main class="app">
-			<h1>Starter PWA</h1>
-			<p class="muted">Offline-capable via service worker. Install from the browser menu.</p>
-			<p id="status" class="status" aria-live="polite">Checking…</p>
-			<button type="button" id="refresh" class="btn">Refresh status</button>
+			<div id="dashboard-root"></div>
 		</main>
 		<script type="module" src="/main.js"></script>
 	</body>

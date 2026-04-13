@@ -10,5 +10,5 @@
 		"skipLibCheck": true,
 		"types": ["bun"]
 	},
-	"include": ["src/sw.ts"]
+	"include": ["src/service-worker/sw.ts"]
 }
