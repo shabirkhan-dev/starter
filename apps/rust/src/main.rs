@@ -5,9 +5,8 @@ fn starter_message() -> &'static str {
 }
 
 fn main() {
-		let message: &str = starter_message();
+    let message: &str = starter_message();
     println!("{}", message);
-
 }
 
 #[cfg(test)]
@@ -16,7 +15,7 @@ mod tests {
 
     #[test]
     fn starter_message_is_stable() {
-		let message = starter_message();
+        let message = starter_message();
         assert_eq!(message, "Hello from Starter Kit Rust app");
     }
 }
