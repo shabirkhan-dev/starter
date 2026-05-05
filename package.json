@@ -32,10 +32,10 @@
     "prepare": "lefthook install"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.10",
-    "lefthook": "^2.1.4",
+    "@biomejs/biome": "^2.4.14",
+    "lefthook": "^2.1.6",
     "lightningcss": "1.30.1",
-    "turbo": "^2.9.3"
+    "turbo": "^2.9.9"
   },
   "ignoreScripts": ["sharp", "unrs-resolver"],
   "trustedDependencies": ["sharp", "unrs-resolver"],
