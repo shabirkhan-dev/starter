@@ -4,6 +4,7 @@
  */
 declare module "@starter/ui" {
 	import type * as React from "react";
+
 	type DivProps = React.ComponentProps<"div">;
 	type ButtonProps = React.ComponentProps<"button">;
 	type LabelProps = React.ComponentProps<"label">;
