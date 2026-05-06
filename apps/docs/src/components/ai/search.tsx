@@ -1,4 +1,8 @@
 "use client";
+import { type UseChatHelpers, useChat } from "@ai-sdk/react";
+import { Presence } from "@radix-ui/react-presence";
+import { DefaultChatTransport, type Tool, type UIToolInvocation } from "ai";
+import { Loader2, MessageCircleIcon, RefreshCw, SearchIcon, Send, X } from "lucide-react";
 import {
 	type ComponentProps,
 	createContext,
@@ -11,14 +15,10 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { Loader2, MessageCircleIcon, RefreshCw, SearchIcon, Send, X } from "lucide-react";
-import { cn } from "../../lib/cn";
-import { buttonVariants } from "../ui/button";
-import { useChat, type UseChatHelpers } from "@ai-sdk/react";
-import { DefaultChatTransport, type Tool, type UIToolInvocation } from "ai";
-import { Markdown } from "../markdown";
-import { Presence } from "@radix-ui/react-presence";
 import type { ChatUIMessage, SearchTool } from "../../app/api/chat/route";
+import { cn } from "../../lib/cn";
+import { Markdown } from "../markdown";
+import { buttonVariants } from "../ui/button";
 
 const Context = createContext<{
 	open: boolean;
@@ -45,6 +45,7 @@ export function AISearchPanelHeader({ className, ...props }: ComponentProps<"div
 			</div>
 
 			<button
+				type="button"
 				aria-label="Close"
 				tabIndex={-1}
 				className={cn(
@@ -274,7 +275,7 @@ function Message({ message, ...props }: { message: ChatUIMessage } & ComponentPr
 	}
 
 	return (
-		<div onClick={(e) => e.stopPropagation()} {...props}>
+		<div {...props}>
 			<p
 				className={cn(
 					"mb-1 text-sm font-medium text-fd-muted-foreground",
@@ -371,7 +372,9 @@ export function AISearchPanel() {
         }`}
 			</style>
 			<Presence present={open}>
-				<div
+				<button
+					type="button"
+					aria-label="Close AI search"
 					data-state={open ? "open" : "closed"}
 					className="fixed inset-0 z-30 backdrop-blur-xs bg-fd-overlay data-[state=open]:animate-fd-fade-in data-[state=closed]:animate-fd-fade-out lg:hidden"
 					onClick={() => setOpen(false)}
@@ -421,7 +424,7 @@ export function AISearchPanelList({ className, style, ...props }: ComponentProps
 			{messages.length === 0 ? (
 				<div className="text-sm text-fd-muted-foreground/80 size-full flex flex-col items-center justify-center text-center gap-2">
 					<MessageCircleIcon fill="currentColor" stroke="none" />
-					<p onClick={(e) => e.stopPropagation()}>Start a new chat below.</p>
+					<p>Start a new chat below.</p>
 				</div>
 			) : (
 				<div className="flex flex-col px-3 gap-4">
@@ -464,9 +467,15 @@ export function useHotKey() {
 }
 
 export function useAISearchContext() {
-	return use(Context)!;
+	const context = use(Context);
+
+	if (context == null) {
+		throw new Error("useAISearchContext must be used inside AISearchProvider");
+	}
+
+	return context;
 }
 
 function useChatContext() {
-	return use(Context)!.chat;
+	return useAISearchContext().chat;
 }

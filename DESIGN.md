@@ -62,13 +62,17 @@ create an app-specific override with a short rationale.
 
 ## Components
 
-The repo currently has app-local UI primitives in `apps/web/src/components/ui`.
+The repo has a shared web primitive package at `packages/ui` and app-local primitives in
+`apps/web/src/components/ui`.
 
-Preferred next step:
+Current rule:
 
-- Create `packages/ui` for shared web primitives.
-- Keep app-specific composed components inside each app or feature module.
-- Add Storybook or a docs route for visual review of shared components.
+- Use `@starter/ui` for stable shared primitives such as `Button`, `Card`, `Badge`, form fields,
+  `Separator`, `Skeleton`, and `Textarea`.
+- Keep complex or app-specific composed components inside each app or feature module.
+- Promote a component to `packages/ui` only after it is reusable and free of route/auth/data
+  coupling.
+- Add Storybook or a docs route later for visual review of shared components.
 - Add examples for loading, empty, error, disabled, hover, focus-visible, and selected states.
 
 ## AI UI Generation Rules

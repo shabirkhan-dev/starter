@@ -18,6 +18,7 @@ The repo already has a strong base:
 - Docker Compose fragments for Postgres and Hono API.
 - Dev Container support.
 - Agent instructions and rule files.
+- Shared `@starter/ui` package for stable web primitives.
 - Web app already has shadcn-style primitives, dashboard examples, Vitest, and Playwright.
 
 This is already beyond a normal starter kit. The next phase should make it easier to turn into a
@@ -25,15 +26,14 @@ real product quickly while keeping design quality, security, and agent workflow 
 
 ## High-Priority Gaps
 
-### 1. Shared UI Package Is Missing
+### 1. Shared UI Package Needs Gradual Migration
 
-`AGENTS.md` references `packages/ui`, but the repo currently has no `packages/ui`. The web app has
+`packages/ui` now exists as a conservative shared primitive package. The web app still has many
 local primitives in `apps/web/src/components/ui`, and mobile has separate UI primitives under
 `apps/mobile/src/components/ui`.
 
 Recommendation:
 
-- Add `packages/ui` for shared web React primitives.
 - Move stable shadcn-style web primitives there over time.
 - Keep app-specific composed components inside each app.
 - Add a component preview surface through Storybook or the docs app.
@@ -96,16 +96,16 @@ Why it matters:
 - Human review becomes easier.
 - CI failures map back to clear expected behavior.
 
-### 5. Nest API Tracking Is Broken
+### 5. Nest API Tracking Was Converted To Normal Files
 
-`apps/nest-api` is tracked as a gitlink, but there is no `.gitmodules` mapping. The directory exists
-locally, but a fresh clone may not reconstruct it correctly.
+`apps/nest-api` was previously tracked as a gitlink without a `.gitmodules` mapping. It has been
+converted back into normal workspace files so a fresh clone can reconstruct the Nest template.
 
 Recommendation:
 
-- Decide whether `apps/nest-api` should be a real workspace directory or a real submodule.
-- For a starter kit, prefer a normal tracked workspace directory.
-- If it must be a submodule, add a valid `.gitmodules`.
+- Keep app templates as normal workspace directories unless there is a strong reason to use
+  submodules.
+- Do not add nested Git repositories inside `apps/*`.
 
 Why it matters:
 
@@ -197,8 +197,9 @@ Output should be:
 
 For web:
 
-- Reuse `apps/web/src/components/ui` until `packages/ui` exists.
-- Move reusable primitives into `packages/ui` later.
+- Use `@starter/ui` for stable shared primitives.
+- Keep app-local components in `apps/web/src/components/ui` until they prove reusable.
+- Move reusable primitives into `packages/ui` gradually.
 - Keep route-specific composed components in feature modules.
 
 For mobile:
@@ -266,16 +267,16 @@ starter/
 
 ### Phase 1: Workflow Foundation
 
-- Add `DESIGN.md`.
-- Add PR and issue templates.
-- Fix `apps/nest-api` gitlink/submodule state.
-- Update `AGENTS.md` to reflect actual packages and design workflow.
-- Add docs link from root `README.md`.
+- Keep `DESIGN.md` current.
+- Use PR and issue templates.
+- Keep `apps/nest-api` as normal tracked workspace files.
+- Keep `AGENTS.md` aligned with actual packages and design workflow.
+- Keep docs linked from root `README.md`.
 
 ### Phase 2: Shared UI and Visual QA
 
-- Create `packages/ui`.
-- Move stable web primitives from `apps/web/src/components/ui`.
+- Expand `packages/ui` gradually.
+- Move stable web primitives from `apps/web/src/components/ui` when they are route/data independent.
 - Add Storybook or a docs-app component gallery.
 - Add Playwright screenshot checks for key web screens.
 - Add design-state examples for loading/empty/error.

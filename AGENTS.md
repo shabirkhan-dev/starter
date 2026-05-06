@@ -8,6 +8,14 @@ Read this file first when working in this repo.
 Monorepo starter kit managed with **Turborepo + Bun**. Four apps, shared packages, and
 multi-language scripts, all wired into a single lint/format/build/test surface.
 
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# Next.js: ALWAYS read docs before coding
+
+Before any Next.js work, find and read the relevant doc in `node_modules/next/dist/docs/`. Your training data is outdated — the docs are the source of truth.
+
+<!-- END:nextjs-agent-rules -->
 ## Repository layout
 
 ```
@@ -21,6 +29,7 @@ starter/
 │   └── docs/               # Documentation for the starter kit
 
 ├── packages/
+│   ├── ui/              # Shared web UI primitives
 │   ├── tailwind-config/ # Shared Tailwind theme (theme.css)
 │   ├── typescript-config/ # Shared tsconfig bases (base.json, nextjs.json)
 │   └── logger/          # Shared logger (TS + Rust)

@@ -62,6 +62,7 @@ starter/
 
 | Package | Workspace import | Purpose |
 | --- | --- | --- |
+| `packages/ui` | `@starter/ui` | Shared web UI primitives |
 | `packages/logger` | `@starter/logger` | Shared structured logger for TypeScript and Rust |
 | `packages/tailwind-config` | `@starter/tailwind-config` | Shared design tokens/theme |
 | `packages/typescript-config` | `@starter/typescript-config` | Reusable TypeScript config presets |

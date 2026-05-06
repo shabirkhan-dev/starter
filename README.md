@@ -51,6 +51,7 @@ bun run dev
 
 | Package | Purpose |
 | --- | --- |
+| `packages/ui` | Shared web UI primitives (`@starter/ui`) |
 | `packages/logger` | Shared logger for TypeScript and Rust |
 | `packages/tailwind-config` | Shared Tailwind theme/tokens |
 | `packages/typescript-config` | Shared TS config presets (`base`, `nextjs`, `expo`) |

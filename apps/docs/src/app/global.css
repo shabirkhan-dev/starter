@@ -4,6 +4,7 @@
 
 html {
   scrollbar-gutter: stable;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 html > body[data-scroll-locked] {
