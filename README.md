@@ -125,6 +125,8 @@ docker compose up --build
 ## Documentation map
 
 - [PROJECT.md](PROJECT.md) - project overview and conventions
+- [DESIGN.md](DESIGN.md) - design-system brief for humans and AI agents
+- [docs/ai-first-starter-workflow.md](docs/ai-first-starter-workflow.md) - starter-kit audit and AI-first workflow roadmap
 - [docs/QoL.md](docs/QoL.md) - developer quality-of-life stack
 - [docs/docker.md](docs/docker.md) - Docker setup and flow
 - [docs/architecture/README.md](docs/architecture/README.md) - architecture baseline and rules

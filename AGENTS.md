@@ -21,7 +21,6 @@ starter/
 │   └── docs/               # Documentation for the starter kit
 
 ├── packages/
-│   ├── ui/              # Shared React components (shadcn-style, re-exported)
 │   ├── tailwind-config/ # Shared Tailwind theme (theme.css)
 │   ├── typescript-config/ # Shared tsconfig bases (base.json, nextjs.json)
 │   └── logger/          # Shared logger (TS + Rust)
@@ -132,6 +131,8 @@ Postgres on 5432, Hono API on 3001 (host). See `docs/docker.md`.
 ## Key files to read for deeper context
 
 - `PROJECT.md` — detailed layout, tooling, and commands.
+- `DESIGN.md` — design-system brief for UI generation and review.
+- `docs/ai-first-starter-workflow.md` — starter-kit audit and AI-first workflow roadmap.
 - `docs/QoL.md` — full QoL stack (hooks, CI, per-language tools).
 - `docs/architecture/README.md` — architecture baseline and enforceable boundaries.
 - `docs/overrides.md` — policy for project-specific architecture overrides.
