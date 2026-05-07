@@ -13,10 +13,11 @@
     "lint:fix": "biome check --write ."
   },
   "dependencies": {
-    "@expo/ui": "~55.0.10",
     "@react-navigation/bottom-tabs": "^7.15.5",
     "@react-navigation/elements": "^2.9.10",
     "@react-navigation/native": "^7.1.33",
+    "@rn-primitives/hooks": "^1.4.0",
+    "@rn-primitives/types": "^1.4.0",
     "expo": "~55.0.12",
     "expo-constants": "~55.0.12",
     "expo-dev-client": "~55.0.23",

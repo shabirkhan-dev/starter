@@ -1,14 +1,14 @@
 import * as Device from "expo-device";
-import { Platform, StyleSheet } from "react-native";
+import { Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AnimatedIcon } from "@/components/animated-icon";
 import { HintRow } from "@/components/hint-row";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { SaveButton } from "@/components/ui/save-button";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { WebBadge } from "@/components/web-badge";
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
 
 function getDevMenuHint() {
 	if (Platform.OS === "web") {
@@ -31,24 +31,26 @@ function getDevMenuHint() {
 
 export default function HomeScreen() {
 	return (
-		<ThemedView style={styles.container}>
-			<SafeAreaView style={styles.safeArea}>
-				<ThemedView style={styles.heroSection}>
+		<ThemedView className="flex-1 justify-center flex-row bg-white dark:bg-black">
+			<SafeAreaView className="flex-1 px-4 items-center gap-6 max-w-xl">
+				<ThemedView className="items-center justify-center flex-1 px-4 gap-4">
 					<AnimatedIcon />
-					<ThemedText type="title" style={styles.title}>
+					<ThemedText type="title" className="text-center">
 						Welcome to&nbsp;Expo
 					</ThemedText>
-					<SaveButton />
-					<ThemedText type="subtitle" className="text-center text-2xl font-bold text-green-200">
-						Welcome to the future of mobile development
+
+					<Button label="Get Started" variant="primary" onPress={() => alert("Let's go!")} />
+
+					<ThemedText type="subtitle" className="text-center text-lg text-gray-500">
+						Built with UniWind & Headless Primitives
 					</ThemedText>
 				</ThemedView>
 
-				<ThemedText type="code" style={styles.code}>
-					get started
-				</ThemedText>
-
-				<ThemedView type="backgroundElement" style={styles.stepContainer}>
+				<Card
+					title="Development"
+					description="Getting started with your new app"
+					className="w-full"
+				>
 					<HintRow
 						title="Try editing"
 						hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
@@ -56,48 +58,12 @@ export default function HomeScreen() {
 					<HintRow title="Dev tools" hint={getDevMenuHint()} />
 					<HintRow
 						title="Fresh start"
-						hint={<ThemedText type="code">npm run reset-project</ThemedText>}
+						hint={<ThemedText type="code">bun run reset-project</ThemedText>}
 					/>
-				</ThemedView>
+				</Card>
 
 				{Platform.OS === "web" && <WebBadge />}
 			</SafeAreaView>
 		</ThemedView>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "center",
-		flexDirection: "row",
-	},
-	safeArea: {
-		flex: 1,
-		paddingHorizontal: Spacing.four,
-		alignItems: "center",
-		gap: Spacing.three,
-		paddingBottom: BottomTabInset + Spacing.three,
-		maxWidth: MaxContentWidth,
-	},
-	heroSection: {
-		alignItems: "center",
-		justifyContent: "center",
-		flex: 1,
-		paddingHorizontal: Spacing.four,
-		gap: Spacing.four,
-	},
-	title: {
-		textAlign: "center",
-	},
-	code: {
-		textTransform: "uppercase",
-	},
-	stepContainer: {
-		gap: Spacing.three,
-		alignSelf: "stretch",
-		paddingHorizontal: Spacing.three,
-		paddingVertical: Spacing.four,
-		borderRadius: Spacing.four,
-	},
-});

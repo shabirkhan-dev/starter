@@ -29,8 +29,6 @@ Skills are used via **auto-discovery** when you ask Expo-related questions (not 
 | `expo-dev-client` | Dev clients locally and TestFlight |
 | `expo-module` | Expo Modules API (Swift, Kotlin, TS), config plugins, native views |
 | `expo-tailwind-setup` | Tailwind CSS v4 + react-native-css + NativeWind v5 |
-| `expo-ui-jetpack-compose` | `@expo/ui/jetpack-compose` |
-| `expo-ui-swift-ui` | `@expo/ui/swift-ui` |
 | `native-data-fetching` | fetch, React Query, SWR, errors, caching, offline, Router loaders |
 | `upgrading-expo` | SDK upgrades and dependency fixes |
 | `use-dom` | Expo DOM — web code in webview / web |
@@ -40,8 +38,6 @@ Skills are used via **auto-discovery** when you ask Expo-related questions (not 
 - Settings screen + form + navigation → `building-native-ui`
 - Tailwind in Expo → `expo-tailwind-setup`
 - Recharts via web on native → `use-dom`
-- SwiftUI picker → `expo-ui-swift-ui`
-- Jetpack Compose MD3 → `expo-ui-jetpack-compose`
 - App Store deploy → `expo-deployment`
 - CI on every PR → `expo-cicd-workflows`
 - Upgrade SDK → `upgrading-expo`
@@ -132,10 +128,6 @@ A fresh **create-expo-app** template may use **StyleSheet** + **ThemedText** / *
 - With **NativeWind** enabled: use **`className`** on supported components; keep **`global.css`** imported from the **root** layout only (see Tailwind section).
 - Without NativeWind: **StyleSheet** / themed components are fine.
 - `react-native-safe-area-context` — not deprecated `SafeAreaView` from `react-native`.
-
-## Expo UI
-
-- Prefer `@expo/ui` where it fits (starter may use pieces like `@expo/ui/datetimepicker`).
 
 ## References
 
