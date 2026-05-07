@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { NeonCard } from "@/components/ui/neon-card";
 import { NeonColors } from "@/constants/design-system";
 
@@ -11,46 +11,48 @@ export function SpendingWidget() {
 	];
 
 	return (
-		<NeonCard>
-			<Text style={styles.label}>TODAY SPENDING</Text>
-			<View style={styles.amountContainer}>
-				<Text style={styles.amount}>
-					$192<Text style={styles.decimal}>.45</Text>
-				</Text>
-				<Text style={styles.percentage}>78%</Text>
-			</View>
+		<Pressable style={({ pressed }) => [{ opacity: pressed ? 0.9 : 1 }]}>
+			<NeonCard>
+				<Text style={styles.label}>TODAY SPENDING</Text>
+				<View style={styles.amountContainer}>
+					<Text style={styles.amount}>
+						$192<Text style={styles.decimal}>.45</Text>
+					</Text>
+					<Text style={styles.percentage}>78%</Text>
+				</View>
 
-			{/* Segmented Progress Bar */}
-			<View style={styles.progressBar}>
-				{[...Array(30)].map((_, i) => {
-					let color = NeonColors.text.muted;
-					if (i < 8) color = NeonColors.accent.orange;
-					else if (i < 15) color = NeonColors.accent.purple;
-					else if (i < 20) color = NeonColors.accent.blue;
-					else if (i < 24) color = NeonColors.accent.green;
+				{/* Segmented Progress Bar */}
+				<View style={styles.progressBar}>
+					{[...Array(30)].map((_, i) => {
+						let color = NeonColors.text.muted;
+						if (i < 8) color = NeonColors.accent.orange;
+						else if (i < 15) color = NeonColors.accent.purple;
+						else if (i < 20) color = NeonColors.accent.blue;
+						else if (i < 24) color = NeonColors.accent.green;
 
-					return (
-						<View
-							key={`segment-${i}`}
-							style={[styles.progressSegment, { backgroundColor: color }]}
-						/>
-					);
-				})}
-			</View>
+						return (
+							<View
+								key={`segment-${i}`}
+								style={[styles.progressSegment, { backgroundColor: color }]}
+							/>
+						);
+					})}
+				</View>
 
-			{/* Legend */}
-			<View style={styles.legend}>
-				{categories.map((cat) => (
-					<View key={cat.name} style={styles.legendItem}>
-						<View style={styles.legendLeft}>
-							<View style={[styles.dot, { backgroundColor: cat.color }]} />
-							<Text style={styles.categoryName}>{cat.name}</Text>
+				{/* Legend */}
+				<View style={styles.legend}>
+					{categories.map((cat) => (
+						<View key={cat.name} style={styles.legendItem}>
+							<View style={styles.legendLeft}>
+								<View style={[styles.dot, { backgroundColor: cat.color }]} />
+								<Text style={styles.categoryName}>{cat.name}</Text>
+							</View>
+							<Text style={styles.categoryAmount}>${cat.amount.toFixed(2)}</Text>
 						</View>
-						<Text style={styles.categoryAmount}>${cat.amount.toFixed(2)}</Text>
-					</View>
-				))}
-			</View>
-		</NeonCard>
+					))}
+				</View>
+			</NeonCard>
+		</Pressable>
 	);
 }
 

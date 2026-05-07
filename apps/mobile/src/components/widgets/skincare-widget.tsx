@@ -1,5 +1,5 @@
 import { Calendar, Sparkles } from "lucide-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { NeonCard } from "@/components/ui/neon-card";
 import { NeonColors } from "@/constants/design-system";
 
@@ -11,57 +11,59 @@ export function SkincareWidget() {
 	];
 
 	return (
-		<NeonCard>
-			<View style={styles.header}>
-				<Text style={styles.label}>DAILY ROUTINE</Text>
-				<Sparkles size={18} color={NeonColors.accent.purple} />
-			</View>
-
-			<View style={styles.statusRow}>
-				<Text style={styles.mainValue}>
-					Morning <Text style={styles.unit}>Set</Text>
-				</Text>
-				<View style={styles.dateBadge}>
-					<Calendar size={12} color={NeonColors.text.secondary} />
-					<Text style={styles.dateText}>May 7</Text>
+		<Pressable style={({ pressed }) => [{ opacity: pressed ? 0.9 : 1 }]}>
+			<NeonCard>
+				<View style={styles.header}>
+					<Text style={styles.label}>DAILY ROUTINE</Text>
+					<Sparkles size={18} color={NeonColors.accent.purple} />
 				</View>
-			</View>
 
-			<View style={styles.list}>
-				{routine.map((item) => (
-					<View key={item.name} style={styles.item}>
-						<View style={styles.itemLeft}>
-							<View style={[styles.dot, { backgroundColor: item.color }]} />
-							<View>
-								<Text style={styles.itemName}>{item.name}</Text>
-								<Text style={styles.itemTime}>{item.time}</Text>
+				<View style={styles.statusRow}>
+					<Text style={styles.mainValue}>
+						Morning <Text style={styles.unit}>Set</Text>
+					</Text>
+					<View style={styles.dateBadge}>
+						<Calendar size={12} color={NeonColors.text.secondary} />
+						<Text style={styles.dateText}>May 7</Text>
+					</View>
+				</View>
+
+				<View style={styles.list}>
+					{routine.map((item) => (
+						<View key={item.name} style={styles.item}>
+							<View style={styles.itemLeft}>
+								<View style={[styles.dot, { backgroundColor: item.color }]} />
+								<View>
+									<Text style={styles.itemName}>{item.name}</Text>
+									<Text style={styles.itemTime}>{item.time}</Text>
+								</View>
 							</View>
-						</View>
-						<View
-							style={[
-								styles.statusBadge,
-								{
-									backgroundColor:
-										item.status === "Done" ? "rgba(0, 230, 118, 0.15)" : "rgba(255, 109, 0, 0.1)",
-								},
-							]}
-						>
-							<Text
+							<View
 								style={[
-									styles.statusText,
+									styles.statusBadge,
 									{
-										color:
-											item.status === "Done" ? NeonColors.accent.green : NeonColors.accent.orange,
+										backgroundColor:
+											item.status === "Done" ? "rgba(0, 230, 118, 0.15)" : "rgba(255, 109, 0, 0.1)",
 									},
 								]}
 							>
-								{item.status}
-							</Text>
+								<Text
+									style={[
+										styles.statusText,
+										{
+											color:
+												item.status === "Done" ? NeonColors.accent.green : NeonColors.accent.orange,
+										},
+									]}
+								>
+									{item.status}
+								</Text>
+							</View>
 						</View>
-					</View>
-				))}
-			</View>
-		</NeonCard>
+					))}
+				</View>
+			</NeonCard>
+		</Pressable>
 	);
 }
 

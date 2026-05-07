@@ -1,5 +1,5 @@
 import { Heart } from "lucide-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { NeonCard } from "@/components/ui/neon-card";
 import { NeonColors } from "@/constants/design-system";
 
@@ -19,59 +19,63 @@ export function HeartRateWidget() {
 	];
 
 	return (
-		<NeonCard>
-			<View style={styles.header}>
-				<Text style={styles.timeLabel}>TODAY 11:26 PM</Text>
-				<Heart size={24} color={NeonColors.text.primary} strokeWidth={1.5} />
-			</View>
-
-			<View style={styles.mainValue}>
-				<Text style={styles.bpm}>
-					72 <Text style={styles.unit}>BPM</Text>
-				</Text>
-			</View>
-
-			<View style={styles.metaRow}>
-				<View style={styles.metaItem}>
-					<View style={styles.metaHeader}>
-						<View style={[styles.dot, { backgroundColor: NeonColors.accent.purple }]} />
-						<Text style={styles.metaLabel}>MIN</Text>
-					</View>
-					<Text style={styles.metaValue}>51 BPM</Text>
+		<Pressable style={({ pressed }) => [{ opacity: pressed ? 0.9 : 1 }]}>
+			<NeonCard>
+				<View style={styles.header}>
+					<Text style={styles.timeLabel}>TODAY 11:26 PM</Text>
+					<Heart size={24} color={NeonColors.text.primary} strokeWidth={1.5} />
 				</View>
-				<View style={styles.metaItem}>
-					<View style={styles.metaHeader}>
-						<View style={[styles.dot, { backgroundColor: NeonColors.accent.orange }]} />
-						<Text style={styles.metaLabel}>PEAK</Text>
-					</View>
-					<Text style={styles.metaValue}>97 BPM</Text>
-				</View>
-			</View>
 
-			{/* Complex Range Chart */}
-			<View style={styles.chartContainer}>
-				<View style={styles.barsRow}>
-					{chartData.map((d, i) => (
-						<View key={`bar-${i}`} style={styles.barColumn}>
-							<View
-								style={[
-									styles.bar,
-									{ height: d.h, marginTop: d.offset, backgroundColor: d.highlight || "#333333" },
-								]}
-							>
-								{d.highlight && <View style={[styles.glowDot, { backgroundColor: d.highlight }]} />}
-							</View>
+				<View style={styles.mainValue}>
+					<Text style={styles.bpm}>
+						72 <Text style={styles.unit}>BPM</Text>
+					</Text>
+				</View>
+
+				<View style={styles.metaRow}>
+					<View style={styles.metaItem}>
+						<View style={styles.metaHeader}>
+							<View style={[styles.dot, { backgroundColor: NeonColors.accent.purple }]} />
+							<Text style={styles.metaLabel}>MIN</Text>
 						</View>
-					))}
+						<Text style={styles.metaValue}>51 BPM</Text>
+					</View>
+					<View style={styles.metaItem}>
+						<View style={styles.metaHeader}>
+							<View style={[styles.dot, { backgroundColor: NeonColors.accent.orange }]} />
+							<Text style={styles.metaLabel}>PEAK</Text>
+						</View>
+						<Text style={styles.metaValue}>97 BPM</Text>
+					</View>
 				</View>
-				<View style={styles.timeline}>
-					<Text style={styles.timeText}>12AM</Text>
-					<Text style={styles.timeText}>6AM</Text>
-					<Text style={styles.timeText}>12PM</Text>
-					<Text style={styles.timeText}>6PM</Text>
+
+				{/* Complex Range Chart */}
+				<View style={styles.chartContainer}>
+					<View style={styles.barsRow}>
+						{chartData.map((d, i) => (
+							<View key={`bar-${i}`} style={styles.barColumn}>
+								<View
+									style={[
+										styles.bar,
+										{ height: d.h, marginTop: d.offset, backgroundColor: d.highlight || "#333333" },
+									]}
+								>
+									{d.highlight && (
+										<View style={[styles.glowDot, { backgroundColor: d.highlight }]} />
+									)}
+								</View>
+							</View>
+						))}
+					</View>
+					<View style={styles.timeline}>
+						<Text style={styles.timeText}>12AM</Text>
+						<Text style={styles.timeText}>6AM</Text>
+						<Text style={styles.timeText}>12PM</Text>
+						<Text style={styles.timeText}>6PM</Text>
+					</View>
 				</View>
-			</View>
-		</NeonCard>
+			</NeonCard>
+		</Pressable>
 	);
 }
 

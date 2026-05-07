@@ -1,13 +1,11 @@
-import { Sparkles } from "lucide-react-native";
+import { Calendar, CheckCircle2, Clock } from "lucide-react-native";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FloatingActionButton } from "@/components/ui/floating-action-button";
 import { LogListItem } from "@/components/ui/log-list-item";
 import { OSHeader } from "@/components/ui/os-header";
-import { SkincareWidget } from "@/components/widgets/skincare-widget";
 import { NeonColors } from "@/constants/design-system";
 
-export default function SkincareIndex() {
+export default function HistoryScreen() {
 	return (
 		<View style={styles.container}>
 			<SafeAreaView edges={["top"]} style={styles.safeArea}>
@@ -19,25 +17,42 @@ export default function SkincareIndex() {
 				>
 					<View style={styles.viewContainer}>
 						<View style={styles.viewHeader}>
-							<Text style={styles.viewTitle}>Skin Health</Text>
-							<Text style={styles.viewSubtitle}>Managing your daily dermatological routine.</Text>
+							<Text style={styles.viewTitle}>History</Text>
+							<Text style={styles.viewSubtitle}>Timeline of past routines and skin progress.</Text>
 						</View>
-						<SkincareWidget />
+
 						<View style={styles.logsList}>
 							<LogListItem
-								icon={Sparkles}
-								iconColor={NeonColors.accent.purple}
-								title="Face Wash"
-								subtitle="Completed morning set"
+								icon={CheckCircle2}
+								iconColor={NeonColors.accent.green}
+								title="Morning Routine"
+								subtitle="Cleanser → Serum → SPF"
 								value="DONE"
-								delta="08:00 AM"
+								delta="Today, 08:00"
+								deltaColor={NeonColors.text.secondary}
+							/>
+							<LogListItem
+								icon={Clock}
+								iconColor={NeonColors.accent.purple}
+								title="Night Routine"
+								subtitle="Double cleanse → Retinol → Moisturizer"
+								value="DONE"
+								delta="Yesterday, 22:30"
+								deltaColor={NeonColors.text.secondary}
+							/>
+							<LogListItem
+								icon={Calendar}
+								iconColor={NeonColors.accent.blue}
+								title="Weekly Mask"
+								subtitle="Clay mask — 15 min session"
+								value="DONE"
+								delta="May 4"
 								deltaColor={NeonColors.text.secondary}
 							/>
 						</View>
 					</View>
 				</ScrollView>
 			</SafeAreaView>
-			<FloatingActionButton color={NeonColors.accent.purple} />
 		</View>
 	);
 }

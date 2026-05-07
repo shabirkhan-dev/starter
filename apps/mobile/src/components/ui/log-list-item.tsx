@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { NeonColors } from "@/constants/design-system";
 
 interface LogListItemProps {
@@ -10,6 +10,7 @@ interface LogListItemProps {
 	value: string;
 	delta?: string;
 	deltaColor?: string;
+	onPress?: () => void;
 }
 
 export function LogListItem({
@@ -20,9 +21,13 @@ export function LogListItem({
 	value,
 	delta,
 	deltaColor = NeonColors.accent.green,
+	onPress,
 }: LogListItemProps) {
 	return (
-		<View style={styles.container}>
+		<Pressable
+			style={({ pressed }) => [styles.container, { opacity: pressed ? 0.7 : 1 }]}
+			onPress={onPress}
+		>
 			<View style={styles.left}>
 				<View style={[styles.iconWrapper, { backgroundColor: `${iconColor}15` }]}>
 					<Icon size={20} color={iconColor} strokeWidth={2} />
@@ -36,7 +41,7 @@ export function LogListItem({
 				<Text style={styles.value}>{value}</Text>
 				{delta && <Text style={[styles.delta, { color: deltaColor }]}>{delta}</Text>}
 			</View>
-		</View>
+		</Pressable>
 	);
 }
 

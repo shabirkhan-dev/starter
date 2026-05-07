@@ -12,7 +12,13 @@ import {
 } from "react-native";
 import { NeonColors } from "@/constants/design-system";
 
-export type OSModule = "Dashboard" | "Skincare" | "Exercise" | "Expenses";
+export type OSModule =
+	| "Dashboard"
+	| "Skincare"
+	| "Exercise"
+	| "Expenses"
+	| "Nutrition"
+	| "Mindfulness";
 
 export function OSHeader() {
 	const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
@@ -23,6 +29,8 @@ export function OSHeader() {
 		if (segments.includes("(skincare)")) return "Skincare";
 		if (segments.includes("(exercise)")) return "Exercise";
 		if (segments.includes("(expenses)")) return "Expenses";
+		if (segments.includes("(nutrition)")) return "Nutrition";
+		if (segments.includes("(mindfulness)")) return "Mindfulness";
 		return "Dashboard";
 	}, [segments]);
 
@@ -31,6 +39,8 @@ export function OSHeader() {
 		{ label: "Skincare", route: "/(modules)/(skincare)" },
 		{ label: "Exercise", route: "/(modules)/(exercise)" },
 		{ label: "Expenses", route: "/(modules)/(expenses)" },
+		{ label: "Nutrition", route: "/(modules)/(nutrition)" },
+		{ label: "Mindfulness", route: "/(modules)/(mindfulness)" },
 	];
 
 	const handleSelect = (route: string) => {
@@ -39,7 +49,9 @@ export function OSHeader() {
 				| "/(modules)/(dashboard)"
 				| "/(modules)/(skincare)"
 				| "/(modules)/(exercise)"
-				| "/(modules)/(expenses)",
+				| "/(modules)/(expenses)"
+				| "/(modules)/(nutrition)"
+				| "/(modules)/(mindfulness)",
 		);
 		setIsDropdownOpen(false);
 	};

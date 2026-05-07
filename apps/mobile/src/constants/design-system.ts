@@ -16,6 +16,8 @@ export const NeonColors = {
 		blue: "#00B0FF",
 		red: "#FF1744",
 		purple: "#D500F9",
+		yellow: "#FFEA00",
+		cyan: "#18FFFF",
 	},
 };
 

@@ -1,13 +1,11 @@
-import { Sparkles } from "lucide-react-native";
+import { BarChart3, TrendingUp, Zap } from "lucide-react-native";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FloatingActionButton } from "@/components/ui/floating-action-button";
 import { LogListItem } from "@/components/ui/log-list-item";
 import { OSHeader } from "@/components/ui/os-header";
-import { SkincareWidget } from "@/components/widgets/skincare-widget";
 import { NeonColors } from "@/constants/design-system";
 
-export default function SkincareIndex() {
+export default function InsightsScreen() {
 	return (
 		<View style={styles.container}>
 			<SafeAreaView edges={["top"]} style={styles.safeArea}>
@@ -19,25 +17,42 @@ export default function SkincareIndex() {
 				>
 					<View style={styles.viewContainer}>
 						<View style={styles.viewHeader}>
-							<Text style={styles.viewTitle}>Skin Health</Text>
-							<Text style={styles.viewSubtitle}>Managing your daily dermatological routine.</Text>
+							<Text style={styles.viewTitle}>Insights</Text>
+							<Text style={styles.viewSubtitle}>AI-powered analysis of your daily patterns.</Text>
 						</View>
-						<SkincareWidget />
+
 						<View style={styles.logsList}>
 							<LogListItem
-								icon={Sparkles}
-								iconColor={NeonColors.accent.purple}
-								title="Face Wash"
-								subtitle="Completed morning set"
-								value="DONE"
-								delta="08:00 AM"
+								icon={TrendingUp}
+								iconColor={NeonColors.accent.green}
+								title="Weekly Trend"
+								subtitle="Consistency up 12% this week"
+								value="+12%"
+								delta="vs last week"
 								deltaColor={NeonColors.text.secondary}
+							/>
+							<LogListItem
+								icon={Zap}
+								iconColor={NeonColors.accent.orange}
+								title="Peak Energy"
+								subtitle="Best performance window detected"
+								value="10 AM"
+								delta="Optimal"
+								deltaColor={NeonColors.accent.green}
+							/>
+							<LogListItem
+								icon={BarChart3}
+								iconColor={NeonColors.accent.blue}
+								title="Sleep Quality"
+								subtitle="REM cycles improving steadily"
+								value="87%"
+								delta="+3%"
+								deltaColor={NeonColors.accent.green}
 							/>
 						</View>
 					</View>
 				</ScrollView>
 			</SafeAreaView>
-			<FloatingActionButton color={NeonColors.accent.purple} />
 		</View>
 	);
 }

@@ -1,13 +1,11 @@
-import { Sparkles } from "lucide-react-native";
+import { AlertCircle, PiggyBank, Target } from "lucide-react-native";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FloatingActionButton } from "@/components/ui/floating-action-button";
 import { LogListItem } from "@/components/ui/log-list-item";
 import { OSHeader } from "@/components/ui/os-header";
-import { SkincareWidget } from "@/components/widgets/skincare-widget";
 import { NeonColors } from "@/constants/design-system";
 
-export default function SkincareIndex() {
+export default function BudgetScreen() {
 	return (
 		<View style={styles.container}>
 			<SafeAreaView edges={["top"]} style={styles.safeArea}>
@@ -19,25 +17,42 @@ export default function SkincareIndex() {
 				>
 					<View style={styles.viewContainer}>
 						<View style={styles.viewHeader}>
-							<Text style={styles.viewTitle}>Skin Health</Text>
-							<Text style={styles.viewSubtitle}>Managing your daily dermatological routine.</Text>
+							<Text style={styles.viewTitle}>Budget</Text>
+							<Text style={styles.viewSubtitle}>Spending limits and savings goals overview.</Text>
 						</View>
-						<SkincareWidget />
+
 						<View style={styles.logsList}>
 							<LogListItem
-								icon={Sparkles}
-								iconColor={NeonColors.accent.purple}
-								title="Face Wash"
-								subtitle="Completed morning set"
-								value="DONE"
-								delta="08:00 AM"
-								deltaColor={NeonColors.text.secondary}
+								icon={Target}
+								iconColor={NeonColors.accent.blue}
+								title="Monthly Target"
+								subtitle="$1,200 of $2,000 remaining"
+								value="60%"
+								delta="On track"
+								deltaColor={NeonColors.accent.green}
+							/>
+							<LogListItem
+								icon={PiggyBank}
+								iconColor={NeonColors.accent.green}
+								title="Savings Goal"
+								subtitle="Emergency fund progress"
+								value="$8,420"
+								delta="84%"
+								deltaColor={NeonColors.accent.green}
+							/>
+							<LogListItem
+								icon={AlertCircle}
+								iconColor={NeonColors.accent.orange}
+								title="Food & Dining"
+								subtitle="Category nearing limit"
+								value="$380/$400"
+								delta="95%"
+								deltaColor={NeonColors.accent.red}
 							/>
 						</View>
 					</View>
 				</ScrollView>
 			</SafeAreaView>
-			<FloatingActionButton color={NeonColors.accent.purple} />
 		</View>
 	);
 }

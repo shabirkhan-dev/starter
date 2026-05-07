@@ -1,10 +1,13 @@
 import { CheckCircle2, Coffee, Droplet, Mic, TrendingUp, Zap } from "lucide-react-native";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FloatingActionButton } from "@/components/ui/floating-action-button";
 import { LogListItem } from "@/components/ui/log-list-item";
 import { OSHeader } from "@/components/ui/os-header";
 import { QuickAction } from "@/components/ui/quick-action";
 import { HeartRateWidget } from "@/components/widgets/heart-rate-widget";
+import { MindfulnessWidget } from "@/components/widgets/mindfulness-widget";
+import { NutritionWidget } from "@/components/widgets/nutrition-widget";
 import { RecorderWidget } from "@/components/widgets/recorder-widget";
 import { SpendingWidget } from "@/components/widgets/spending-widget";
 import { WaterWidget } from "@/components/widgets/water-widget";
@@ -66,6 +69,12 @@ export default function DashboardIndex() {
 						<View style={styles.widgetWrapper}>
 							<RecorderWidget />
 						</View>
+						<View style={styles.widgetWrapper}>
+							<NutritionWidget />
+						</View>
+						<View style={styles.widgetWrapper}>
+							<MindfulnessWidget />
+						</View>
 					</ScrollView>
 
 					{/* Recent Activity */}
@@ -86,6 +95,7 @@ export default function DashboardIndex() {
 					</View>
 				</ScrollView>
 			</SafeAreaView>
+			<FloatingActionButton color={NeonColors.accent.green} />
 		</View>
 	);
 }

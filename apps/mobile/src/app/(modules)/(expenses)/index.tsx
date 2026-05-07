@@ -1,6 +1,7 @@
 import { ShoppingBag } from "lucide-react-native";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FloatingActionButton } from "@/components/ui/floating-action-button";
 import { LogListItem } from "@/components/ui/log-list-item";
 import { OSHeader } from "@/components/ui/os-header";
 import { SpendingWidget } from "@/components/widgets/spending-widget";
@@ -36,6 +37,7 @@ export default function ExpensesIndex() {
 					</View>
 				</ScrollView>
 			</SafeAreaView>
+			<FloatingActionButton color={NeonColors.accent.orange} />
 		</View>
 	);
 }

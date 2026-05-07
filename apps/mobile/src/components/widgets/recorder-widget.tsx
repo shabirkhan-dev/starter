@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { Pause, Settings2, Square } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { NeonCard } from "@/components/ui/neon-card";
@@ -8,53 +9,55 @@ export function RecorderWidget() {
 	const waveform = [10, 20, 15, 40, 60, 30, 80, 50, 40, 90, 30, 20, 10, 15, 25, 35, 15, 10];
 
 	return (
-		<NeonCard>
-			{/* Waveform Visualizer */}
-			<View style={styles.waveformContainer}>
-				<View style={styles.waveformRow}>
-					{waveform.map((h, i) => (
-						<View
-							key={`wave-${i}`}
-							style={[
-								styles.waveBar,
-								{
-									height: h,
-									backgroundColor: i > 10 ? NeonColors.text.muted : NeonColors.text.primary,
-								},
-							]}
-						/>
-					))}
-					<View style={styles.playhead} />
+		<Pressable style={({ pressed }) => [{ opacity: pressed ? 0.9 : 1 }]}>
+			<NeonCard>
+				{/* Waveform Visualizer */}
+				<View style={styles.waveformContainer}>
+					<View style={styles.waveformRow}>
+						{waveform.map((h, i) => (
+							<View
+								key={`wave-${i}`}
+								style={[
+									styles.waveBar,
+									{
+										height: h,
+										backgroundColor: i > 10 ? NeonColors.text.muted : NeonColors.text.primary,
+									},
+								]}
+							/>
+						))}
+						<View style={styles.playhead} />
+					</View>
+					<View style={styles.waveformDotted} />
 				</View>
-				<View style={styles.waveformDotted} />
-			</View>
 
-			<View style={styles.infoRow}>
-				<View style={styles.timeContainer}>
-					<View style={styles.recordingDot} />
-					<Text style={styles.time}>01:49</Text>
+				<View style={styles.infoRow}>
+					<View style={styles.timeContainer}>
+						<View style={styles.recordingDot} />
+						<Text style={styles.time}>01:49</Text>
+					</View>
+					<View>
+						<Text style={styles.statusLabel}>NEW AUDIO</Text>
+						<Text style={styles.statusLabel}>RECORDING...</Text>
+					</View>
 				</View>
-				<View>
-					<Text style={styles.statusLabel}>NEW AUDIO</Text>
-					<Text style={styles.statusLabel}>RECORDING...</Text>
+
+				{/* Controls */}
+				<View style={styles.controls}>
+					<Pressable style={styles.secondaryButton}>
+						<Settings2 size={20} color={NeonColors.text.primary} />
+					</Pressable>
+
+					<Pressable style={styles.mainButton}>
+						<Pause size={24} color={NeonColors.text.primary} fill={NeonColors.text.primary} />
+					</Pressable>
+
+					<Pressable style={styles.secondaryButton}>
+						<Square size={20} color={NeonColors.text.primary} fill={NeonColors.text.primary} />
+					</Pressable>
 				</View>
-			</View>
-
-			{/* Controls */}
-			<View style={styles.controls}>
-				<Pressable style={styles.secondaryButton}>
-					<Settings2 size={20} color={NeonColors.text.primary} />
-				</Pressable>
-
-				<Pressable style={styles.mainButton}>
-					<Pause size={24} color={NeonColors.text.primary} fill={NeonColors.text.primary} />
-				</Pressable>
-
-				<Pressable style={styles.secondaryButton}>
-					<Square size={20} color={NeonColors.text.primary} fill={NeonColors.text.primary} />
-				</Pressable>
-			</View>
-		</NeonCard>
+			</NeonCard>
+		</Pressable>
 	);
 }
 
