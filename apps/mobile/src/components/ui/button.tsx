@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Pressable, type PressableProps, Text } from "react-native";
 
 interface ButtonProps extends PressableProps {

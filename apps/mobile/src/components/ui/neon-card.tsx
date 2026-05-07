@@ -1,7 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import type * as React from "react";
 import { StyleSheet, View, type ViewStyle } from "react-native";
-import Svg, { Path } from "react-native-svg";
 import { NeonColors } from "@/constants/design-system";
 
 interface NeonCardProps {

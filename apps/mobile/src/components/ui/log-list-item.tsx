@@ -1,5 +1,4 @@
 import type { LucideIcon } from "lucide-react-native";
-import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NeonColors } from "@/constants/design-system";
 

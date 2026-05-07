@@ -1,5 +1,4 @@
 import { CheckCircle2, Coffee, Droplet, Mic, TrendingUp, Zap } from "lucide-react-native";
-import * as React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LogListItem } from "@/components/ui/log-list-item";

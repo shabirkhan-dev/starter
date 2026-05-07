@@ -53,6 +53,16 @@
 					}
 				}
 			}
+		},
+		{
+			"includes": ["apps/mobile/**/*.ts", "apps/mobile/**/*.tsx"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noArrayIndexKey": "off"
+					}
+				}
+			}
 		}
 	]
 }

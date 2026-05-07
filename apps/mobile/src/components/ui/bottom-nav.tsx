@@ -1,5 +1,4 @@
 import { Activity, BarChart2, Home, Plus, User } from "lucide-react-native";
-import * as React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { NeonColors } from "@/constants/design-system";
 
@@ -14,7 +13,7 @@ export function BottomNav() {
 
 	return (
 		<View style={styles.container}>
-			{tabs.map((tab, i) => (
+			{tabs.map((tab, _i) => (
 				<Pressable key={tab.label} style={[styles.tab, tab.isCenter && styles.centerTab]}>
 					{tab.isCenter ? (
 						<View style={styles.centerButton}>
