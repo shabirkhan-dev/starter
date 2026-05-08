@@ -1,5 +1,3 @@
-"use client";
-
 import "./admin-dashboard.css";
 import { AdminHeader, AdminWelcome } from "./admin-header";
 import { AdminRevenueBreakdown } from "./admin-revenue-breakdown";
