@@ -18,7 +18,9 @@ export type OSModule =
 	| "Exercise"
 	| "Expenses"
 	| "Nutrition"
-	| "Mindfulness";
+	| "Mindfulness"
+	| "Focus"
+	| "Library";
 
 export function OSHeader() {
 	const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
@@ -31,11 +33,15 @@ export function OSHeader() {
 		if (segments.includes("(expenses)")) return "Expenses";
 		if (segments.includes("(nutrition)")) return "Nutrition";
 		if (segments.includes("(mindfulness)")) return "Mindfulness";
+		if (segments.includes("(focus)")) return "Focus";
+		if (segments.includes("(library)")) return "Library";
 		return "Dashboard";
 	}, [segments]);
 
 	const modules: { label: OSModule; route: string }[] = [
 		{ label: "Dashboard", route: "/(modules)/(dashboard)" },
+		{ label: "Focus", route: "/(modules)/(focus)" },
+		{ label: "Library", route: "/(modules)/(library)" },
 		{ label: "Skincare", route: "/(modules)/(skincare)" },
 		{ label: "Exercise", route: "/(modules)/(exercise)" },
 		{ label: "Expenses", route: "/(modules)/(expenses)" },
@@ -51,7 +57,9 @@ export function OSHeader() {
 				| "/(modules)/(exercise)"
 				| "/(modules)/(expenses)"
 				| "/(modules)/(nutrition)"
-				| "/(modules)/(mindfulness)",
+				| "/(modules)/(mindfulness)"
+				| "/(modules)/(focus)"
+				| "/(modules)/(library)",
 		);
 		setIsDropdownOpen(false);
 	};

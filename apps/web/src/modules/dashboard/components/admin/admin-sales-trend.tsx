@@ -23,7 +23,15 @@ const yLabels = ["0k", "10k", "20k", "30k", "40k", "50k", "60k", "70k"];
 const maxValue = 70;
 
 const InfoIcon = () => (
-	<svg className="info-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+	<svg
+		className="info-icon"
+		width="14"
+		height="14"
+		viewBox="0 0 14 14"
+		fill="none"
+		aria-label="icon"
+		role="img"
+	>
 		<circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.2" />
 		<path d="M7 6V10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
 		<circle cx="7" cy="4.5" r="0.5" fill="currentColor" />
@@ -31,7 +39,7 @@ const InfoIcon = () => (
 );
 
 const MoreIcon = () => (
-	<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+	<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-label="icon" role="img">
 		<circle cx="3" cy="7" r="1" fill="currentColor" />
 		<circle cx="7" cy="7" r="1" fill="currentColor" />
 		<circle cx="11" cy="7" r="1" fill="currentColor" />
@@ -113,7 +121,10 @@ export function AdminSalesTrend() {
 						const existingHeight = (data.existing / maxValue) * 240;
 
 						return (
+							// biome-ignore lint/a11y/useSemanticElements: <explanation>
 							<div
+								role="button"
+								tabIndex={0}
 								key={data.month}
 								className="admin-bar-group"
 								onMouseEnter={() => setHoveredBar(index)}

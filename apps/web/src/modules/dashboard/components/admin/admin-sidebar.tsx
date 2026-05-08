@@ -15,7 +15,15 @@ type SidebarSection = {
 
 /* ── SVG Icons ── */
 const DashboardIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<rect x="1" y="1" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
 		<rect x="10" y="1" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
 		<rect x="1" y="10" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
@@ -24,7 +32,15 @@ const DashboardIcon = () => (
 );
 
 const BoxIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path
 			d="M9 1L16 5V13L9 17L2 13V5L9 1Z"
 			stroke="currentColor"
@@ -37,7 +53,15 @@ const BoxIcon = () => (
 );
 
 const TransactionsIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path d="M2 5H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
 		<path d="M2 9H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
 		<path d="M2 13H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -52,7 +76,15 @@ const TransactionsIcon = () => (
 );
 
 const ChartIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path
 			d="M2 14L6 8L10 11L16 4"
 			stroke="currentColor"
@@ -71,7 +103,15 @@ const ChartIcon = () => (
 );
 
 const MessageIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path
 			d="M3 3H15C15.55 3 16 3.45 16 4V12C16 12.55 15.55 13 15 13H5L2 16V4C2 3.45 2.45 3 3 3Z"
 			stroke="currentColor"
@@ -82,7 +122,15 @@ const MessageIcon = () => (
 );
 
 const TeamIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<circle cx="7" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.5" />
 		<path
 			d="M2 15C2 12.24 4.24 10 7 10C9.76 10 12 12.24 12 15"
@@ -101,7 +149,15 @@ const TeamIcon = () => (
 );
 
 const CampaignIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path
 			d="M3 5V13L9 9L15 13V5L9 9L3 5Z"
 			stroke="currentColor"
@@ -112,7 +168,15 @@ const CampaignIcon = () => (
 );
 
 const CustomerListIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<circle cx="9" cy="5" r="3" stroke="currentColor" strokeWidth="1.5" />
 		<path
 			d="M3 16C3 12.69 5.69 10 9 10C12.31 10 15 12.69 15 16"
@@ -124,7 +188,15 @@ const CustomerListIcon = () => (
 );
 
 const ChannelsIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
 		<rect x="11" y="2" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
 		<rect x="2" y="11" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
@@ -133,7 +205,15 @@ const ChannelsIcon = () => (
 );
 
 const OrderIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path
 			d="M3 3H5L7 13H14"
 			stroke="currentColor"
@@ -148,7 +228,15 @@ const OrderIcon = () => (
 );
 
 const RolesIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path
 			d="M9 2L3 5V9C3 12.31 5.55 15.36 9 16C12.45 15.36 15 12.31 15 9V5L9 2Z"
 			stroke="currentColor"
@@ -159,14 +247,30 @@ const RolesIcon = () => (
 );
 
 const BillingIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<rect x="2" y="4" width="14" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
 		<path d="M2 8H16" stroke="currentColor" strokeWidth="1.5" />
 	</svg>
 );
 
 const IntegrationsIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.5" />
 		<path d="M9 2V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
 		<path d="M9 14V16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -176,7 +280,15 @@ const IntegrationsIcon = () => (
 );
 
 const SupportIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path
 			d="M3 4C3 3.45 3.45 3 4 3H14C14.55 3 15 3.45 15 4V11C15 11.55 14.55 12 14 12H6L3 15V4Z"
 			stroke="currentColor"
@@ -190,7 +302,15 @@ const SupportIcon = () => (
 );
 
 const HelpIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.5" />
 		<path
 			d="M7 7C7 5.9 7.9 5 9 5C10.1 5 11 5.9 11 7C11 8 9.5 8.5 9.5 9.5"
@@ -203,7 +323,15 @@ const HelpIcon = () => (
 );
 
 const SettingsIcon = () => (
-	<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 18 18"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<circle cx="9" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5" />
 		<path
 			d="M14.5 9C14.5 8.6 14.47 8.21 14.41 7.83L16 6.64L14.5 4.04L12.62 4.67C12.08 4.21 11.46 3.85 10.78 3.62L10.5 1.5H7.5L7.22 3.62C6.54 3.85 5.92 4.21 5.38 4.67L3.5 4.04L2 6.64L3.59 7.83C3.53 8.21 3.5 8.6 3.5 9C3.5 9.4 3.53 9.79 3.59 10.17L2 11.36L3.5 13.96L5.38 13.33C5.92 13.79 6.54 14.15 7.22 14.38L7.5 16.5H10.5L10.78 14.38C11.46 14.15 12.08 13.79 12.62 13.33L14.5 13.96L16 11.36L14.41 10.17C14.47 9.79 14.5 9.4 14.5 9Z"
@@ -215,7 +343,15 @@ const SettingsIcon = () => (
 );
 
 const ChevronDownIcon = () => (
-	<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="16"
+		height="16"
+		viewBox="0 0 16 16"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path
 			d="M4 6L8 10L12 6"
 			stroke="currentColor"
@@ -271,7 +407,7 @@ export function AdminSidebar() {
 			{/* Logo */}
 			<div className="admin-sidebar-logo">
 				<div className="admin-sidebar-logo-icon">
-					<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="icon" role="img">
 						<path d="M8 1L14 5V11L8 15L2 11V5L8 1Z" fill="white" />
 					</svg>
 				</div>

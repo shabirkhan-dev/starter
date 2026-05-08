@@ -60,6 +60,7 @@ function MiniBarChart({ heights, accentIndex }: { heights: number[]; accentIndex
 		<div className="admin-stat-mini-chart">
 			{heights.map((h, i) => (
 				<div
+					// biome-ignore lint/suspicious/noArrayIndexKey: Static array
 					key={i}
 					className={`admin-stat-mini-bar${i === accentIndex ? " accent" : ""}`}
 					style={{ height: `${(h / 100) * 28}px` }}
@@ -71,7 +72,15 @@ function MiniBarChart({ heights, accentIndex }: { heights: number[]; accentIndex
 
 /* Small up-arrow icon for the footer */
 const ArrowUpIcon = () => (
-	<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="10"
+		height="10"
+		viewBox="0 0 10 10"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path d="M5 2V8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
 		<path
 			d="M2.5 4.5L5 2L7.5 4.5"
@@ -104,7 +113,7 @@ export function AdminStatsCards() {
 				<div className="admin-stat-arrow-icon">
 					<ArrowUpIcon />
 				</div>
-				<div className={`admin-stat-change ${1 ? "positive" : "negative"}`}>
+				<div className={`admin-stat-change positive`}>
 					<span>200%</span>
 					<span className="label">last year</span>
 				</div>

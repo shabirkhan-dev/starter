@@ -15,13 +15,29 @@ interface AppState {
 	expensesTransactions: LogEntry[];
 	nutritionMeals: LogEntry[];
 	mindfulnessJournal: LogEntry[];
+	focusTasks: LogEntry[];
+	libraryBooks: LogEntry[];
 
 	addEntry: (
-		module: "skincare" | "exercise" | "expenses" | "nutrition" | "mindfulness",
+		module:
+			| "skincare"
+			| "exercise"
+			| "expenses"
+			| "nutrition"
+			| "mindfulness"
+			| "focus"
+			| "library",
 		entry: Omit<LogEntry, "id" | "date">,
 	) => void;
 	deleteEntry: (
-		module: "skincare" | "exercise" | "expenses" | "nutrition" | "mindfulness",
+		module:
+			| "skincare"
+			| "exercise"
+			| "expenses"
+			| "nutrition"
+			| "mindfulness"
+			| "focus"
+			| "library",
 		id: string,
 	) => void;
 }
@@ -93,6 +109,26 @@ export const useAppStore = create<AppState>((set) => ({
 			date: new Date().toISOString(),
 		},
 	],
+	focusTasks: [
+		{
+			id: "1",
+			title: "Ship Personal OS",
+			subtitle: "Build UI & State",
+			value: "Active",
+			delta: "High Priority",
+			date: new Date().toISOString(),
+		},
+	],
+	libraryBooks: [
+		{
+			id: "1",
+			title: "Atomic Habits",
+			subtitle: "James Clear",
+			value: "70%",
+			delta: "Chapter 12",
+			date: new Date().toISOString(),
+		},
+	],
 
 	addEntry: (module, entry) =>
 		set((state) => {
@@ -113,6 +149,10 @@ export const useAppStore = create<AppState>((set) => ({
 					return { nutritionMeals: [newEntry, ...state.nutritionMeals] };
 				case "mindfulness":
 					return { mindfulnessJournal: [newEntry, ...state.mindfulnessJournal] };
+				case "focus":
+					return { focusTasks: [newEntry, ...state.focusTasks] };
+				case "library":
+					return { libraryBooks: [newEntry, ...state.libraryBooks] };
 				default:
 					return state;
 			}
@@ -131,6 +171,10 @@ export const useAppStore = create<AppState>((set) => ({
 					return { nutritionMeals: state.nutritionMeals.filter((e) => e.id !== id) };
 				case "mindfulness":
 					return { mindfulnessJournal: state.mindfulnessJournal.filter((e) => e.id !== id) };
+				case "focus":
+					return { focusTasks: state.focusTasks.filter((e) => e.id !== id) };
+				case "library":
+					return { libraryBooks: state.libraryBooks.filter((e) => e.id !== id) };
 				default:
 					return state;
 			}

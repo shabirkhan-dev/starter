@@ -39,7 +39,15 @@ const revenueXLabels = [
 ];
 
 const InfoIcon = () => (
-	<svg className="info-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+	<svg
+		className="info-icon"
+		width="14"
+		height="14"
+		viewBox="0 0 14 14"
+		fill="none"
+		aria-label="icon"
+		role="img"
+	>
 		<circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.2" />
 		<path d="M7 6V10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
 		<circle cx="7" cy="4.5" r="0.5" fill="currentColor" />
@@ -47,7 +55,15 @@ const InfoIcon = () => (
 );
 
 const SparkleIcon = () => (
-	<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="16"
+		height="16"
+		viewBox="0 0 16 16"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-label="icon"
+		role="img"
+	>
 		<path
 			d="M8 1L9.5 6.5L15 8L9.5 9.5L8 15L6.5 9.5L1 8L6.5 6.5L8 1Z"
 			stroke="currentColor"
@@ -58,7 +74,7 @@ const SparkleIcon = () => (
 );
 
 const ChevronDownSmall = () => (
-	<svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+	<svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-label="icon" role="img">
 		<path
 			d="M2.5 3.5L5 6.5L7.5 3.5"
 			stroke="currentColor"
@@ -98,6 +114,7 @@ export function AdminRevenueBreakdown() {
 			<div className="admin-revenue-chart-area">
 				{revenueBarData.map((value, i) => (
 					<div
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 						key={i}
 						className="admin-revenue-bar"
 						style={{ height: `${(value / 100) * 100}%` }}
@@ -107,6 +124,7 @@ export function AdminRevenueBreakdown() {
 
 			<div className="admin-revenue-x-labels">
 				{revenueXLabels.map((label, i) => (
+					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 					<span key={i} className="admin-revenue-x-label">
 						{label}
 					</span>
