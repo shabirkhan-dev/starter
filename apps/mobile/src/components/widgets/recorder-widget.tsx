@@ -1,4 +1,3 @@
-import { LinearGradient } from "expo-linear-gradient";
 import { Pause, Settings2, Square } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { NeonCard } from "@/components/ui/neon-card";

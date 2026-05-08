@@ -121,7 +121,7 @@ export function AdminSalesTrend() {
 						const existingHeight = (data.existing / maxValue) * 240;
 
 						return (
-							// biome-ignore lint/a11y/useSemanticElements: <explanation>
+							// biome-ignore lint/a11y/useSemanticElements: graph interaction
 							<div
 								role="button"
 								tabIndex={0}

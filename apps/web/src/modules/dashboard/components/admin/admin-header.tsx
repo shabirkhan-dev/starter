@@ -125,7 +125,7 @@ export function AdminHeader() {
 
 				{/* Avatar */}
 				<div className="admin-header-avatar">
-					{/* biome-ignore lint/performance/noImgElement: <explanation> */}
+					{/* biome-ignore lint/performance/noImgElement: img is sufficient here */}
 					<img
 						src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face"
 						alt="User"

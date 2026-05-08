@@ -114,7 +114,7 @@ export function AdminRevenueBreakdown() {
 			<div className="admin-revenue-chart-area">
 				{revenueBarData.map((value, i) => (
 					<div
-						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+						// biome-ignore lint/suspicious/noArrayIndexKey: static array
 						key={i}
 						className="admin-revenue-bar"
 						style={{ height: `${(value / 100) * 100}%` }}
@@ -124,7 +124,7 @@ export function AdminRevenueBreakdown() {
 
 			<div className="admin-revenue-x-labels">
 				{revenueXLabels.map((label, i) => (
-					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+					// biome-ignore lint/suspicious/noArrayIndexKey: static array
 					<span key={i} className="admin-revenue-x-label">
 						{label}
 					</span>
