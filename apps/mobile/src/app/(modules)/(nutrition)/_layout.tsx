@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { List, PieChart, Utensils } from "lucide-react-native";
+import { PieChart, Utensils } from "lucide-react-native";
 import { NeonColors } from "@/constants/design-system";
 
 export default function NutritionLayout() {

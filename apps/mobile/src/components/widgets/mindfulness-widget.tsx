@@ -1,7 +1,7 @@
 import { Brain, Heart, Moon, Sun } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { NeonCard } from "@/components/ui/neon-card";
-import { NeonColors, NeonShadows } from "@/constants/design-system";
+import { NeonColors } from "@/constants/design-system";
 
 export function MindfulnessWidget() {
 	return (
