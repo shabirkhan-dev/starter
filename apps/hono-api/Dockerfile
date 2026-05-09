@@ -8,6 +8,7 @@ WORKDIR /app
 # Monorepo: root package.json + lockfile + workspaces needed for hono-api
 COPY package.json bun.lock ./
 COPY packages ./packages
+COPY patches ./patches
 COPY apps/hono-api ./apps/hono-api
 
 # Install workspace deps; skip lifecycle scripts (prepare/postinstall need git/lefthook)

@@ -1,6 +1,6 @@
 import "./load-env";
-import { serve } from "bun";
 import { createLogger } from "@starter/logger";
+import { serve } from "bun";
 import app from "@/app";
 import { appConfig } from "@/shared/configs/app-config";
 import { connectPrisma } from "@/shared/lib/prisma";

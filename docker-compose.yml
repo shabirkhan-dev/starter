@@ -8,3 +8,4 @@ name: starter
 include:
   - docker/compose/postgres.yml
   - docker/compose/hono-api.yml
+  - docker/compose/rust-api.yml
