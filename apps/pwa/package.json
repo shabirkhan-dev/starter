@@ -15,8 +15,8 @@
 	},
 	"devDependencies": {
 		"@starter/typescript-config": "workspace:*",
-		"@types/bun": "^1.3.5",
-		"@types/node": "^25.5.0",
-		"typescript": "^6.0.2"
+		"@types/bun": "^1.3.14",
+		"@types/node": "^25.8.0",
+		"typescript": "^6.0.3"
 	}
 }
