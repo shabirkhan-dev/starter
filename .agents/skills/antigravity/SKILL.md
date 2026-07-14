@@ -1,6 +1,6 @@
 ---
 name: antigravity
-description: Core operating principles and premium design standards for the Antigravity agent in the School OS.
+description: Core operating principles and premium design standards for the Antigravity agent in the Starter.
 version: 1.0.0
 ---
 
@@ -43,6 +43,6 @@ When working on the frontend (`apps/web`, `apps/mobile`):
 - **Feedback**: Antigravity thrives on specific design feedback—mention colors, moods, or specific UI patterns you like.
 
 ## References
-- [AGENTS.md](file:///home/shabir/work/school-os/AGENTS.md)
-- [.cursor/rules/antigravity.mdc](file:///home/shabir/work/school-os/.cursor/rules/antigravity.mdc)
-- [.cursor/plans/school-os-next-phase-roadmap-fbfaf701.plan.md](file:///home/shabir/work/school-os/.cursor/plans/school-os-next-phase-roadmap-fbfaf701.plan.md)
+- [AGENTS.md](file:///home/shabir/work/starter/AGENTS.md)
+- [.cursor/rules/antigravity.mdc](file:///home/shabir/work/starter/.cursor/rules/antigravity.mdc)
+- [.cursor/plans/school-os-next-phase-roadmap-fbfaf701.plan.md](file:///home/shabir/work/starter/.cursor/plans/school-os-next-phase-roadmap-fbfaf701.plan.md)

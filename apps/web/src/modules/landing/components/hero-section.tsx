@@ -122,7 +122,7 @@ function WorkflowCard() {
 					</span>
 					<div>
 						<p className="font-semibold text-neutral-900 text-sm">Workspace bootstrap</p>
-						<p className="text-[11px] text-neutral-500">school-os · just now</p>
+						<p className="text-[11px] text-neutral-500">starter · just now</p>
 					</div>
 				</div>
 

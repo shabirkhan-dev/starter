@@ -1,11 +1,11 @@
-# School OS - Project overview
+# Starter - Project overview
 
-This document is the deeper technical reference for the School OS monorepo.
+This document is the deeper technical reference for the Starter monorepo.
 For quick setup/use, start with `README.md`.
 
 ## What this repository includes
 
-Monorepo school-os managed by **Bun + Turborepo**, with:
+Monorepo starter managed by **Bun + Turborepo**, with:
 
 - Multiple app templates (web, mobile, API, docs, Rust)
 - Shared workspace packages (`@school-os/*`)
@@ -17,7 +17,7 @@ Monorepo school-os managed by **Bun + Turborepo**, with:
 ## Repository layout
 
 ```text
-school-os/
+starter/
 ├── apps/                     # Runnable applications
 │   ├── web/                  # Next.js app
 │   ├── mobile/               # Expo Router + NativeWind app

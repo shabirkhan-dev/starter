@@ -1,10 +1,13 @@
-# School OS
+# Starter
 
-Production-ready monorepo school-os built with **Bun + Turborepo**.
+Production-ready monorepo starter built with **Bun + Turborepo**.
 
 It includes multiple runnable apps (web, mobile, Nest API, docs, Rust), shared packages,
 polyglot scripts, architecture checks, hooks, CI/CD, security workflows, Docker, and a Dev
 Container.
+
+> Workspace packages currently use the `@school-os/*` npm scope (technical imports). Product
+> naming in docs and UI is **Starter**.
 
 ## Quick start
 
@@ -14,8 +17,8 @@ Container.
 - Optional: Docker Compose `v2.20+`, Rust
 
 ```bash
-git clone <this-repo>
-cd <repo>
+git clone https://github.com/shabirkhan-dev/starter.git
+cd starter
 bun install
 bun run prepare
 bun run dev

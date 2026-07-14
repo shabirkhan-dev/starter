@@ -1,11 +1,11 @@
-# Agent instructions (School OS)
+# Agent instructions (Starter)
 
 Universal instructions for AI agents (Cursor, Copilot, Claude Code, Windsurf, Cline, Aider, etc.).
 Read this file first when working in this repo.
 
 ## Project overview
 
-Monorepo School OS managed with **Turborepo + Bun**. Apps, shared packages, and
+Monorepo Starter managed with **Turborepo + Bun**. Apps, shared packages, and
 multi-language scripts, all wired into a single lint/format/build/test surface.
 
 ## Documentation
@@ -30,7 +30,7 @@ Before any Next.js work, find and read the relevant doc in `node_modules/next/di
 ## Repository layout
 
 ```
-school-os/
+starter/
 ├── apps/
 │   ├── web/             # Next.js (React, Tailwind, shadcn-style UI)
 │   ├── mobile/          # Expo Router + NativeWind app (TypeScript)
