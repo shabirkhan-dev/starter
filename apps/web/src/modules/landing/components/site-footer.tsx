@@ -73,17 +73,17 @@ export function SiteFooter() {
 						<div className="mt-8">
 							<p className="font-medium text-foreground text-sm">Release notes</p>
 							<p className="mt-1 text-muted-foreground text-sm">
-								What landed in School OS this month. Once a month, no noise.
+								What landed in Starter this month. Once a month, no noise.
 							</p>
 							<form
 								onSubmit={handleSubmit}
 								className="mt-4 flex flex-col gap-2.5 sm:flex-row sm:items-center"
 							>
-								<label htmlFor="school-os-newsletter" className="sr-only">
+								<label htmlFor="starter-newsletter" className="sr-only">
 									Email address
 								</label>
 								<input
-									id="school-os-newsletter"
+									id="starter-newsletter"
 									type="email"
 									required
 									value={email}
