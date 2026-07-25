@@ -137,6 +137,11 @@ export function LoginForm() {
 								});
 							}}
 						/>
+						<AuthButton
+							label="Explore Mobile UI Showcase (Motion Tabs)"
+							variant="outline"
+							onPress={() => router.push("/ui")}
+						/>
 					</View>
 					<Text style={styles.footerText}>
 						Don't have an account?{" "}
