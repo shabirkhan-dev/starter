@@ -18,6 +18,7 @@ export interface MobileMotionButtonProps {
 	size?: ButtonSize;
 	loading?: boolean;
 	disabled?: boolean;
+	elevated?: boolean;
 	onPress?: () => void;
 	children?: React.ReactNode;
 	style?: object;
@@ -29,6 +30,7 @@ export function MobileMotionButton({
 	size = "default",
 	loading = false,
 	disabled = false,
+	elevated = true,
 	onPress,
 	children,
 	style,
@@ -36,17 +38,24 @@ export function MobileMotionButton({
 }: MobileMotionButtonProps) {
 	const isDisabled = disabled || loading;
 	const scale = useSharedValue(1);
+	const translateY = useSharedValue(0);
 
 	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
+		transform: [{ scale: scale.value }, { translateY: translateY.value }],
 	}));
 
 	const handlePressIn = () => {
-		if (!isDisabled) scale.value = withSpring(0.96, SPRING_CONFIG);
+		if (!isDisabled) {
+			scale.value = withSpring(0.96, SPRING_CONFIG);
+			translateY.value = withSpring(1.5, SPRING_CONFIG);
+		}
 	};
 
 	const handlePressOut = () => {
-		if (!isDisabled) scale.value = withSpring(1, SPRING_CONFIG);
+		if (!isDisabled) {
+			scale.value = withSpring(1, SPRING_CONFIG);
+			translateY.value = withSpring(0, SPRING_CONFIG);
+		}
 	};
 
 	return (
@@ -59,6 +68,8 @@ export function MobileMotionButton({
 				styles.base,
 				styles[variant],
 				styles[`size_${size}` as keyof typeof styles],
+				elevated && variant === "default" && styles.elevatedDefault,
+				elevated && variant === "outline" && styles.elevatedOutline,
 				isDisabled && styles.disabled,
 				animatedStyle,
 				style,
@@ -106,6 +117,20 @@ const styles = StyleSheet.create({
 	},
 	disabled: {
 		opacity: 0.5,
+	},
+	elevatedDefault: {
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.15,
+		shadowRadius: 4,
+		elevation: 3,
+	},
+	elevatedOutline: {
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.08,
+		shadowRadius: 2,
+		elevation: 1,
 	},
 	default: {
 		backgroundColor: "#ffffff",

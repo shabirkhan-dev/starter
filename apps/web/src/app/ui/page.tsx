@@ -239,24 +239,35 @@ export default function RabtxUIPage() {
 							{isButtonComponent ? (
 								activePlatform === "web" ? (
 									/* WEB MOTION BUTTON SHOWCASE */
-									<div className="space-y-6 w-full max-w-md flex flex-col items-center justify-center pt-4">
+									<div className="space-y-6 w-full max-w-md flex flex-col items-center justify-center pt-2">
 										<div className="flex flex-wrap items-center justify-center gap-3">
 											<MotionButton
+												elevated
 												variant="default"
 												onClick={() => setButtonLoading(!buttonLoading)}
 											>
-												Primary Motion Button
+												Elevated Motion Button
 											</MotionButton>
-											<MotionButton variant="secondary">Secondary</MotionButton>
-											<MotionButton variant="outline">Outline</MotionButton>
-											<MotionButton variant="destructive">Destructive</MotionButton>
+											<MotionButton elevated variant="secondary">
+												Secondary Depth
+											</MotionButton>
+											<MotionButton elevated variant="outline">
+												Outline Reflection
+											</MotionButton>
+											<MotionButton elevated variant="destructive">
+												Destructive Action
+											</MotionButton>
 										</div>
 
-										<div className="flex items-center gap-3 pt-2">
-											<MotionButton loading={buttonLoading} variant="default">
-												{buttonLoading ? "Loading State..." : "Click to test loading"}
+										<div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+											<MotionButton
+												loading={buttonLoading}
+												variant="default"
+												onClick={() => setButtonLoading(!buttonLoading)}
+											>
+												{buttonLoading ? "Processing State..." : "Click to Test Loader"}
 											</MotionButton>
-											<Button variant="outline">Standard Primitive Button</Button>
+											<Button variant="outline">Standard Base Primitive</Button>
 										</div>
 									</div>
 								) : (
