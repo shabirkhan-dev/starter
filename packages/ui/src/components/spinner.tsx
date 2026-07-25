@@ -1,12 +1,16 @@
-import { cn } from "@school-os/ui/lib/utils";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { Loading03Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { cn } from "@school-os/ui/lib/utils";
 
-function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
+function Spinner({
+	className,
+	strokeWidth = 2,
+	...props
+}: React.ComponentProps<"svg"> & { strokeWidth?: number }) {
 	return (
 		<HugeiconsIcon
 			icon={Loading03Icon}
-			strokeWidth={2}
+			strokeWidth={strokeWidth}
 			data-slot="spinner"
 			role="status"
 			aria-label="Loading"

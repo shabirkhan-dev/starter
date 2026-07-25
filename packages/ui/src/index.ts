@@ -83,6 +83,12 @@ export {
 } from "./components/input-group";
 export { Label } from "./components/label";
 export {
+	Tabs as MotionTabs,
+	TabsContent as MotionTabsContent,
+	TabsList as MotionTabsList,
+	TabsTrigger as MotionTabsTrigger,
+} from "./components/motion/tabs";
+export {
 	Select,
 	SelectContent,
 	SelectGroup,

@@ -53,5 +53,8 @@
     "expo-glass-effect": "57.0.1",
     "expo-linking": "57.0.3",
     "expo-symbols": "57.0.1"
+  },
+  "dependencies": {
+    "@turbo/linux-64": "2.10.5"
   }
 }
