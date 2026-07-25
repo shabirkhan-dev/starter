@@ -86,7 +86,7 @@ export default function ComponentSlugScreen() {
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView contentContainerStyle={styles.scrollContent}>
-				{/* HEADER */}
+				{/* 1. HEADER SECTION */}
 				<View style={styles.header}>
 					<View style={styles.badgeRow}>
 						<Text style={styles.badgeText}>Mobile Component</Text>
@@ -116,9 +116,19 @@ export default function ComponentSlugScreen() {
 
 				{activePlatformView === "preview" ? (
 					isButtonSlug ? (
-						/* BUTTON MOBILE PREVIEW MATCHING WEB EXACTLY */
+						/* BUTTON MOBILE PREVIEW & DOCS */
 						<View style={styles.previewSection}>
-							{/* GROUP 1: STATEFUL CASCADING TEXT STAGGER & ICON SLOT */}
+							{/* 2. OVERVIEW */}
+							<View style={styles.docCard}>
+								<Text style={styles.docCardTitle}>Overview</Text>
+								<Text style={styles.docCardText}>
+									Reanimated spring press motion buttons with tactile feedback on UI thread.
+									Integrated icon slot swaps and stateful text transitions (idle, loading, success,
+									error).
+								</Text>
+							</View>
+
+							{/* 3. HERO SHOWCASE EXAMPLES */}
 							<View style={styles.playgroundCard}>
 								<Text style={styles.sectionLabel}>Cascading Text Stagger & Icon Slot Swap:</Text>
 								<View style={styles.buttonList}>
@@ -146,9 +156,9 @@ export default function ComponentSlugScreen() {
 								</View>
 							</View>
 
-							{/* GROUP 2: BUTTON SIZES & ELEVATION */}
+							{/* 4. BUTTON SIZES */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Button Sizes & Elevation:</Text>
+								<Text style={styles.sectionLabel}>Button Sizes:</Text>
 								<View style={styles.buttonRow}>
 									<MobileMotionButton variant="primary" size="sm">
 										Small Pill
@@ -162,7 +172,7 @@ export default function ComponentSlugScreen() {
 								</View>
 							</View>
 
-							{/* GROUP 3: VARIANTS & LOADING SPINNER STATE */}
+							{/* 5. VARIANTS & SPINNER */}
 							<View style={styles.playgroundCard}>
 								<Text style={styles.sectionLabel}>Variants & Loading Spinner State:</Text>
 								<View style={styles.buttonList}>
@@ -185,10 +195,35 @@ export default function ComponentSlugScreen() {
 									</MobileButton>
 								</View>
 							</View>
+
+							{/* 6. MOTION PHYSICS SPECIFICATIONS */}
+							<View style={styles.docCard}>
+								<Text style={styles.docCardTitle}>Motion Physics Specs</Text>
+								<Text style={styles.specLine}>Stiffness: 500 (High elasticity touch)</Text>
+								<Text style={styles.specLine}>Damping: 30 (Smooth settle without overshoot)</Text>
+								<Text style={styles.specLine}>Mass: 0.6 (Tactile press scale 0.93)</Text>
+							</View>
+
+							{/* 7. ACCESSIBILITY (A11Y) */}
+							<View style={styles.docCard}>
+								<Text style={styles.docCardTitle}>Accessibility (a11y)</Text>
+								<Text style={styles.docCardText}>
+									Supports screen readers with accessibilityRole="button", accessibilityState=
+									{{ disabled, busy }}, and minimum 44pt touch target bounds.
+								</Text>
+							</View>
 						</View>
 					) : (
-						/* TABS MOBILE PREVIEW */
+						/* TABS MOBILE PREVIEW & DOCS */
 						<View style={styles.previewSection}>
+							<View style={styles.docCard}>
+								<Text style={styles.docCardTitle}>Overview</Text>
+								<Text style={styles.docCardText}>
+									React Native Reanimated spring tabs with layout measurements and UI-thread
+									indicator glides across pill, underline, and segment variants.
+								</Text>
+							</View>
+
 							<View style={styles.variantCard}>
 								<Text style={styles.sectionLabel}>Variant Switcher:</Text>
 								<MotionTabs
@@ -210,7 +245,6 @@ export default function ComponentSlugScreen() {
 										<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
 										<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
 										<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
-										<MotionTabsTrigger value="security">Security</MotionTabsTrigger>
 									</MotionTabsList>
 
 									<View style={styles.contentContainer}>
@@ -232,13 +266,6 @@ export default function ComponentSlugScreen() {
 											<Text style={styles.cardHeader}>Workspace Preferences</Text>
 											<Text style={styles.cardText}>
 												Configure haptic feedback and native layout bounds.
-											</Text>
-										</MotionTabsContent>
-
-										<MotionTabsContent value="security" style={styles.cardInner}>
-											<Text style={styles.cardHeader}>Security & Access</Text>
-											<Text style={styles.cardText}>
-												Session authentication tokens and audit log permissions.
 											</Text>
 										</MotionTabsContent>
 									</View>
@@ -314,6 +341,29 @@ const styles = StyleSheet.create({
 	},
 	previewSection: {
 		gap: 16,
+	},
+	docCard: {
+		backgroundColor: "#18181b",
+		padding: 16,
+		borderRadius: 12,
+		borderWidth: 1,
+		borderColor: "#27272a",
+		gap: 6,
+	},
+	docCardTitle: {
+		fontSize: 14,
+		fontWeight: "bold",
+		color: "#ffffff",
+	},
+	docCardText: {
+		fontSize: 12,
+		color: "#a1a1aa",
+		lineHeight: 18,
+	},
+	specLine: {
+		fontSize: 11,
+		color: "#14b8a6",
+		fontFamily: "monospace",
 	},
 	variantCard: {
 		flexDirection: "row",

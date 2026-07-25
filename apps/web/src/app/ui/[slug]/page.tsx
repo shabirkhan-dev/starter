@@ -1,14 +1,17 @@
 "use client";
 
 import {
+	AccessibilityIcon,
 	ActivityIcon,
 	ArrowRightIcon,
+	BrushIcon,
 	CodeIcon,
 	Copy01Icon,
+	CubeIcon,
+	Download01Icon,
 	EyeIcon,
 	Grid02Icon,
 	Layers01Icon,
-	SecurityIcon,
 	Settings02Icon,
 	SmartPhone01Icon,
 	SparklesIcon,
@@ -17,7 +20,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Badge } from "@school-os/ui/components/badge";
 import { Button } from "@school-os/ui/components/button";
-import { Card, CardContent, CardHeader } from "@school-os/ui/components/card";
+import { Card, CardContent } from "@school-os/ui/components/card";
 import {
 	type ButtonState,
 	MotionButton,
@@ -29,7 +32,6 @@ import {
 	TabsList as MotionTabsList,
 	TabsTrigger as MotionTabsTrigger,
 } from "@school-os/ui/components/motion/tabs";
-import { motion } from "motion/react";
 import { use, useState } from "react";
 
 const WEB_TABS_CODE = `import {
@@ -39,7 +41,7 @@ const WEB_TABS_CODE = `import {
   TabsContent,
 } from "@school-os/ui/components/motion/tabs";
 
-export function MotionTabsExample() {
+export function MotionTabsDemo() {
   return (
     <Tabs defaultValue="overview" variant="pill" size="md">
       <TabsList>
@@ -54,36 +56,24 @@ export function MotionTabsExample() {
 }`;
 
 const WEB_BUTTON_CODE = `import { MotionButton, StatefulButton } from "@school-os/ui/components/motion/button";
+import { ArrowRightIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
-export function MotionButtonExamples() {
-  const [okState, setOkState] = useState("idle");
+export function MotionButtonDemo() {
+  const [state, setState] = useState("idle");
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Stateful Cascading Text Stagger & Icon Slot */}
+    <div className="flex gap-3">
       <StatefulButton
-        state={okState}
+        state={state}
         variant="primary"
-        size="md"
         ripple
-        onClick={() => runStateful("ok")}
-        loadingText="Saving changes"
-        successText="Saved successfully"
-        icon={<ArrowRightIcon className="size-4" />}
+        onClick={() => setState("loading")}
+        icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} />}
       >
         Save changes
       </StatefulButton>
-
-      {/* Glossy Elevated Ripple Buttons */}
-      <MotionButton variant="primary" size="md" ripple>
-        Primary Ripple
-      </MotionButton>
-      <MotionButton variant="secondary" size="md">
-        Secondary
-      </MotionButton>
-      <MotionButton variant="outline" size="md">
-        Outline Reflection
-      </MotionButton>
+      <MotionButton variant="outline">Outline Reflection</MotionButton>
     </div>
   );
 }`;
@@ -96,8 +86,7 @@ export function MobileButtonDemo() {
       <MobileStatefulButton state="idle" variant="primary">
         Save changes
       </MobileStatefulButton>
-      <MobileMotionButton variant="secondary">Secondary</MobileMotionButton>
-      <MobileMotionButton variant="outline">Outline</MobileMotionButton>
+      <MobileMotionButton variant="outline">Outline Reflection</MobileMotionButton>
     </View>
   );
 }`;
@@ -107,14 +96,15 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 	const slug = resolvedParams.slug || "tabs";
 
 	const [activePlatform, setActivePlatform] = useState<"web" | "mobile">("web");
-	const [activeVariant, setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
-	const [activeSize, setActiveSize] = useState<"sm" | "md" | "lg">("md");
+	const [activeVariant, _setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
+	const [activeSize, _setActiveSize] = useState<"sm" | "md" | "lg">("md");
 	const [activeViewTab, setActiveViewTab] = useState<"preview" | "code">("preview");
-	const [buttonLoading, setButtonLoading] = useState(false);
+	const [_buttonLoading, _setButtonLoading] = useState(false);
 
 	const [okState, setOkState] = useState<ButtonState>("idle");
 	const [errState, setErrState] = useState<ButtonState>("idle");
 	const [copied, setCopied] = useState(false);
+	const [cmdCopied, setCmdCopied] = useState(false);
 
 	const runStatefulDemo = (target: "ok" | "err") => {
 		const setter = target === "ok" ? setOkState : setErrState;
@@ -138,11 +128,17 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 		setTimeout(() => setCopied(false), 2000);
 	};
 
+	const copyInstall = () => {
+		navigator.clipboard.writeText("bun add @school-os/ui motion");
+		setCmdCopied(true);
+		setTimeout(() => setCmdCopied(false), 2000);
+	};
+
 	return (
-		<div className="space-y-8 max-w-4xl mx-auto py-2">
-			{/* HEADER SECTION */}
-			<div className="space-y-3">
-				<div className="flex flex-wrap items-center justify-between gap-4">
+		<div className="space-y-12 max-w-4xl mx-auto py-4 pb-16">
+			{/* 1. HEADER SECTION & PLATFORM SWITCHER */}
+			<div className="space-y-4">
+				<div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
 					<div className="flex items-center gap-2">
 						<Badge variant="secondary" className="px-2.5 py-0.5 font-mono text-xs text-foreground">
 							slug: /ui/{slug}
@@ -155,7 +151,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 						</Badge>
 					</div>
 
-					{/* PLATFORM SWITCHER (WEB vs MOBILE) */}
+					{/* PLATFORM SWITCHER */}
 					<MotionTabs
 						value={activePlatform}
 						onValueChange={(p) => setActivePlatform(p as "web" | "mobile")}
@@ -176,7 +172,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				</div>
 
 				<div>
-					<h1 className="text-2xl font-semibold tracking-tight text-foreground flex items-center gap-2">
+					<h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
 						<HugeiconsIcon
 							icon={
 								isButtonComponent
@@ -185,66 +181,40 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 										? Grid02Icon
 										: SmartPhone01Icon
 							}
-							size={22}
+							size={28}
 							strokeWidth={2}
 						/>
-						{isButtonComponent ? "Motion Button Component" : "Motion Tabs Component"} (
-						{activePlatform === "web" ? "Web Edition" : "Mobile Expo Edition"})
+						{isButtonComponent ? "Motion Button" : "Motion Tabs"}
 					</h1>
-					<p className="text-xs text-muted-foreground mt-1">
+					<p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
 						{isButtonComponent
-							? "Spring press scaling with cascading text stagger, icon slot swaps, and material ripples."
-							: "Spring-animated layout projection for both React Web & React Native Mobile."}
+							? "Production-ready motion button with cascading text stagger, icon slot swaps, material ripples, and spring press scaling physics."
+							: "Spring-animated layout projection tabs with exclusion text blending and active indicator glide."}
 					</p>
 				</div>
 			</div>
 
-			{/* INTERACTIVE DEMO CARD */}
-			<Card className="overflow-hidden border border-border bg-card shadow-sm">
-				<CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-border p-4 gap-4">
-					{!isButtonComponent && activePlatform === "web" ? (
-						<div className="flex flex-wrap items-center gap-4">
-							<div className="flex items-center gap-2">
-								<span className="text-xs font-mono font-medium text-muted-foreground">
-									Variant:
-								</span>
-								<MotionTabs
-									value={activeVariant}
-									onValueChange={(v) => setActiveVariant(v as "pill" | "underline" | "segment")}
-									variant="pill"
-									size="sm"
-								>
-									<MotionTabsList>
-										<MotionTabsTrigger value="pill">Pill</MotionTabsTrigger>
-										<MotionTabsTrigger value="underline">Underline</MotionTabsTrigger>
-										<MotionTabsTrigger value="segment">Segment</MotionTabsTrigger>
-									</MotionTabsList>
-								</MotionTabs>
-							</div>
+			{/* 2. OVERVIEW */}
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+					<HugeiconsIcon icon={CubeIcon} size={18} strokeWidth={2} />
+					Overview
+				</h2>
+				<p className="text-sm text-muted-foreground leading-relaxed">
+					{isButtonComponent
+						? "Rabtx UI Motion Button is engineered for high-performance interactive interfaces. It provides tactile spring physics, material press ripples, elevated glossy reflection highlights, and slot-swapping stateful loaders (idle, loading, success, error) with zero-layout-shift kerning preservation."
+						: "Rabtx UI Motion Tabs provides GPU-accelerated spring glides across active tabs using Framer Motion on Web and React Native Reanimated on Mobile. Includes pill, underline, and segment variants with automatic light/dark blend inversion."}
+				</p>
+			</section>
 
-							<div className="flex items-center gap-2">
-								<span className="text-xs font-mono font-medium text-muted-foreground">Size:</span>
-								<MotionTabs
-									value={activeSize}
-									onValueChange={(s) => setActiveSize(s as "sm" | "md" | "lg")}
-									variant="pill"
-									size="sm"
-								>
-									<MotionTabsList>
-										<MotionTabsTrigger value="sm">sm</MotionTabsTrigger>
-										<MotionTabsTrigger value="md">md</MotionTabsTrigger>
-										<MotionTabsTrigger value="lg">lg</MotionTabsTrigger>
-									</MotionTabsList>
-								</MotionTabs>
-							</div>
-						</div>
-					) : (
-						<span className="text-xs font-mono font-medium text-muted-foreground">
-							{isButtonComponent ? "Motion Button Showcase" : "Motion Tabs Showcase"}
-						</span>
-					)}
+			{/* 3. INTERACTIVE HERO SHOWCASE (PREVIEW / CODE) */}
+			<section className="space-y-3">
+				<div className="flex items-center justify-between">
+					<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+						<HugeiconsIcon icon={EyeIcon} size={18} strokeWidth={2} />
+						Interactive Showcase
+					</h2>
 
-					{/* View Switcher: Preview / Code */}
 					<MotionTabs
 						value={activeViewTab}
 						onValueChange={(v) => setActiveViewTab(v as "preview" | "code")}
@@ -262,20 +232,16 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 							</MotionTabsTrigger>
 						</MotionTabsList>
 					</MotionTabs>
-				</CardHeader>
+				</div>
 
-				<CardContent className="p-0">
-					{activeViewTab === "preview" && (
-						<div className="relative min-h-[340px] w-full flex flex-col items-center justify-start p-8 pt-10 bg-background border-b border-border">
-							{isButtonComponent ? (
-								activePlatform === "web" ? (
-									/* WEB MOTION BUTTON SHOWCASE */
-									<div className="space-y-8 w-full max-w-lg flex flex-col items-center justify-center pt-2">
-										{/* Stateful Cascading Text Stagger & Icon Slot Swap Buttons */}
-										<div className="space-y-2 text-center w-full">
-											<span className="text-xs font-mono text-muted-foreground block">
-												Cascading Text Stagger & Icon Slot Swap:
-											</span>
+				<Card className="overflow-hidden border border-border bg-card shadow-xs">
+					<CardContent className="p-0">
+						{activeViewTab === "preview" && (
+							<div className="relative min-h-[340px] w-full flex flex-col items-center justify-center p-8 bg-background border-b border-border">
+								{isButtonComponent ? (
+									activePlatform === "web" ? (
+										/* WEB HERO PREVIEW */
+										<div className="space-y-6 w-full max-w-lg flex flex-col items-center justify-center">
 											<div className="flex flex-wrap items-center justify-center gap-3">
 												<StatefulButton
 													state={okState}
@@ -302,278 +268,413 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 													Submit form
 												</StatefulButton>
 											</div>
-										</div>
 
-										{/* Sized Normal & Pill Motion Buttons */}
-										<div className="space-y-2 text-center w-full">
-											<span className="text-xs font-mono text-muted-foreground block">
-												Button Sizes & Elevation Reflection:
-											</span>
 											<div className="flex flex-wrap items-center justify-center gap-3">
-												<MotionButton elevated ripple variant="primary" size="sm">
-													Small Pill
-												</MotionButton>
-
 												<MotionButton elevated ripple variant="primary" size="md">
-													Medium Primary
+													Elevated Ripple
 												</MotionButton>
-
-												<MotionButton elevated ripple variant="primary" size="lg">
-													Large Action
-												</MotionButton>
-
-												<MotionButton elevated ripple variant="primary" size="icon">
-													<HugeiconsIcon icon={SparklesIcon} size={16} strokeWidth={2} />
-												</MotionButton>
-											</div>
-										</div>
-
-										{/* Variants & Loading */}
-										<div className="space-y-2 text-center w-full">
-											<span className="text-xs font-mono text-muted-foreground block">
-												Variants & Loading Spinner State:
-											</span>
-											<div className="flex flex-wrap items-center justify-center gap-3">
-												<MotionButton
-													loading={buttonLoading}
-													variant="primary"
-													size="md"
-													onClick={() => setButtonLoading(!buttonLoading)}
-												>
-													{buttonLoading ? "Processing State..." : "Click for Loader"}
-												</MotionButton>
-												<MotionButton variant="outline" size="md">
+												<MotionButton elevated variant="outline" size="md">
 													Outline Reflection
 												</MotionButton>
-												<MotionButton variant="destructive" size="md">
+												<MotionButton elevated variant="destructive" size="md">
 													Destructive
 												</MotionButton>
-												<Button variant="outline">Base Primitive</Button>
 											</div>
 										</div>
-									</div>
+									) : (
+										/* MOBILE HERO PREVIEW */
+										<div className="w-[300px] rounded-[36px] border-[6px] border-zinc-800 bg-zinc-950 p-4 pt-3 shadow-2xl space-y-4">
+											<div className="flex items-center justify-between text-[11px] text-zinc-400 px-2 font-mono">
+												<span>9:41</span>
+												<div className="w-16 h-3.5 bg-zinc-900 rounded-full mx-auto" />
+												<span>100%</span>
+											</div>
+
+											<div className="space-y-3 py-4 flex flex-col items-stretch">
+												<StatefulButton
+													state={okState}
+													variant="primary"
+													size="md"
+													onClick={() => runStatefulDemo("ok")}
+													loadingText="Saving changes"
+													successText="Saved successfully"
+												>
+													Save changes
+												</StatefulButton>
+												<MotionButton variant="secondary" size="md">
+													Secondary
+												</MotionButton>
+												<MotionButton variant="outline" size="md">
+													Outline
+												</MotionButton>
+											</div>
+
+											<div className="w-24 h-1 bg-zinc-700 rounded-full mx-auto" />
+										</div>
+									)
 								) : (
-									/* MOBILE MOTION BUTTON SHOWCASE */
-									<div className="w-[300px] rounded-[36px] border-[6px] border-zinc-800 bg-zinc-950 p-4 pt-3 shadow-2xl space-y-4">
-										<div className="flex items-center justify-between text-[11px] text-zinc-400 px-2 font-mono">
-											<span>9:41</span>
-											<div className="w-16 h-3.5 bg-zinc-900 rounded-full mx-auto" />
-											<span>100%</span>
+									/* TABS HERO PREVIEW */
+									<div className="relative z-10 w-full max-w-md flex flex-col items-center gap-4">
+										<div className="flex items-center justify-between w-full text-xs font-mono text-muted-foreground bg-muted/40 p-2 rounded-lg border border-border">
+											<span>Variant: {activeVariant}</span>
+											<span>Size: {activeSize}</span>
 										</div>
 
-										<div className="space-y-3 py-4 flex flex-col items-stretch">
-											<MotionButton
-												variant="primary"
-												onClick={() => setButtonLoading(!buttonLoading)}
-											>
-												Mobile Motion Button
-											</MotionButton>
-											<MotionButton variant="secondary">Mobile Secondary</MotionButton>
-											<MotionButton variant="outline">Mobile Outline</MotionButton>
-											<MotionButton variant="destructive">Mobile Destructive</MotionButton>
-											<MotionButton loading={buttonLoading} variant="primary">
-												{buttonLoading ? "Processing..." : "Tap to test loading"}
-											</MotionButton>
-										</div>
-
-										<div className="w-24 h-1 bg-zinc-700 rounded-full mx-auto" />
-									</div>
-								)
-							) : activePlatform === "web" ? (
-								/* WEB MOTION TABS SHOWCASE */
-								<div className="relative z-10 w-full max-w-md flex flex-col items-center">
-									<MotionTabs
-										defaultValue="overview"
-										variant={activeVariant}
-										size={activeSize}
-										className="w-full"
-									>
-										<div className="flex justify-center w-full">
-											<MotionTabsList>
-												<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
-												<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-												<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
-												<MotionTabsTrigger value="security">Security</MotionTabsTrigger>
-											</MotionTabsList>
-										</div>
-
-										<div className="mt-4 w-full">
-											<MotionTabsContent value="overview">
-												<motion.div
-													initial={{ opacity: 0, y: 6, scale: 0.99 }}
-													animate={{ opacity: 1, y: 0, scale: 1 }}
-													transition={{ type: "spring", stiffness: 350, damping: 25 }}
-												>
-													<Card className="p-5 border border-border bg-card shadow-xs space-y-2 min-h-[120px]">
-														<div className="flex items-center justify-between">
-															<div className="font-semibold text-sm text-foreground flex items-center gap-2">
-																<HugeiconsIcon icon={SparklesIcon} size={16} strokeWidth={2} />
-																Web Overview
-															</div>
-															<Badge variant="outline" className="text-[10px] font-mono">
-																Next.js Web
-															</Badge>
-														</div>
-														<p className="text-xs text-muted-foreground leading-relaxed">
-															Spring layout active indicator with exclusion text inversion. Size:{" "}
-															<strong className="text-foreground">{activeSize}</strong>, Variant:{" "}
-															<strong className="text-foreground">{activeVariant}</strong>.
-														</p>
-													</Card>
-												</motion.div>
-											</MotionTabsContent>
-
-											<MotionTabsContent value="analytics">
-												<motion.div
-													initial={{ opacity: 0, y: 6, scale: 0.99 }}
-													animate={{ opacity: 1, y: 0, scale: 1 }}
-													transition={{ type: "spring", stiffness: 350, damping: 25 }}
-												>
-													<Card className="p-5 border border-border bg-card shadow-xs space-y-2 min-h-[120px]">
-														<div className="flex items-center justify-between">
-															<div className="font-semibold text-sm text-foreground flex items-center gap-2">
-																<HugeiconsIcon icon={ActivityIcon} size={16} strokeWidth={2} />
-																Web Analytics
-															</div>
-															<Badge variant="outline" className="text-[10px] font-mono">
-																60 FPS
-															</Badge>
-														</div>
-														<p className="text-xs text-muted-foreground leading-relaxed">
-															GPU hardware accelerated spring transitions configured via{" "}
-															<code className="font-mono">SPRING_LAYOUT</code> physics.
-														</p>
-													</Card>
-												</motion.div>
-											</MotionTabsContent>
-
-											<MotionTabsContent value="settings">
-												<motion.div
-													initial={{ opacity: 0, y: 6, scale: 0.99 }}
-													animate={{ opacity: 1, y: 0, scale: 1 }}
-													transition={{ type: "spring", stiffness: 350, damping: 25 }}
-												>
-													<Card className="p-5 border border-border bg-card shadow-xs space-y-2 min-h-[120px]">
-														<div className="flex items-center justify-between">
-															<div className="font-semibold text-sm text-foreground flex items-center gap-2">
-																<HugeiconsIcon icon={Settings02Icon} size={16} strokeWidth={2} />
-																Web Settings
-															</div>
-															<Badge variant="outline" className="text-[10px] font-mono">
-																Configured
-															</Badge>
-														</div>
-														<p className="text-xs text-muted-foreground leading-relaxed">
-															Customize stiffness, damping, mass, and accessible reduced motion
-															preferences.
-														</p>
-													</Card>
-												</motion.div>
-											</MotionTabsContent>
-
-											<MotionTabsContent value="security">
-												<motion.div
-													initial={{ opacity: 0, y: 6, scale: 0.99 }}
-													animate={{ opacity: 1, y: 0, scale: 1 }}
-													transition={{ type: "spring", stiffness: 350, damping: 25 }}
-												>
-													<Card className="p-5 border border-border bg-card shadow-xs space-y-2 min-h-[120px]">
-														<div className="flex items-center justify-between">
-															<div className="font-semibold text-sm text-foreground flex items-center gap-2">
-																<HugeiconsIcon icon={SecurityIcon} size={16} strokeWidth={2} />
-																Web Security
-															</div>
-															<Badge variant="outline" className="text-[10px] font-mono">
-																Protected
-															</Badge>
-														</div>
-														<p className="text-xs text-muted-foreground leading-relaxed">
-															Role permissions, authentication tokens, and audit log access
-															controls.
-														</p>
-													</Card>
-												</motion.div>
-											</MotionTabsContent>
-										</div>
-									</MotionTabs>
-								</div>
-							) : (
-								/* MOBILE MOTION TABS SHOWCASE */
-								<div className="w-[300px] rounded-[36px] border-[6px] border-zinc-800 bg-zinc-950 p-4 pt-3 shadow-2xl space-y-4">
-									<div className="flex items-center justify-between text-[11px] text-zinc-400 px-2 font-mono">
-										<span>9:41</span>
-										<div className="w-16 h-3.5 bg-zinc-900 rounded-full mx-auto" />
-										<span>100%</span>
-									</div>
-
-									<div className="py-2">
-										<MotionTabs defaultValue="overview" variant="pill" className="w-full">
+										<MotionTabs
+											defaultValue="overview"
+											variant={activeVariant}
+											size={activeSize}
+											className="w-full"
+										>
 											<div className="flex justify-center w-full">
 												<MotionTabsList>
 													<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
 													<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
+													<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
 												</MotionTabsList>
 											</div>
 
-											<div className="mt-4">
+											<div className="mt-4 w-full">
 												<MotionTabsContent value="overview">
-													<div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 space-y-1 min-h-[100px]">
-														<span className="font-semibold text-white block">
-															Mobile Motion Tabs
-														</span>
-														<p className="text-zinc-400 text-[11px]">
-															Expo Router screen with React Native Reanimated spring physics.
+													<Card className="p-5 border border-border bg-card shadow-xs space-y-2">
+														<div className="font-semibold text-sm text-foreground flex items-center gap-2">
+															<HugeiconsIcon icon={SparklesIcon} size={16} strokeWidth={2} />
+															Spring Layout Glides
+														</div>
+														<p className="text-xs text-muted-foreground leading-relaxed">
+															GPU accelerated active indicator with exclusion text inversion. Size:{" "}
+															<strong className="text-foreground">{activeSize}</strong>, Variant:{" "}
+															<strong className="text-foreground">{activeVariant}</strong>.
 														</p>
-													</div>
-												</MotionTabsContent>
-
-												<MotionTabsContent value="analytics">
-													<div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 space-y-1 min-h-[100px]">
-														<span className="font-semibold text-white block">Mobile Telemetry</span>
-														<p className="text-zinc-400 text-[11px]">
-															60 FPS touch gestures & screen transition metrics.
-														</p>
-													</div>
+													</Card>
 												</MotionTabsContent>
 											</div>
 										</MotionTabs>
 									</div>
+								)}
+							</div>
+						)}
 
-									<div className="w-24 h-1 bg-zinc-700 rounded-full mx-auto mt-4" />
-								</div>
-							)}
-						</div>
-					)}
+						{activeViewTab === "code" && (
+							<div className="relative bg-zinc-950 text-zinc-100 p-6 font-mono text-xs overflow-x-auto min-h-[300px] scrollbar-thin">
+								<Button
+									variant="ghost"
+									size="sm"
+									onClick={handleCopy}
+									className="absolute right-4 top-4 h-8 px-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 gap-1.5 border border-zinc-700"
+								>
+									<HugeiconsIcon
+										icon={copied ? Tick02Icon : Copy01Icon}
+										size={14}
+										strokeWidth={2}
+										className={copied ? "text-emerald-400" : ""}
+									/>
+									{copied ? "Copied!" : "Copy Code"}
+								</Button>
+								<pre className="pr-16 leading-relaxed">
+									<code>
+										{isButtonComponent
+											? activePlatform === "web"
+												? WEB_BUTTON_CODE
+												: MOBILE_BUTTON_CODE
+											: WEB_TABS_CODE}
+									</code>
+								</pre>
+							</div>
+						)}
+					</CardContent>
+				</Card>
+			</section>
 
-					{activeViewTab === "code" && (
-						<div className="relative bg-zinc-950 text-zinc-100 p-6 font-mono text-xs overflow-x-auto min-h-[300px] scrollbar-thin">
-							<Button
-								variant="ghost"
-								size="sm"
-								onClick={handleCopy}
-								className="absolute right-4 top-4 h-8 px-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 gap-1.5 border border-zinc-700"
-							>
-								<HugeiconsIcon
-									icon={copied ? Tick02Icon : Copy01Icon}
-									size={14}
-									strokeWidth={2}
-									className={copied ? "text-emerald-400" : ""}
-								/>
-								{copied ? "Copied!" : "Copy Code"}
-							</Button>
-							<pre className="pr-16 leading-relaxed">
-								<code>
-									{isButtonComponent
-										? activePlatform === "web"
-											? WEB_BUTTON_CODE
-											: MOBILE_BUTTON_CODE
-										: WEB_TABS_CODE}
-								</code>
-							</pre>
+			{/* 4. INSTALLATION */}
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+					<HugeiconsIcon icon={Download01Icon} size={18} strokeWidth={2} />
+					Installation
+				</h2>
+				<Card className="border border-border bg-card p-4">
+					<div className="flex items-center justify-between font-mono text-xs bg-zinc-950 text-zinc-100 p-3 rounded-lg border border-zinc-800">
+						<code>bun add @school-os/ui motion</code>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={copyInstall}
+							className="h-7 px-2 text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 gap-1 border border-zinc-700"
+						>
+							<HugeiconsIcon
+								icon={cmdCopied ? Tick02Icon : Copy01Icon}
+								size={13}
+								strokeWidth={2}
+								className={cmdCopied ? "text-emerald-400" : ""}
+							/>
+							{cmdCopied ? "Copied" : "Copy"}
+						</Button>
+					</div>
+				</Card>
+			</section>
+
+			{/* 5. VARIANTS MATRIX */}
+			<section className="space-y-4">
+				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+					<HugeiconsIcon icon={Layers01Icon} size={18} strokeWidth={2} />
+					Variants & Styles
+				</h2>
+				<Card className="border border-border bg-card p-6">
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
+							<span className="text-xs font-mono font-medium text-muted-foreground">Primary</span>
+							<div className="pt-1 flex justify-center">
+								<MotionButton variant="primary" size="md">
+									Primary Button
+								</MotionButton>
+							</div>
 						</div>
-					)}
-				</CardContent>
-			</Card>
+
+						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
+							<span className="text-xs font-mono font-medium text-muted-foreground">Secondary</span>
+							<div className="pt-1 flex justify-center">
+								<MotionButton variant="secondary" size="md">
+									Secondary Button
+								</MotionButton>
+							</div>
+						</div>
+
+						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
+							<span className="text-xs font-mono font-medium text-muted-foreground">Outline</span>
+							<div className="pt-1 flex justify-center">
+								<MotionButton variant="outline" size="md">
+									Outline Button
+								</MotionButton>
+							</div>
+						</div>
+
+						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
+							<span className="text-xs font-mono font-medium text-muted-foreground">Ghost</span>
+							<div className="pt-1 flex justify-center">
+								<MotionButton variant="ghost" size="md">
+									Ghost Action
+								</MotionButton>
+							</div>
+						</div>
+
+						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
+							<span className="text-xs font-mono font-medium text-muted-foreground">
+								Destructive
+							</span>
+							<div className="pt-1 flex justify-center">
+								<MotionButton variant="destructive" size="md">
+									Destructive Action
+								</MotionButton>
+							</div>
+						</div>
+
+						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
+							<span className="text-xs font-mono font-medium text-muted-foreground">
+								Icon Button
+							</span>
+							<div className="pt-1 flex justify-center">
+								<MotionButton variant="primary" size="icon">
+									<HugeiconsIcon icon={SparklesIcon} size={16} strokeWidth={2} />
+								</MotionButton>
+							</div>
+						</div>
+					</div>
+				</Card>
+			</section>
+
+			{/* 6. SIZES MATRIX */}
+			<section className="space-y-4">
+				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+					<HugeiconsIcon icon={Settings02Icon} size={18} strokeWidth={2} />
+					Sizes Matrix
+				</h2>
+				<Card className="border border-border bg-card p-6">
+					<div className="flex flex-wrap items-center justify-center gap-4">
+						<MotionButton variant="primary" size="sm">
+							Small (h-8)
+						</MotionButton>
+						<MotionButton variant="primary" size="md">
+							Medium (h-10)
+						</MotionButton>
+						<MotionButton variant="primary" size="lg">
+							Large (h-12)
+						</MotionButton>
+					</div>
+				</Card>
+			</section>
+
+			{/* 7. COLORS & DESIGN SYSTEM */}
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+					<HugeiconsIcon icon={BrushIcon} size={18} strokeWidth={2} />
+					Colors & Design System
+				</h2>
+				<Card className="border border-border bg-card p-6 space-y-3">
+					<p className="text-xs text-muted-foreground leading-relaxed">
+						Rabtx UI components consume native shadcn HSL semantic tokens (
+						<code className="font-mono text-foreground">--primary</code>,{" "}
+						<code className="font-mono text-foreground">--secondary</code>,{" "}
+						<code className="font-mono text-foreground">--border</code>). Automatic light/dark mode
+						adaptation without hardcoded hex colors or artificial RGB gradients.
+					</p>
+					<div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs pt-2">
+						<div className="p-3 rounded-lg border border-border bg-primary text-primary-foreground text-center">
+							bg-primary
+						</div>
+						<div className="p-3 rounded-lg border border-border bg-secondary text-secondary-foreground text-center">
+							bg-secondary
+						</div>
+						<div className="p-3 rounded-lg border border-border bg-card text-card-foreground text-center">
+							bg-card
+						</div>
+						<div className="p-3 rounded-lg border border-destructive bg-destructive text-destructive-foreground text-center">
+							bg-destructive
+						</div>
+					</div>
+				</Card>
+			</section>
+
+			{/* 8. MOTION PHYSICS */}
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+					<HugeiconsIcon icon={ActivityIcon} size={18} strokeWidth={2} />
+					Motion Physics Specifications
+				</h2>
+				<Card className="border border-border bg-card overflow-hidden">
+					<div className="overflow-x-auto">
+						<table className="w-full text-xs text-left">
+							<thead className="bg-muted/50 border-b border-border text-muted-foreground font-mono">
+								<tr>
+									<th className="p-3">Physics Property</th>
+									<th className="p-3">Web Value (Framer)</th>
+									<th className="p-3">Mobile Value (Reanimated)</th>
+									<th className="p-3">Behavior</th>
+								</tr>
+							</thead>
+							<tbody className="divide-y divide-border">
+								<tr>
+									<td className="p-3 font-mono text-foreground">Stiffness</td>
+									<td className="p-3 font-mono">500</td>
+									<td className="p-3 font-mono">500</td>
+									<td className="p-3 text-muted-foreground">
+										High elasticity tactile press feedback
+									</td>
+								</tr>
+								<tr>
+									<td className="p-3 font-mono text-foreground">Damping</td>
+									<td className="p-3 font-mono">30</td>
+									<td className="p-3 font-mono">30</td>
+									<td className="p-3 text-muted-foreground">Prevents overshooting oscillation</td>
+								</tr>
+								<tr>
+									<td className="p-3 font-mono text-foreground">Mass</td>
+									<td className="p-3 font-mono">0.6</td>
+									<td className="p-3 font-mono">0.6</td>
+									<td className="p-3 text-muted-foreground">Lightweight responsive press weight</td>
+								</tr>
+								<tr>
+									<td className="p-3 font-mono text-foreground">Press Scale</td>
+									<td className="p-3 font-mono">0.93</td>
+									<td className="p-3 font-mono">0.93</td>
+									<td className="p-3 text-muted-foreground">Tactile press compression ratio</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</Card>
+			</section>
+
+			{/* 9. ACCESSIBILITY (A11Y) */}
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+					<HugeiconsIcon icon={AccessibilityIcon} size={18} strokeWidth={2} />
+					Accessibility (a11y)
+				</h2>
+				<Card className="border border-border bg-card p-6 space-y-3">
+					<ul className="space-y-2 text-xs text-muted-foreground list-disc list-inside leading-relaxed">
+						<li>
+							<strong className="text-foreground font-mono">Keyboard Navigation:</strong> Native
+							support for <code className="font-mono">Tab</code>,{" "}
+							<code className="font-mono">Space</code>, and <code className="font-mono">Enter</code>{" "}
+							key activation.
+						</li>
+						<li>
+							<strong className="text-foreground font-mono">ARIA State:</strong> Automatically
+							injects <code className="font-mono">aria-busy="true"</code> during loading states and{" "}
+							<code className="font-mono">aria-disabled</code> when disabled.
+						</li>
+						<li>
+							<strong className="text-foreground font-mono">Reduced Motion:</strong> Respects system
+							preferences via <code className="font-mono">useReducedMotion</code> to disable scale
+							spring physics for users who prefer reduced motion.
+						</li>
+					</ul>
+				</Card>
+			</section>
+
+			{/* 10. API REFERENCE */}
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+					<HugeiconsIcon icon={CodeIcon} size={18} strokeWidth={2} />
+					API Reference
+				</h2>
+				<Card className="border border-border bg-card overflow-hidden">
+					<div className="overflow-x-auto">
+						<table className="w-full text-xs text-left">
+							<thead className="bg-muted/50 border-b border-border text-muted-foreground font-mono">
+								<tr>
+									<th className="p-3">Prop</th>
+									<th className="p-3">Type</th>
+									<th className="p-3">Default</th>
+									<th className="p-3">Description</th>
+								</tr>
+							</thead>
+							<tbody className="divide-y divide-border">
+								<tr>
+									<td className="p-3 font-mono text-foreground">variant</td>
+									<td className="p-3 font-mono text-teal-400">
+										"primary" | "secondary" | "outline" | "ghost" | "destructive"
+									</td>
+									<td className="p-3 font-mono">"primary"</td>
+									<td className="p-3 text-muted-foreground">Visual button styling variant</td>
+								</tr>
+								<tr>
+									<td className="p-3 font-mono text-foreground">size</td>
+									<td className="p-3 font-mono text-teal-400">"sm" | "md" | "lg" | "icon"</td>
+									<td className="p-3 font-mono">"md"</td>
+									<td className="p-3 text-muted-foreground">Button dimensions and padding</td>
+								</tr>
+								<tr>
+									<td className="p-3 font-mono text-foreground">ripple</td>
+									<td className="p-3 font-mono text-teal-400">boolean</td>
+									<td className="p-3 font-mono">false</td>
+									<td className="p-3 text-muted-foreground">
+										Spawn Material press point ripple beam
+									</td>
+								</tr>
+								<tr>
+									<td className="p-3 font-mono text-foreground">state</td>
+									<td className="p-3 font-mono text-teal-400">
+										"idle" | "loading" | "success" | "error"
+									</td>
+									<td className="p-3 font-mono">"idle"</td>
+									<td className="p-3 text-muted-foreground">
+										Stateful button slot transition state
+									</td>
+								</tr>
+								<tr>
+									<td className="p-3 font-mono text-foreground">pressScale</td>
+									<td className="p-3 font-mono text-teal-400">number</td>
+									<td className="p-3 font-mono">0.93</td>
+									<td className="p-3 text-muted-foreground">
+										Spring press scale ratio down on pointer tap
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</Card>
+			</section>
 		</div>
 	);
 }
