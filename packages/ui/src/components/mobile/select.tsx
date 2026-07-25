@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Pressable, ScrollView, Text, View } from "uniwind/components";
+import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 
 export interface MobileSelectOption {
 	value: string;

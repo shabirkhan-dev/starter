@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 @import 'uniwind';
+@import '../../../packages/ui/src/styles/globals.css';
+
+@source '../../../packages/ui';
 
 :root {
   --font-display:

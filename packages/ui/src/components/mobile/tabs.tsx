@@ -1,6 +1,6 @@
 import type React from "react";
 import { createContext, useContext, useState } from "react";
-import { Pressable, Text, View } from "uniwind/components";
+import { Pressable, Text, View } from "react-native";
 
 type Variant = "pill" | "underline" | "segment";
 

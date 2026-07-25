@@ -8,8 +8,8 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView, Text, View } from "uniwind/components";
 import {
 	Input,
 	MobileButton,

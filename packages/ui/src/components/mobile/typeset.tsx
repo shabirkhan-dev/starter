@@ -1,6 +1,6 @@
 import type React from "react";
 import { createContext, useContext } from "react";
-import { ScrollView, Text, View } from "uniwind/components";
+import { ScrollView, Text, View } from "react-native";
 
 export type MobileTypesetPreset = "docs" | "chat" | "compact" | "reading" | "large";
 

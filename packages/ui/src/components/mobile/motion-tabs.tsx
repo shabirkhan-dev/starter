@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
-import type { LayoutChangeEvent } from "react-native";
+import { type LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
-import { Pressable, Text, View } from "uniwind/components";
 
 type Variant = "pill" | "underline" | "segment";
 

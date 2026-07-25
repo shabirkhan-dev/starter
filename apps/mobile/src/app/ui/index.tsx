@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Pressable, ScrollView, Text, View } from "uniwind/components";
 
 export const MOBILE_COMPONENT_SLUGS = [
 	{

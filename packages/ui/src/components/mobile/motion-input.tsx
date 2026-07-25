@@ -2,6 +2,7 @@ import { Cancel01Icon, CheckIcon, EyeIcon, ViewOffIcon } from "@hugeicons/core-f
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import type React from "react";
 import { useEffect, useState } from "react";
+import { Pressable, Text, TextInput, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -9,7 +10,6 @@ import Animated, {
 	withSpring,
 	withTiming,
 } from "react-native-reanimated";
-import { Pressable, Text, TextInput, View } from "uniwind/components";
 
 const SPRING_PRESS = {
 	stiffness: 500,
