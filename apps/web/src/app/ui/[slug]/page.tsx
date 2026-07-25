@@ -2,7 +2,6 @@
 
 import {
 	AccessibilityIcon,
-	ActivityIcon,
 	ArrowDown01Icon,
 	ArrowRightIcon,
 	BrushIcon,
@@ -15,6 +14,7 @@ import {
 	InputTextIcon,
 	Layers01Icon,
 	Mail01Icon,
+	Search01Icon,
 	SmartPhone01Icon,
 	SparklesIcon,
 	Tick02Icon,
@@ -26,7 +26,13 @@ import { Button } from "@school-os/ui/components/button";
 import { Card, CardContent } from "@school-os/ui/components/card";
 import { type ButtonState, StatefulButton } from "@school-os/ui/components/motion/button";
 import { MotionInput } from "@school-os/ui/components/motion/input";
-import { MotionSelect } from "@school-os/ui/components/motion/select";
+import {
+	MotionSelect,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@school-os/ui/components/motion/select";
 import {
 	Tabs as MotionTabs,
 	TabsContent as MotionTabsContent,
@@ -67,31 +73,51 @@ import { Mail01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 export function MotionInputDemo() {
-  const [val, setVal] = useState("");
+  const [email, setEmail] = useState("shabir@example.com");
+
   return (
-    <MotionInput
-      label="Email Address"
-      placeholder="you@example.com"
-      value={val}
-      onChange={(e) => setVal(e.target.value)}
-      clearable
-      onClear={() => setVal("")}
-      icon={<HugeiconsIcon icon={Mail01Icon} size={16} />}
-    />
+    <div className="space-y-4 max-w-sm">
+      {/* 1. Success Animated Checkmark Path */}
+      <MotionInput
+        label="Verified Email"
+        value={email}
+        onChange={setEmail}
+        success
+        leftIcon={<HugeiconsIcon icon={Mail01Icon} size={16} />}
+      />
+
+      {/* 2. Error Shake with Blur Transition */}
+      <MotionInput
+        label="Workspace URL"
+        defaultValue="invalid workspace domain!"
+        error="Domain contains invalid characters"
+      />
+    </div>
   );
 }`;
 
-const WEB_SELECT_CODE = `import { MotionSelect } from "@school-os/ui/components/motion/select";
+const WEB_SELECT_CODE = `import {
+  MotionSelect,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@school-os/ui/components/motion/select";
 
 export function MotionSelectDemo() {
+  const [role, setRole] = useState("admin");
+
   return (
-    <MotionSelect
-      label="Role"
-      options={[
-        { value: "admin", label: "Admin" },
-        { value: "member", label: "Member" }
-      ]}
-    />
+    <MotionSelect value={role} onValueChange={setRole} className="max-w-xs">
+      <SelectTrigger>
+        <SelectValue placeholder="Select user role..." />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="admin">Administrator</SelectItem>
+        <SelectItem value="developer">Developer</SelectItem>
+        <SelectItem value="viewer">Viewer</SelectItem>
+      </SelectContent>
+    </MotionSelect>
   );
 }`;
 
@@ -100,14 +126,14 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 	const slug = resolvedParams.slug || "tabs";
 
 	const [activePlatform, setActivePlatform] = useState<"web" | "mobile">("web");
-	const [_activeVariant] = useState<"pill" | "underline" | "segment">("pill");
-	const [_activeSize] = useState<"sm" | "md" | "lg">("md");
 	const [activeViewTab, setActiveViewTab] = useState<"preview" | "code">("preview");
 
-	const [inputValue, setInputValue] = useState("john.doe@example.com");
-	const [passwordValue, setPasswordValue] = useState("secret123");
-	const [inputError, setInputError] = useState(false);
-	const [selectValue, setSelectValue] = useState("nextjs");
+	const [emailValue, setEmailValue] = useState("shabir@school-os.dev");
+	const [errorInputVal, setErrorInputVal] = useState("invalid domain!");
+	const [inputErrorState, setInputErrorState] = useState(true);
+	const [searchValue, setSearchValue] = useState("");
+	const [roleSelect, setRoleSelect] = useState("admin");
+	const [envSelect, setEnvSelect] = useState("production");
 
 	const [okState, setOkState] = useState<ButtonState>("idle");
 	const [errState, setErrState] = useState<ButtonState>("idle");
@@ -140,13 +166,6 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 		setCmdCopied(true);
 		setTimeout(() => setCmdCopied(false), 2000);
 	};
-
-	const frameworkOptions = [
-		{ value: "nextjs", label: "Next.js 16 (App Router)" },
-		{ value: "expo", label: "Expo Router (React Native)" },
-		{ value: "turborepo", label: "Turborepo + Bun Monorepo" },
-		{ value: "nestjs", label: "NestJS Backend Spine" },
-	];
 
 	return (
 		<div className="space-y-12 max-w-4xl mx-auto py-4 pb-16">
@@ -204,9 +223,9 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 					</h1>
 					<p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
 						{slug === "input"
-							? "Interactive input field with smooth focus ring glow animation, clear button, password visibility toggle, and error shake transitions."
+							? "Shadcn motion input with error shake animations, animated checkmark path draw, left/right icon slots, and blur error messages."
 							: slug === "select"
-								? "Animated combobox select dropdown with spring scaling physics and checkmark selection state."
+								? "Compositional motion select with gooey corner flattening, auto-placement flip, and staggered list item blur transitions."
 								: slug === "button"
 									? "Production-ready motion button with cascading text stagger, icon slot swaps, material ripples, and spring press scaling physics."
 									: "Spring-animated layout projection tabs with exclusion text blending and active indicator glide."}
@@ -222,9 +241,9 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				</h2>
 				<p className="text-sm text-muted-foreground leading-relaxed">
 					{slug === "input"
-						? "Rabtx UI Motion Input provides real-time focus ring feedback with GPU-accelerated spring animations. Supports clear buttons, password reveal icons, floating helper text, and invalid error state shakes."
+						? "Rabtx UI Motion Input combines smooth focus border ring feedback with SVG checkmark path draw animations and automatic error shake physics. Includes full classNames customization and ARIA accessibility."
 						: slug === "select"
-							? "Rabtx UI Motion Select delivers smooth dropdown panel spring physics with click-outside detection, keyboard selection, and theme-adaptive option checkmarks."
+							? "Rabtx UI Motion Select delivers bouncy accordion corner flattening transitions when unfolding option panels. Sits above or below the trigger automatically depending on viewport bounds."
 							: slug === "button"
 								? "Rabtx UI Motion Button is engineered for high-performance interactive interfaces. It provides tactile spring physics, material press ripples, elevated glossy reflection highlights, and slot-swapping stateful loaders."
 								: "Rabtx UI Motion Tabs provides GPU-accelerated spring glides across active tabs using Framer Motion on Web and React Native Reanimated on Mobile."}
@@ -261,55 +280,90 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				<Card className="overflow-hidden border border-border bg-card shadow-xs">
 					<CardContent className="p-0">
 						{activeViewTab === "preview" && (
-							<div className="relative min-h-[340px] w-full flex flex-col items-center justify-center p-8 bg-background border-b border-border">
+							<div className="relative min-h-[360px] w-full flex flex-col items-center justify-center p-8 bg-background border-b border-border space-y-6">
 								{slug === "input" ? (
-									/* INPUT PREVIEW */
-									<div className="space-y-4 w-full max-w-sm">
+									/* INPUT EXTENSIVE PREVIEWS */
+									<div className="space-y-5 w-full max-w-md">
+										{/* 1. SUCCESS ANIMATED CHECKMARK */}
 										<MotionInput
-											label="Email Address"
-											placeholder="you@example.com"
-											value={inputValue}
-											onChange={(e) => setInputValue(e.target.value)}
-											clearable
-											onClear={() => setInputValue("")}
-											icon={<HugeiconsIcon icon={Mail01Icon} size={16} strokeWidth={2} />}
-											error={inputError ? "Invalid email address format" : undefined}
+											label="1. Verified Account Email (Success Checkmark)"
+											value={emailValue}
+											onChange={setEmailValue}
+											success
+											leftIcon={<HugeiconsIcon icon={Mail01Icon} size={16} strokeWidth={2} />}
 										/>
 
+										{/* 2. ERROR SHAKE & BLUR MESSAGE */}
 										<MotionInput
-											label="Account Password"
-											type="password"
-											value={passwordValue}
-											onChange={(e) => setPasswordValue(e.target.value)}
-											icon={<HugeiconsIcon icon={UserIcon} size={16} strokeWidth={2} />}
+											label="2. Workspace Domain (Error Shake & Blur)"
+											value={errorInputVal}
+											onChange={setErrorInputVal}
+											error={
+												inputErrorState ? "Domain contains invalid special characters" : undefined
+											}
+											leftIcon={<HugeiconsIcon icon={UserIcon} size={16} strokeWidth={2} />}
+										/>
+
+										{/* 3. SEARCH WITH LEFT & RIGHT ICON */}
+										<MotionInput
+											label="3. Search Query (Left & Right Slot)"
+											placeholder="Search components or icons..."
+											value={searchValue}
+											onChange={setSearchValue}
+											leftIcon={<HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={2} />}
+											rightIcon={
+												<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+													<span className="text-xs">⌘</span>K
+												</kbd>
+											}
 										/>
 
 										<div className="pt-2 flex justify-center">
 											<Button
 												variant="outline"
 												size="sm"
-												onClick={() => setInputError(!inputError)}
+												onClick={() => setInputErrorState(!inputErrorState)}
 												className="text-xs"
 											>
-												{inputError ? "Clear Error State" : "Trigger Shake Error"}
+												{inputErrorState ? "Clear Error State" : "Re-trigger Error Shake"}
 											</Button>
 										</div>
 									</div>
 								) : slug === "select" ? (
-									/* SELECT PREVIEW */
-									<div className="space-y-4 w-full max-w-sm">
-										<MotionSelect
-											label="Active Framework Target"
-											options={frameworkOptions}
-											value={selectValue}
-											onValueChange={setSelectValue}
-										/>
+									/* SELECT EXTENSIVE PREVIEWS */
+									<div className="space-y-6 w-full max-w-sm">
+										<div className="space-y-1.5">
+											{/* biome-ignore lint/a11y/noLabelWithoutControl: section title label */}
+											<label className="text-xs font-medium text-foreground tracking-tight block">
+												1. Select User Role (Bouncy Accordion Gooey Corners)
+											</label>
+											<MotionSelect value={roleSelect} onValueChange={setRoleSelect}>
+												<SelectTrigger>
+													<SelectValue placeholder="Select user role..." />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="admin">Administrator (Full Access)</SelectItem>
+													<SelectItem value="developer">Developer (API Keys & Logs)</SelectItem>
+													<SelectItem value="viewer">Viewer (Read-Only)</SelectItem>
+												</SelectContent>
+											</MotionSelect>
+										</div>
 
-										<div className="p-3 rounded-xl border border-border bg-card text-xs space-y-1">
-											<span className="text-muted-foreground block font-mono">
-												Current Selection:
-											</span>
-											<span className="font-semibold text-foreground font-mono">{selectValue}</span>
+										<div className="space-y-1.5">
+											{/* biome-ignore lint/a11y/noLabelWithoutControl: section title label */}
+											<label className="text-xs font-medium text-foreground tracking-tight block">
+												2. Deployment Environment Target
+											</label>
+											<MotionSelect value={envSelect} onValueChange={setEnvSelect}>
+												<SelectTrigger>
+													<SelectValue placeholder="Select target environment..." />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="production">Production Cluster (Neon DB)</SelectItem>
+													<SelectItem value="staging">Staging Preview (Vercel)</SelectItem>
+													<SelectItem value="local">Local Dev Container (Bun)</SelectItem>
+												</SelectContent>
+											</MotionSelect>
 										</div>
 									</div>
 								) : slug === "button" ? (
@@ -449,44 +503,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				</Card>
 			</section>
 
-			{/* 6. MOTION PHYSICS SPECIFICATIONS */}
-			<section className="space-y-3">
-				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
-					<HugeiconsIcon icon={ActivityIcon} size={18} strokeWidth={2} />
-					Motion Physics Specifications
-				</h2>
-				<Card className="border border-border bg-card overflow-hidden">
-					<div className="overflow-x-auto">
-						<table className="w-full text-xs text-left">
-							<thead className="bg-muted/50 border-b border-border text-muted-foreground font-mono">
-								<tr>
-									<th className="p-3">Physics Property</th>
-									<th className="p-3">Web Value</th>
-									<th className="p-3">Behavior</th>
-								</tr>
-							</thead>
-							<tbody className="divide-y divide-border">
-								<tr>
-									<td className="p-3 font-mono text-foreground">Focus Scale</td>
-									<td className="p-3 font-mono">1.01</td>
-									<td className="p-3 text-muted-foreground">
-										Tactile scale feedback on element focus
-									</td>
-								</tr>
-								<tr>
-									<td className="p-3 font-mono text-foreground">Stiffness</td>
-									<td className="p-3 font-mono">500</td>
-									<td className="p-3 text-muted-foreground">
-										Elastic spring stiffness for focus ring ring/20 glow
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</Card>
-			</section>
-
-			{/* 7. ACCESSIBILITY (A11Y) */}
+			{/* 6. ACCESSIBILITY (A11Y) */}
 			<section className="space-y-3">
 				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
 					<HugeiconsIcon icon={AccessibilityIcon} size={18} strokeWidth={2} />

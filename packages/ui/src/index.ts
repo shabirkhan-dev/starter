@@ -20,7 +20,13 @@ export {
 export { Button, buttonVariants } from "./components/button";
 export { MotionButton, StatefulButton } from "./components/motion/button";
 export { MotionInput } from "./components/motion/input";
-export { MotionSelect } from "./components/motion/select";
+export {
+	MotionSelect,
+	SelectTrigger,
+	SelectValue,
+	SelectContent,
+	SelectItem,
+} from "./components/motion/select";
 export {
 	Card,
 	CardAction,

@@ -2,145 +2,383 @@
 
 import { ArrowDown01Icon, CheckIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { SPRING_PRESS, SPRING_SWAP } from "@school-os/ui/lib/ease";
+import { EASE_OUT } from "@school-os/ui/lib/ease";
 import { cn } from "@school-os/ui/lib/utils";
-import { AnimatePresence, motion } from "motion/react";
-import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { motion, type Transition, useReducedMotion, type Variants } from "motion/react";
+import {
+	createContext,
+	type ReactNode,
+	useCallback,
+	useContext,
+	useEffect,
+	useId,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 
-export interface SelectOption {
-	value: string;
-	label: string;
-	icon?: React.ReactNode;
+const INSTANT_TRANSITION: Transition = { duration: 0 };
+
+const CHEVRON_TRANSITION: Transition = {
+	type: "spring",
+	duration: 0.4,
+	bounce: 0.3,
+};
+
+const LIST_VARIANTS: Variants = {
+	hidden: {},
+	show: { transition: { staggerChildren: 0.035, delayChildren: 0.05 } },
+};
+
+const ITEM_VARIANTS: Variants = {
+	hidden: { opacity: 0, y: -6, filter: "blur(3px)" },
+	show: { opacity: 1, y: 0, filter: "blur(0px)" },
+};
+
+type Placement = "bottom" | "top";
+
+interface SelectContextValue {
+	value: string | undefined;
+	open: boolean;
+	setOpen: (open: boolean) => void;
+	select: (value: string) => void;
+	register: (value: string, label: string) => void;
+	unregister: (value: string) => void;
+	labelFor: (value: string | undefined) => string | undefined;
+	reduce: boolean;
+	triggerId: string;
+	listId: string;
+	disabled: boolean;
+	placement: Placement;
+	setPlacement: (p: Placement) => void;
 }
 
-export interface MotionSelectProps {
-	options: SelectOption[];
+const SelectContext = createContext<SelectContextValue | null>(null);
+
+function useSelectContext(component: string) {
+	const ctx = useContext(SelectContext);
+	if (!ctx) throw new Error(`${component} must be used within <Select>`);
+	return ctx;
+}
+
+export interface SelectProps {
 	value?: string;
 	defaultValue?: string;
-	onValueChange?: (val: string) => void;
-	placeholder?: string;
-	label?: string;
+	onValueChange?: (value: string) => void;
 	disabled?: boolean;
 	className?: string;
-	size?: "sm" | "md" | "lg";
+	children: ReactNode;
 }
 
 export function MotionSelect({
-	options,
 	value,
-	defaultValue = "",
+	defaultValue,
 	onValueChange,
-	placeholder = "Select an option...",
-	label,
 	disabled = false,
 	className,
-	size = "md",
-}: MotionSelectProps) {
-	const [isOpen, setIsOpen] = useState(false);
-	const [selected, setSelected] = useState(value || defaultValue);
-	const containerRef = useRef<HTMLDivElement>(null);
+	children,
+}: SelectProps) {
+	const reduce = useReducedMotion() ?? false;
+	const baseId = useId();
+	const rootRef = useRef<HTMLDivElement>(null);
+	const [open, setOpen] = useState(false);
+	const [internal, setInternal] = useState(defaultValue);
+	const [labels, setLabels] = useState<Map<string, string>>(new Map());
+	const [placement, setPlacement] = useState<Placement>("bottom");
 
-	const isControlled = value !== undefined;
-	const currentValue = isControlled ? value : selected;
-	const selectedOption = options.find((opt) => opt.value === currentValue);
+	const controlled = value !== undefined;
+	const current = controlled ? value : internal;
 
-	const handleSelect = (optionValue: string) => {
-		if (!isControlled) setSelected(optionValue);
-		onValueChange?.(optionValue);
-		setIsOpen(false);
-	};
+	const select = useCallback(
+		(next: string) => {
+			if (!controlled) setInternal(next);
+			onValueChange?.(next);
+			setOpen(false);
+		},
+		[controlled, onValueChange],
+	);
 
-	useEffect(() => {
-		const handleClickOutside = (e: MouseEvent) => {
-			if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-				setIsOpen(false);
-			}
-		};
-		document.addEventListener("mousedown", handleClickOutside);
-		return () => document.removeEventListener("mousedown", handleClickOutside);
+	const register = useCallback((v: string, label: string) => {
+		setLabels((m) => (m.get(v) === label ? m : new Map(m).set(v, label)));
 	}, []);
 
-	const sizeClasses = {
-		sm: "h-8 text-xs px-3",
-		md: "h-10 text-sm px-3.5",
-		lg: "h-12 text-base px-4",
-	};
+	const unregister = useCallback((v: string) => {
+		setLabels((m) => {
+			if (!m.has(v)) return m;
+			const next = new Map(m);
+			next.delete(v);
+			return next;
+		});
+	}, []);
+
+	// close on outside pointer / escape
+	useEffect(() => {
+		if (!open) return;
+		const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+		const onPointer = (e: PointerEvent) => {
+			if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
+		};
+		window.addEventListener("keydown", onKey);
+		window.addEventListener("pointerdown", onPointer);
+		return () => {
+			window.removeEventListener("keydown", onKey);
+			window.removeEventListener("pointerdown", onPointer);
+		};
+	}, [open]);
+
+	const ctx = useMemo<SelectContextValue>(
+		() => ({
+			value: current,
+			open,
+			setOpen,
+			select,
+			register,
+			unregister,
+			labelFor: (v) => (v === undefined ? undefined : labels.get(v)),
+			reduce,
+			triggerId: `${baseId}-trigger`,
+			listId: `${baseId}-list`,
+			disabled,
+			placement,
+			setPlacement,
+		}),
+		[current, open, select, register, unregister, labels, reduce, baseId, disabled, placement],
+	);
 
 	return (
-		<div ref={containerRef} className="relative w-full space-y-1.5">
-			{label && (
-				// biome-ignore lint/a11y/noLabelWithoutControl: label is styled description text
-				<label className="text-xs font-medium text-foreground tracking-tight block">{label}</label>
-			)}
+		<SelectContext.Provider value={ctx}>
+			<div ref={rootRef} className={cn("relative w-full", className)}>
+				{children}
+			</div>
+		</SelectContext.Provider>
+	);
+}
 
-			<motion.button
+export interface SelectTriggerProps {
+	className?: string;
+	children: ReactNode;
+}
+
+export function SelectTrigger({ className, children }: SelectTriggerProps) {
+	const ctx = useSelectContext("SelectTrigger");
+	const isTop = ctx.placement === "top";
+	const kf = ctx.open ? [0, 0, 12] : [12, 0, 12];
+	const kfT: Transition = ctx.reduce
+		? { duration: 0 }
+		: ctx.open
+			? { duration: 0.6, times: [0, 0.4, 1], ease: EASE_OUT }
+			: { duration: 0.42, times: [0, 0.5, 1], ease: EASE_OUT };
+
+	return (
+		<motion.button
+			type="button"
+			id={ctx.triggerId}
+			disabled={ctx.disabled}
+			aria-haspopup="listbox"
+			aria-expanded={ctx.open}
+			aria-controls={ctx.listId}
+			onClick={() => ctx.setOpen(!ctx.open)}
+			initial={false}
+			animate={{
+				borderTopLeftRadius: isTop ? kf : 12,
+				borderTopRightRadius: isTop ? kf : 12,
+				borderBottomLeftRadius: isTop ? 12 : kf,
+				borderBottomRightRadius: isTop ? 12 : kf,
+			}}
+			transition={{
+				borderTopLeftRadius: isTop ? kfT : INSTANT_TRANSITION,
+				borderTopRightRadius: isTop ? kfT : INSTANT_TRANSITION,
+				borderBottomLeftRadius: isTop ? INSTANT_TRANSITION : kfT,
+				borderBottomRightRadius: isTop ? INSTANT_TRANSITION : kfT,
+			}}
+			className={cn(
+				"relative z-10 flex h-10 w-full items-center justify-between gap-2 rounded-xl border border-input bg-background px-3.5 py-2 text-sm text-foreground outline-none transition-colors",
+				"hover:border-foreground/40 focus-visible:ring-3 focus-visible:ring-ring/20",
+				"disabled:pointer-events-none disabled:opacity-50",
+				className,
+			)}
+		>
+			{children}
+			<motion.span
+				aria-hidden
+				animate={{ rotate: ctx.open ? 180 : 0 }}
+				transition={ctx.reduce ? { duration: 0 } : CHEVRON_TRANSITION}
+				className="text-muted-foreground shrink-0"
+			>
+				<HugeiconsIcon icon={ArrowDown01Icon} size={16} strokeWidth={2} />
+			</motion.span>
+		</motion.button>
+	);
+}
+
+export interface SelectValueProps {
+	placeholder?: string;
+	className?: string;
+}
+
+export function SelectValue({ placeholder, className }: SelectValueProps) {
+	const ctx = useSelectContext("SelectValue");
+	const label = ctx.labelFor(ctx.value);
+
+	return (
+		<span
+			className={cn(
+				"truncate text-sm font-medium",
+				label ? "text-foreground" : "text-muted-foreground",
+				className,
+			)}
+		>
+			{label ?? placeholder ?? "Select"}
+		</span>
+	);
+}
+
+export interface SelectContentProps {
+	className?: string;
+	children: ReactNode;
+}
+
+export function SelectContent({ className, children }: SelectContentProps) {
+	const ctx = useSelectContext("SelectContent");
+	const innerRef = useRef<HTMLDivElement>(null);
+	const [height, setHeight] = useState(0);
+	const open = ctx.open;
+	const { setPlacement } = ctx;
+
+	useLayoutEffect(() => {
+		const node = innerRef.current;
+		if (!node) return;
+		const measure = () => setHeight(node.offsetHeight);
+		measure();
+		const observer = new ResizeObserver(measure);
+		observer.observe(node);
+		return () => observer.disconnect();
+	});
+
+	useLayoutEffect(() => {
+		if (!open) return;
+		const trigger = document.getElementById(ctx.triggerId);
+		const node = innerRef.current;
+		if (!trigger || !node) return;
+		const rect = trigger.getBoundingClientRect();
+		const h = node.offsetHeight;
+		const below = window.innerHeight - rect.bottom;
+		const above = rect.top;
+		setPlacement(below < h + 16 && above > below ? "top" : "bottom");
+	}, [open, ctx.triggerId, setPlacement]);
+
+	const isTop = ctx.placement === "top";
+	const nearGap = open ? 8 : 0;
+	const nearRadius = open ? 12 : 0;
+
+	const gapT: Transition = open
+		? { type: "spring", duration: 0.6, bounce: 0.5, delay: 0.12 }
+		: { type: "spring", duration: 0.3, bounce: 0.1 };
+	const radiusT: Transition = open
+		? { duration: 0.3, ease: EASE_OUT, delay: 0.14 }
+		: { duration: 0.16, ease: EASE_OUT };
+
+	return (
+		<motion.div
+			id={ctx.listId}
+			role="listbox"
+			aria-labelledby={ctx.triggerId}
+			aria-hidden={!open}
+			initial={false}
+			animate={
+				ctx.reduce
+					? { opacity: open ? 1 : 0, height: open ? height : 0 }
+					: {
+							opacity: open ? 1 : 0,
+							height: open ? height : 0,
+							marginTop: isTop ? 0 : nearGap,
+							marginBottom: isTop ? nearGap : 0,
+							borderTopLeftRadius: isTop ? 12 : nearRadius,
+							borderTopRightRadius: isTop ? 12 : nearRadius,
+							borderBottomLeftRadius: isTop ? nearRadius : 12,
+							borderBottomRightRadius: isTop ? nearRadius : 12,
+						}
+			}
+			transition={
+				ctx.reduce
+					? { duration: 0.12 }
+					: {
+							opacity: open ? { duration: 0.18 } : { duration: 0.16, delay: 0.12 },
+							height: open
+								? { type: "spring", duration: 0.42, bounce: 0.14 }
+								: { duration: 0.26, ease: EASE_OUT, delay: 0.14 },
+							marginTop: isTop ? INSTANT_TRANSITION : gapT,
+							marginBottom: isTop ? gapT : INSTANT_TRANSITION,
+							borderTopLeftRadius: isTop ? INSTANT_TRANSITION : radiusT,
+							borderTopRightRadius: isTop ? INSTANT_TRANSITION : radiusT,
+							borderBottomLeftRadius: isTop ? radiusT : INSTANT_TRANSITION,
+							borderBottomRightRadius: isTop ? radiusT : INSTANT_TRANSITION,
+						}
+			}
+			style={{
+				transformOrigin: isTop ? "bottom" : "top",
+				overflow: "hidden",
+				pointerEvents: open ? "auto" : "none",
+			}}
+			className={cn(
+				"absolute left-0 right-0 z-50 rounded-xl border border-border bg-popover text-popover-foreground shadow-lg",
+				isTop ? "bottom-full" : "top-full",
+				className,
+			)}
+		>
+			<motion.div
+				ref={innerRef}
+				variants={ctx.reduce ? undefined : LIST_VARIANTS}
+				initial={false}
+				animate={open ? "show" : "hidden"}
+				className="p-1 space-y-0.5"
+			>
+				{children}
+			</motion.div>
+		</motion.div>
+	);
+}
+
+export interface SelectItemProps {
+	value: string;
+	disabled?: boolean;
+	className?: string;
+	children: ReactNode;
+}
+
+export function SelectItem({ value, disabled = false, className, children }: SelectItemProps) {
+	const ctx = useSelectContext("SelectItem");
+	const selected = ctx.value === value;
+	const label = typeof children === "string" ? children : value;
+
+	useLayoutEffect(() => {
+		ctx.register(value, label);
+		return () => ctx.unregister(value);
+	}, [ctx.register, ctx.unregister, value, label]);
+
+	return (
+		<motion.li variants={ctx.reduce ? undefined : ITEM_VARIANTS} className="list-none">
+			<button
 				type="button"
-				whileTap={disabled ? undefined : { scale: 0.98 }}
-				transition={SPRING_PRESS}
-				onClick={() => !disabled && setIsOpen(!isOpen)}
+				role="option"
+				aria-selected={selected}
 				disabled={disabled}
+				onClick={() => ctx.select(value)}
 				className={cn(
-					"flex items-center justify-between w-full rounded-xl border border-input bg-background font-medium text-foreground transition-colors shadow-2xs cursor-pointer select-none",
-					isOpen && "border-ring ring-3 ring-ring/20",
-					disabled && "opacity-50 pointer-events-none bg-muted/30",
-					sizeClasses[size],
+					"flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs font-medium outline-none transition-colors cursor-pointer",
+					selected
+						? "bg-accent text-accent-foreground font-semibold"
+						: "text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:bg-muted",
+					"disabled:pointer-events-none disabled:opacity-50",
 					className,
 				)}
 			>
-				<span className="flex items-center gap-2 truncate">
-					{selectedOption?.icon}
-					<span className={selectedOption ? "text-foreground" : "text-muted-foreground"}>
-						{selectedOption ? selectedOption.label : placeholder}
-					</span>
-				</span>
-
-				<motion.span
-					animate={{ rotate: isOpen ? 180 : 0 }}
-					transition={SPRING_SWAP}
-					className="shrink-0 text-muted-foreground"
-				>
-					<HugeiconsIcon icon={ArrowDown01Icon} size={16} strokeWidth={2} />
-				</motion.span>
-			</motion.button>
-
-			<AnimatePresence>
-				{isOpen && (
-					<motion.div
-						initial={{ opacity: 0, y: -8, scale: 0.96 }}
-						animate={{ opacity: 1, y: 4, scale: 1 }}
-						exit={{ opacity: 0, y: -8, scale: 0.96 }}
-						transition={SPRING_SWAP}
-						className="absolute left-0 right-0 z-50 p-1.5 bg-popover text-popover-foreground border border-border rounded-xl shadow-lg max-h-60 overflow-y-auto scrollbar-thin space-y-0.5"
-					>
-						{options.map((option) => {
-							const isSelected = option.value === currentValue;
-							return (
-								<button
-									key={option.value}
-									type="button"
-									onClick={() => handleSelect(option.value)}
-									className={cn(
-										"flex items-center justify-between w-full px-3 py-2 text-xs font-medium rounded-lg transition-colors cursor-pointer text-left",
-										isSelected
-											? "bg-accent text-accent-foreground font-semibold"
-											: "hover:bg-muted text-foreground",
-									)}
-								>
-									<span className="flex items-center gap-2 truncate">
-										{option.icon}
-										<span>{option.label}</span>
-									</span>
-
-									{isSelected && (
-										<HugeiconsIcon icon={CheckIcon} size={14} className="text-primary shrink-0" />
-									)}
-								</button>
-							);
-						})}
-					</motion.div>
-				)}
-			</AnimatePresence>
-		</div>
+				<span>{children}</span>
+				{selected ? (
+					<HugeiconsIcon icon={CheckIcon} size={14} className="text-primary shrink-0" />
+				) : null}
+			</button>
+		</motion.li>
 	);
 }
