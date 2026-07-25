@@ -1,4 +1,9 @@
-import { Grid02Icon, Layers01Icon } from "@hugeicons/core-free-icons";
+import {
+	ArrowDown01Icon,
+	Grid02Icon,
+	InputTextIcon,
+	Layers01Icon,
+} from "@hugeicons/core-free-icons";
 import type { HugeiconsIcon } from "@hugeicons/react";
 import type { ComponentProps } from "react";
 
@@ -36,6 +41,22 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 				description: "Spring interactive button with press scale feedback and loading state",
 				category: "Motion",
 				icon: Layers01Icon,
+				badge: "Ready",
+			},
+			{
+				id: "input",
+				name: "Motion Input",
+				description: "Interactive input with focus border glow, password toggle, and error shake",
+				category: "Motion",
+				icon: InputTextIcon,
+				badge: "Ready",
+			},
+			{
+				id: "select",
+				name: "Motion Select",
+				description: "Animated combobox dropdown with spring scale physics and option checkmarks",
+				category: "Motion",
+				icon: ArrowDown01Icon,
 				badge: "Ready",
 			},
 		],

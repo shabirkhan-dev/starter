@@ -17,6 +17,20 @@ export const MOBILE_COMPONENT_SLUGS = [
 		category: "Motion Components",
 		status: "Ready",
 	},
+	{
+		slug: "input",
+		name: "Motion Input",
+		description: "React Native Reanimated focus scale input with clear & password toggle",
+		category: "Motion Components",
+		status: "Ready",
+	},
+	{
+		slug: "select",
+		name: "Motion Select",
+		description: "React Native Reanimated bottom sheet select picker modal",
+		category: "Motion Components",
+		status: "Ready",
+	},
 ];
 
 export default function MobileUICatalogScreen() {

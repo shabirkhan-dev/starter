@@ -1,16 +1,19 @@
-export {
-	Tabs as MobileTabs,
-	TabsList as MobileTabsList,
-	TabsTrigger as MobileTabsTrigger,
-	TabsContent as MobileTabsContent,
-} from "./tabs";
-
+export { MobileButton } from "./button";
+export { MobileInput } from "./input";
+export { MobileMotionButton, MobileStatefulButton } from "./motion-button";
+export { MobileMotionInput } from "./motion-input";
+export { MobileMotionSelect } from "./motion-select";
 export {
 	MotionTabs as MobileMotionTabs,
+	MotionTabsContent as MobileMotionTabsContent,
 	MotionTabsList as MobileMotionTabsList,
 	MotionTabsTrigger as MobileMotionTabsTrigger,
-	MotionTabsContent as MobileMotionTabsContent,
 } from "./motion-tabs";
 
-export { MobileButton } from "./button";
-export { MobileMotionButton, MobileStatefulButton } from "./motion-button";
+export { MobileSelect } from "./select";
+export {
+	Tabs as MobileTabs,
+	TabsContent as MobileTabsContent,
+	TabsList as MobileTabsList,
+	TabsTrigger as MobileTabsTrigger,
+} from "./tabs";

@@ -5,69 +5,64 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-	MobileButton,
+	Input,
 	MobileMotionButton,
+	MotionInput,
+	MotionSelect,
 	MotionTabs,
 	MotionTabsContent,
 	MotionTabsList,
 	MotionTabsTrigger,
+	Select,
 	StatefulButton,
 } from "../../modules/ui";
 
-const TABS_CODE_EXAMPLE = `import {
-  MotionTabs,
-  MotionTabsList,
-  MotionTabsTrigger,
-  MotionTabsContent,
-} from "@school-os/ui/components/mobile";
+const TABS_CODE_EXAMPLE = `import { MotionTabs } from "@school-os/ui/components/mobile";`;
+const BUTTON_CODE_EXAMPLE = `import { MobileMotionButton } from "@school-os/ui/components/mobile";`;
 
-export function MobileTabsDemo() {
+const INPUT_CODE_EXAMPLE = `import { MotionInput } from "@school-os/ui/components/mobile";
+
+export function MobileInputDemo() {
+  const [val, setVal] = useState("john.doe@example.com");
   return (
-    <MotionTabs defaultValue="overview" variant="pill">
-      <MotionTabsList>
-        <MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
-        <MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-      </MotionTabsList>
-      <MotionTabsContent value="overview">
-        <Text>Overview Panel</Text>
-      </MotionTabsContent>
-    </MotionTabs>
+    <MotionInput
+      label="Email Address"
+      placeholder="you@example.com"
+      value={val}
+      onChangeText={setVal}
+      clearable
+      onClear={() => setVal("")}
+    />
   );
 }`;
 
-const BUTTON_CODE_EXAMPLE = `import { MobileMotionButton, MobileStatefulButton } from "@school-os/ui/components/mobile";
-import { ArrowRightIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react-native";
+const SELECT_CODE_EXAMPLE = `import { MotionSelect } from "@school-os/ui/components/mobile";
 
-export function MobileButtonDemo() {
-  const [okState, setOkState] = useState("idle");
-
+export function MobileSelectDemo() {
+  const [val, setVal] = useState("nextjs");
   return (
-    <View style={{ gap: 12 }}>
-      <MobileStatefulButton
-        state={okState}
-        variant="primary"
-        size="md"
-        onPress={() => run("ok")}
-        loadingText="Saving changes"
-        successText="Saved successfully"
-        icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} color="#000" />}
-      >
-        Save changes
-      </MobileStatefulButton>
-
-      <MobileMotionButton variant="secondary" size="md">Secondary</MobileMotionButton>
-      <MobileMotionButton variant="outline" size="md">Outline</MobileMotionButton>
-    </View>
+    <MotionSelect
+      label="Framework Target"
+      options={[
+        { value: "nextjs", label: "Next.js 16 (App Router)" },
+        { value: "expo", label: "Expo Router (React Native)" }
+      ]}
+      value={val}
+      onValueChange={setVal}
+    />
   );
 }`;
 
 export default function ComponentSlugScreen() {
 	const { slug = "tabs" } = useLocalSearchParams<{ slug: string }>();
 	const [activePlatformView, setActivePlatformView] = useState<"preview" | "code">("preview");
-	const [activeVariant, setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
 
-	const [buttonLoading, setButtonLoading] = useState(false);
+	const [inputValue, setInputValue] = useState("john.doe@example.com");
+	const [passwordValue, setPasswordValue] = useState("secret123");
+	const [inputError, setInputError] = useState(false);
+	const [selectValue, setSelectValue] = useState("nextjs");
+
+	const [_buttonLoading, _setButtonLoading] = useState(false);
 	const [okState, setOkState] = useState<"idle" | "loading" | "success" | "error">("idle");
 	const [errState, setErrState] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -80,8 +75,24 @@ export default function ComponentSlugScreen() {
 		}, 1400);
 	};
 
+	const frameworkOptions = [
+		{ value: "nextjs", label: "Next.js 16 (App Router)" },
+		{ value: "expo", label: "Expo Router (React Native)" },
+		{ value: "turborepo", label: "Turborepo + Bun Monorepo" },
+		{ value: "nestjs", label: "NestJS Backend Spine" },
+	];
+
 	const isButtonSlug = slug === "button";
-	const componentTitle = isButtonSlug ? "Motion Button" : "Motion Tabs";
+	const isInputSlug = slug === "input";
+	const isSelectSlug = slug === "select";
+
+	const componentTitle = isInputSlug
+		? "Motion Input"
+		: isSelectSlug
+			? "Motion Select"
+			: isButtonSlug
+				? "Motion Button"
+				: "Motion Tabs";
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -94,9 +105,7 @@ export default function ComponentSlugScreen() {
 					</View>
 					<Text style={styles.title}>{componentTitle}</Text>
 					<Text style={styles.subtitle}>
-						{isButtonSlug
-							? "React Native Reanimated press scale spring physics with Hugeicons & stateful text transitions."
-							: "React Native Reanimated spring physics for Expo Router applications."}
+						React Native Reanimated component running on UI thread for Expo apps.
 					</Text>
 				</View>
 
@@ -115,20 +124,71 @@ export default function ComponentSlugScreen() {
 				</View>
 
 				{activePlatformView === "preview" ? (
-					isButtonSlug ? (
-						/* BUTTON MOBILE PREVIEW & DOCS */
+					isInputSlug ? (
+						/* INPUT MOBILE PREVIEW */
 						<View style={styles.previewSection}>
-							{/* 2. OVERVIEW */}
-							<View style={styles.docCard}>
-								<Text style={styles.docCardTitle}>Overview</Text>
-								<Text style={styles.docCardText}>
-									Reanimated spring press motion buttons with tactile feedback on UI thread.
-									Integrated icon slot swaps and stateful text transitions (idle, loading, success,
-									error).
-								</Text>
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>Reanimated Focus Scale & Clear Input:</Text>
+								<View style={styles.buttonList}>
+									<MotionInput
+										label="Email Address"
+										placeholder="you@example.com"
+										value={inputValue}
+										onChangeText={setInputValue}
+										clearable
+										onClear={() => setInputValue("")}
+										error={inputError ? "Invalid email format" : undefined}
+									/>
+
+									<MotionInput
+										label="Account Password"
+										secureTextEntry
+										value={passwordValue}
+										onChangeText={setPasswordValue}
+									/>
+
+									<MobileMotionButton
+										variant="outline"
+										size="sm"
+										onPress={() => setInputError(!inputError)}
+									>
+										{inputError ? "Clear Error" : "Toggle Shake Error"}
+									</MobileMotionButton>
+								</View>
 							</View>
 
-							{/* 3. HERO SHOWCASE EXAMPLES */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>Base Primitive Input:</Text>
+								<Input placeholder="Base un-animated TextInput..." />
+							</View>
+						</View>
+					) : isSelectSlug ? (
+						/* SELECT MOBILE PREVIEW */
+						<View style={styles.previewSection}>
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>Reanimated Bottom Sheet Select Picker:</Text>
+								<View style={styles.buttonList}>
+									<MotionSelect
+										label="Target Framework"
+										options={frameworkOptions}
+										value={selectValue}
+										onValueChange={setSelectValue}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>Base Primitive Select:</Text>
+								<Select
+									options={frameworkOptions}
+									value={selectValue}
+									onValueChange={setSelectValue}
+								/>
+							</View>
+						</View>
+					) : isButtonSlug ? (
+						/* BUTTON MOBILE PREVIEW */
+						<View style={styles.previewSection}>
 							<View style={styles.playgroundCard}>
 								<Text style={styles.sectionLabel}>Cascading Text Stagger & Icon Slot Swap:</Text>
 								<View style={styles.buttonList}>
@@ -156,7 +216,6 @@ export default function ComponentSlugScreen() {
 								</View>
 							</View>
 
-							{/* 4. BUTTON SIZES */}
 							<View style={styles.playgroundCard}>
 								<Text style={styles.sectionLabel}>Button Sizes:</Text>
 								<View style={styles.buttonRow}>
@@ -171,101 +230,21 @@ export default function ComponentSlugScreen() {
 									</MobileMotionButton>
 								</View>
 							</View>
-
-							{/* 5. VARIANTS & SPINNER */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Variants & Loading Spinner State:</Text>
-								<View style={styles.buttonList}>
-									<MobileMotionButton
-										loading={buttonLoading}
-										variant="primary"
-										size="md"
-										onPress={() => setButtonLoading(!buttonLoading)}
-									>
-										{buttonLoading ? "Processing State..." : "Click for Loader"}
-									</MobileMotionButton>
-									<MobileMotionButton variant="outline" size="md">
-										Outline Reflection
-									</MobileMotionButton>
-									<MobileMotionButton variant="destructive" size="md">
-										Destructive Action
-									</MobileMotionButton>
-									<MobileButton variant="outline" size="md">
-										Base Primitive
-									</MobileButton>
-								</View>
-							</View>
-
-							{/* 6. MOTION PHYSICS SPECIFICATIONS */}
-							<View style={styles.docCard}>
-								<Text style={styles.docCardTitle}>Motion Physics Specs</Text>
-								<Text style={styles.specLine}>Stiffness: 500 (High elasticity touch)</Text>
-								<Text style={styles.specLine}>Damping: 30 (Smooth settle without overshoot)</Text>
-								<Text style={styles.specLine}>Mass: 0.6 (Tactile press scale 0.93)</Text>
-							</View>
-
-							{/* 7. ACCESSIBILITY (A11Y) */}
-							<View style={styles.docCard}>
-								<Text style={styles.docCardTitle}>Accessibility (a11y)</Text>
-								<Text style={styles.docCardText}>
-									Supports screen readers with accessibilityRole="button", accessibilityState=
-									{{ disabled, busy }}, and minimum 44pt touch target bounds.
-								</Text>
-							</View>
 						</View>
 					) : (
-						/* TABS MOBILE PREVIEW & DOCS */
+						/* TABS MOBILE PREVIEW */
 						<View style={styles.previewSection}>
-							<View style={styles.docCard}>
-								<Text style={styles.docCardTitle}>Overview</Text>
-								<Text style={styles.docCardText}>
-									React Native Reanimated spring tabs with layout measurements and UI-thread
-									indicator glides across pill, underline, and segment variants.
-								</Text>
-							</View>
-
-							<View style={styles.variantCard}>
-								<Text style={styles.sectionLabel}>Variant Switcher:</Text>
-								<MotionTabs
-									value={activeVariant}
-									onValueChange={(v) => setActiveVariant(v as "pill" | "underline" | "segment")}
-									variant="pill"
-								>
-									<MotionTabsList>
-										<MotionTabsTrigger value="pill">Pill</MotionTabsTrigger>
-										<MotionTabsTrigger value="underline">Underline</MotionTabsTrigger>
-										<MotionTabsTrigger value="segment">Segment</MotionTabsTrigger>
-									</MotionTabsList>
-								</MotionTabs>
-							</View>
-
 							<View style={styles.playgroundCard}>
-								<MotionTabs defaultValue="overview" variant={activeVariant}>
+								<MotionTabs defaultValue="overview" variant="pill">
 									<MotionTabsList>
 										<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
 										<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-										<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
 									</MotionTabsList>
-
 									<View style={styles.contentContainer}>
 										<MotionTabsContent value="overview" style={styles.cardInner}>
 											<Text style={styles.cardHeader}>System Overview</Text>
 											<Text style={styles.cardText}>
 												React Native Reanimated spring physics running on UI thread.
-											</Text>
-										</MotionTabsContent>
-
-										<MotionTabsContent value="analytics" style={styles.cardInner}>
-											<Text style={styles.cardHeader}>Performance Analytics</Text>
-											<Text style={styles.cardText}>
-												60/120Hz gesture & animation telemetry metrics.
-											</Text>
-										</MotionTabsContent>
-
-										<MotionTabsContent value="settings" style={styles.cardInner}>
-											<Text style={styles.cardHeader}>Workspace Preferences</Text>
-											<Text style={styles.cardText}>
-												Configure haptic feedback and native layout bounds.
 											</Text>
 										</MotionTabsContent>
 									</View>
@@ -278,7 +257,13 @@ export default function ComponentSlugScreen() {
 					<View style={styles.codeCard}>
 						<Text style={styles.codeHeader}>React Native Code Snippet:</Text>
 						<Text style={styles.codeText}>
-							{isButtonSlug ? BUTTON_CODE_EXAMPLE : TABS_CODE_EXAMPLE}
+							{isInputSlug
+								? INPUT_CODE_EXAMPLE
+								: isSelectSlug
+									? SELECT_CODE_EXAMPLE
+									: isButtonSlug
+										? BUTTON_CODE_EXAMPLE
+										: TABS_CODE_EXAMPLE}
 						</Text>
 					</View>
 				)}
@@ -341,39 +326,6 @@ const styles = StyleSheet.create({
 	},
 	previewSection: {
 		gap: 16,
-	},
-	docCard: {
-		backgroundColor: "#18181b",
-		padding: 16,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#27272a",
-		gap: 6,
-	},
-	docCardTitle: {
-		fontSize: 14,
-		fontWeight: "bold",
-		color: "#ffffff",
-	},
-	docCardText: {
-		fontSize: 12,
-		color: "#a1a1aa",
-		lineHeight: 18,
-	},
-	specLine: {
-		fontSize: 11,
-		color: "#14b8a6",
-		fontFamily: "monospace",
-	},
-	variantCard: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		backgroundColor: "#18181b",
-		padding: 12,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#27272a",
 	},
 	sectionLabel: {
 		fontSize: 12,

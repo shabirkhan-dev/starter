@@ -3,6 +3,7 @@
 import {
 	AccessibilityIcon,
 	ActivityIcon,
+	ArrowDown01Icon,
 	ArrowRightIcon,
 	BrushIcon,
 	CodeIcon,
@@ -11,21 +12,21 @@ import {
 	Download01Icon,
 	EyeIcon,
 	Grid02Icon,
+	InputTextIcon,
 	Layers01Icon,
-	Settings02Icon,
+	Mail01Icon,
 	SmartPhone01Icon,
 	SparklesIcon,
 	Tick02Icon,
+	UserIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Badge } from "@school-os/ui/components/badge";
 import { Button } from "@school-os/ui/components/button";
 import { Card, CardContent } from "@school-os/ui/components/card";
-import {
-	type ButtonState,
-	MotionButton,
-	StatefulButton,
-} from "@school-os/ui/components/motion/button";
+import { type ButtonState, StatefulButton } from "@school-os/ui/components/motion/button";
+import { MotionInput } from "@school-os/ui/components/motion/input";
+import { MotionSelect } from "@school-os/ui/components/motion/select";
 import {
 	Tabs as MotionTabs,
 	TabsContent as MotionTabsContent,
@@ -34,12 +35,7 @@ import {
 } from "@school-os/ui/components/motion/tabs";
 import { use, useState } from "react";
 
-const WEB_TABS_CODE = `import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "@school-os/ui/components/motion/tabs";
+const WEB_TABS_CODE = `import { Tabs, TabsList, TabsTrigger, TabsContent } from "@school-os/ui/components/motion/tabs";
 
 export function MotionTabsDemo() {
   return (
@@ -56,38 +52,46 @@ export function MotionTabsDemo() {
 }`;
 
 const WEB_BUTTON_CODE = `import { MotionButton, StatefulButton } from "@school-os/ui/components/motion/button";
-import { ArrowRightIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 
 export function MotionButtonDemo() {
-  const [state, setState] = useState("idle");
-
   return (
     <div className="flex gap-3">
-      <StatefulButton
-        state={state}
-        variant="primary"
-        ripple
-        onClick={() => setState("loading")}
-        icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} />}
-      >
-        Save changes
-      </StatefulButton>
-      <MotionButton variant="outline">Outline Reflection</MotionButton>
+      <StatefulButton variant="primary" ripple>Save changes</StatefulButton>
+      <MotionButton variant="outline">Outline</MotionButton>
     </div>
   );
 }`;
 
-const MOBILE_BUTTON_CODE = `import { MobileMotionButton, MobileStatefulButton } from "@school-os/ui/components/mobile";
+const WEB_INPUT_CODE = `import { MotionInput } from "@school-os/ui/components/motion/input";
+import { Mail01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
-export function MobileButtonDemo() {
+export function MotionInputDemo() {
+  const [val, setVal] = useState("");
   return (
-    <View style={{ gap: 10 }}>
-      <MobileStatefulButton state="idle" variant="primary">
-        Save changes
-      </MobileStatefulButton>
-      <MobileMotionButton variant="outline">Outline Reflection</MobileMotionButton>
-    </View>
+    <MotionInput
+      label="Email Address"
+      placeholder="you@example.com"
+      value={val}
+      onChange={(e) => setVal(e.target.value)}
+      clearable
+      onClear={() => setVal("")}
+      icon={<HugeiconsIcon icon={Mail01Icon} size={16} />}
+    />
+  );
+}`;
+
+const WEB_SELECT_CODE = `import { MotionSelect } from "@school-os/ui/components/motion/select";
+
+export function MotionSelectDemo() {
+  return (
+    <MotionSelect
+      label="Role"
+      options={[
+        { value: "admin", label: "Admin" },
+        { value: "member", label: "Member" }
+      ]}
+    />
   );
 }`;
 
@@ -96,10 +100,14 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 	const slug = resolvedParams.slug || "tabs";
 
 	const [activePlatform, setActivePlatform] = useState<"web" | "mobile">("web");
-	const [activeVariant, _setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
-	const [activeSize, _setActiveSize] = useState<"sm" | "md" | "lg">("md");
+	const [_activeVariant] = useState<"pill" | "underline" | "segment">("pill");
+	const [_activeSize] = useState<"sm" | "md" | "lg">("md");
 	const [activeViewTab, setActiveViewTab] = useState<"preview" | "code">("preview");
-	const [_buttonLoading, _setButtonLoading] = useState(false);
+
+	const [inputValue, setInputValue] = useState("john.doe@example.com");
+	const [passwordValue, setPasswordValue] = useState("secret123");
+	const [inputError, setInputError] = useState(false);
+	const [selectValue, setSelectValue] = useState("nextjs");
 
 	const [okState, setOkState] = useState<ButtonState>("idle");
 	const [errState, setErrState] = useState<ButtonState>("idle");
@@ -115,15 +123,14 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 		}, 1400);
 	};
 
-	const isButtonComponent = slug === "button";
-
 	const handleCopy = () => {
-		const codeToCopy = isButtonComponent
-			? activePlatform === "web"
-				? WEB_BUTTON_CODE
-				: MOBILE_BUTTON_CODE
-			: WEB_TABS_CODE;
-		navigator.clipboard.writeText(codeToCopy);
+		const codeMap = {
+			tabs: WEB_TABS_CODE,
+			button: WEB_BUTTON_CODE,
+			input: WEB_INPUT_CODE,
+			select: WEB_SELECT_CODE,
+		};
+		navigator.clipboard.writeText(codeMap[slug as keyof typeof codeMap] || WEB_TABS_CODE);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2000);
 	};
@@ -133,6 +140,13 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 		setCmdCopied(true);
 		setTimeout(() => setCmdCopied(false), 2000);
 	};
+
+	const frameworkOptions = [
+		{ value: "nextjs", label: "Next.js 16 (App Router)" },
+		{ value: "expo", label: "Expo Router (React Native)" },
+		{ value: "turborepo", label: "Turborepo + Bun Monorepo" },
+		{ value: "nestjs", label: "NestJS Backend Spine" },
+	];
 
 	return (
 		<div className="space-y-12 max-w-4xl mx-auto py-4 pb-16">
@@ -175,21 +189,27 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 					<h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
 						<HugeiconsIcon
 							icon={
-								isButtonComponent
+								slug === "button"
 									? Layers01Icon
-									: activePlatform === "web"
-										? Grid02Icon
-										: SmartPhone01Icon
+									: slug === "input"
+										? InputTextIcon
+										: slug === "select"
+											? ArrowDown01Icon
+											: Grid02Icon
 							}
 							size={28}
 							strokeWidth={2}
 						/>
-						{isButtonComponent ? "Motion Button" : "Motion Tabs"}
+						Motion {slug.charAt(0).toUpperCase() + slug.slice(1)} Component
 					</h1>
 					<p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-						{isButtonComponent
-							? "Production-ready motion button with cascading text stagger, icon slot swaps, material ripples, and spring press scaling physics."
-							: "Spring-animated layout projection tabs with exclusion text blending and active indicator glide."}
+						{slug === "input"
+							? "Interactive input field with smooth focus ring glow animation, clear button, password visibility toggle, and error shake transitions."
+							: slug === "select"
+								? "Animated combobox select dropdown with spring scaling physics and checkmark selection state."
+								: slug === "button"
+									? "Production-ready motion button with cascading text stagger, icon slot swaps, material ripples, and spring press scaling physics."
+									: "Spring-animated layout projection tabs with exclusion text blending and active indicator glide."}
 					</p>
 				</div>
 			</div>
@@ -201,13 +221,17 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 					Overview
 				</h2>
 				<p className="text-sm text-muted-foreground leading-relaxed">
-					{isButtonComponent
-						? "Rabtx UI Motion Button is engineered for high-performance interactive interfaces. It provides tactile spring physics, material press ripples, elevated glossy reflection highlights, and slot-swapping stateful loaders (idle, loading, success, error) with zero-layout-shift kerning preservation."
-						: "Rabtx UI Motion Tabs provides GPU-accelerated spring glides across active tabs using Framer Motion on Web and React Native Reanimated on Mobile. Includes pill, underline, and segment variants with automatic light/dark blend inversion."}
+					{slug === "input"
+						? "Rabtx UI Motion Input provides real-time focus ring feedback with GPU-accelerated spring animations. Supports clear buttons, password reveal icons, floating helper text, and invalid error state shakes."
+						: slug === "select"
+							? "Rabtx UI Motion Select delivers smooth dropdown panel spring physics with click-outside detection, keyboard selection, and theme-adaptive option checkmarks."
+							: slug === "button"
+								? "Rabtx UI Motion Button is engineered for high-performance interactive interfaces. It provides tactile spring physics, material press ripples, elevated glossy reflection highlights, and slot-swapping stateful loaders."
+								: "Rabtx UI Motion Tabs provides GPU-accelerated spring glides across active tabs using Framer Motion on Web and React Native Reanimated on Mobile."}
 				</p>
 			</section>
 
-			{/* 3. INTERACTIVE HERO SHOWCASE (PREVIEW / CODE) */}
+			{/* 3. INTERACTIVE HERO SHOWCASE */}
 			<section className="space-y-3">
 				<div className="flex items-center justify-between">
 					<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
@@ -238,99 +262,94 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 					<CardContent className="p-0">
 						{activeViewTab === "preview" && (
 							<div className="relative min-h-[340px] w-full flex flex-col items-center justify-center p-8 bg-background border-b border-border">
-								{isButtonComponent ? (
-									activePlatform === "web" ? (
-										/* WEB HERO PREVIEW */
-										<div className="space-y-6 w-full max-w-lg flex flex-col items-center justify-center">
-											<div className="flex flex-wrap items-center justify-center gap-3">
-												<StatefulButton
-													state={okState}
-													variant="primary"
-													size="md"
-													ripple
-													onClick={() => runStatefulDemo("ok")}
-													loadingText="Saving changes"
-													successText="Saved successfully"
-													icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} strokeWidth={2} />}
-												>
-													Save changes
-												</StatefulButton>
+								{slug === "input" ? (
+									/* INPUT PREVIEW */
+									<div className="space-y-4 w-full max-w-sm">
+										<MotionInput
+											label="Email Address"
+											placeholder="you@example.com"
+											value={inputValue}
+											onChange={(e) => setInputValue(e.target.value)}
+											clearable
+											onClear={() => setInputValue("")}
+											icon={<HugeiconsIcon icon={Mail01Icon} size={16} strokeWidth={2} />}
+											error={inputError ? "Invalid email address format" : undefined}
+										/>
 
-												<StatefulButton
-													state={errState}
-													variant="secondary"
-													size="md"
-													ripple
-													onClick={() => runStatefulDemo("err")}
-													loadingText="Submitting form"
-													errorText="Failed to save"
-												>
-													Submit form
-												</StatefulButton>
-											</div>
+										<MotionInput
+											label="Account Password"
+											type="password"
+											value={passwordValue}
+											onChange={(e) => setPasswordValue(e.target.value)}
+											icon={<HugeiconsIcon icon={UserIcon} size={16} strokeWidth={2} />}
+										/>
 
-											<div className="flex flex-wrap items-center justify-center gap-3">
-												<MotionButton elevated ripple variant="primary" size="md">
-													Elevated Ripple
-												</MotionButton>
-												<MotionButton elevated variant="outline" size="md">
-													Outline Reflection
-												</MotionButton>
-												<MotionButton elevated variant="destructive" size="md">
-													Destructive
-												</MotionButton>
-											</div>
+										<div className="pt-2 flex justify-center">
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={() => setInputError(!inputError)}
+												className="text-xs"
+											>
+												{inputError ? "Clear Error State" : "Trigger Shake Error"}
+											</Button>
 										</div>
-									) : (
-										/* MOBILE HERO PREVIEW */
-										<div className="w-[300px] rounded-[36px] border-[6px] border-zinc-800 bg-zinc-950 p-4 pt-3 shadow-2xl space-y-4">
-											<div className="flex items-center justify-between text-[11px] text-zinc-400 px-2 font-mono">
-												<span>9:41</span>
-												<div className="w-16 h-3.5 bg-zinc-900 rounded-full mx-auto" />
-												<span>100%</span>
-											</div>
+									</div>
+								) : slug === "select" ? (
+									/* SELECT PREVIEW */
+									<div className="space-y-4 w-full max-w-sm">
+										<MotionSelect
+											label="Active Framework Target"
+											options={frameworkOptions}
+											value={selectValue}
+											onValueChange={setSelectValue}
+										/>
 
-											<div className="space-y-3 py-4 flex flex-col items-stretch">
-												<StatefulButton
-													state={okState}
-													variant="primary"
-													size="md"
-													onClick={() => runStatefulDemo("ok")}
-													loadingText="Saving changes"
-													successText="Saved successfully"
-												>
-													Save changes
-												</StatefulButton>
-												<MotionButton variant="secondary" size="md">
-													Secondary
-												</MotionButton>
-												<MotionButton variant="outline" size="md">
-													Outline
-												</MotionButton>
-											</div>
-
-											<div className="w-24 h-1 bg-zinc-700 rounded-full mx-auto" />
+										<div className="p-3 rounded-xl border border-border bg-card text-xs space-y-1">
+											<span className="text-muted-foreground block font-mono">
+												Current Selection:
+											</span>
+											<span className="font-semibold text-foreground font-mono">{selectValue}</span>
 										</div>
-									)
+									</div>
+								) : slug === "button" ? (
+									/* BUTTON PREVIEW */
+									<div className="space-y-6 w-full max-w-lg flex flex-col items-center justify-center">
+										<div className="flex flex-wrap items-center justify-center gap-3">
+											<StatefulButton
+												state={okState}
+												variant="primary"
+												size="md"
+												ripple
+												onClick={() => runStatefulDemo("ok")}
+												loadingText="Saving changes"
+												successText="Saved successfully"
+												icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} strokeWidth={2} />}
+											>
+												Save changes
+											</StatefulButton>
+
+											<StatefulButton
+												state={errState}
+												variant="secondary"
+												size="md"
+												ripple
+												onClick={() => runStatefulDemo("err")}
+												loadingText="Submitting form"
+												errorText="Failed to save"
+											>
+												Submit form
+											</StatefulButton>
+										</div>
+									</div>
 								) : (
-									/* TABS HERO PREVIEW */
-									<div className="relative z-10 w-full max-w-md flex flex-col items-center gap-4">
-										<div className="flex items-center justify-between w-full text-xs font-mono text-muted-foreground bg-muted/40 p-2 rounded-lg border border-border">
-											<span>Variant: {activeVariant}</span>
-											<span>Size: {activeSize}</span>
-										</div>
-
-										<MotionTabs
-											defaultValue="overview"
-											variant={activeVariant}
-											size={activeSize}
-											className="w-full"
-										>
+									/* TABS PREVIEW */
+									<div className="relative z-10 w-full max-w-md flex flex-col items-center">
+										<MotionTabs defaultValue="overview" variant="pill" size="md" className="w-full">
 											<div className="flex justify-center w-full">
 												<MotionTabsList>
 													<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
 													<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-													<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
 												</MotionTabsList>
 											</div>
 
@@ -342,9 +361,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 															Spring Layout Glides
 														</div>
 														<p className="text-xs text-muted-foreground leading-relaxed">
-															GPU accelerated active indicator with exclusion text inversion. Size:{" "}
-															<strong className="text-foreground">{activeSize}</strong>, Variant:{" "}
-															<strong className="text-foreground">{activeVariant}</strong>.
+															GPU accelerated active indicator with exclusion text inversion.
 														</p>
 													</Card>
 												</MotionTabsContent>
@@ -373,11 +390,13 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 								</Button>
 								<pre className="pr-16 leading-relaxed">
 									<code>
-										{isButtonComponent
-											? activePlatform === "web"
-												? WEB_BUTTON_CODE
-												: MOBILE_BUTTON_CODE
-											: WEB_TABS_CODE}
+										{slug === "input"
+											? WEB_INPUT_CODE
+											: slug === "select"
+												? WEB_SELECT_CODE
+												: slug === "button"
+													? WEB_BUTTON_CODE
+													: WEB_TABS_CODE}
 									</code>
 								</pre>
 							</div>
@@ -413,97 +432,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				</Card>
 			</section>
 
-			{/* 5. VARIANTS MATRIX */}
-			<section className="space-y-4">
-				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
-					<HugeiconsIcon icon={Layers01Icon} size={18} strokeWidth={2} />
-					Variants & Styles
-				</h2>
-				<Card className="border border-border bg-card p-6">
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
-							<span className="text-xs font-mono font-medium text-muted-foreground">Primary</span>
-							<div className="pt-1 flex justify-center">
-								<MotionButton variant="primary" size="md">
-									Primary Button
-								</MotionButton>
-							</div>
-						</div>
-
-						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
-							<span className="text-xs font-mono font-medium text-muted-foreground">Secondary</span>
-							<div className="pt-1 flex justify-center">
-								<MotionButton variant="secondary" size="md">
-									Secondary Button
-								</MotionButton>
-							</div>
-						</div>
-
-						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
-							<span className="text-xs font-mono font-medium text-muted-foreground">Outline</span>
-							<div className="pt-1 flex justify-center">
-								<MotionButton variant="outline" size="md">
-									Outline Button
-								</MotionButton>
-							</div>
-						</div>
-
-						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
-							<span className="text-xs font-mono font-medium text-muted-foreground">Ghost</span>
-							<div className="pt-1 flex justify-center">
-								<MotionButton variant="ghost" size="md">
-									Ghost Action
-								</MotionButton>
-							</div>
-						</div>
-
-						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
-							<span className="text-xs font-mono font-medium text-muted-foreground">
-								Destructive
-							</span>
-							<div className="pt-1 flex justify-center">
-								<MotionButton variant="destructive" size="md">
-									Destructive Action
-								</MotionButton>
-							</div>
-						</div>
-
-						<div className="p-4 rounded-xl border border-border bg-background space-y-2 text-center">
-							<span className="text-xs font-mono font-medium text-muted-foreground">
-								Icon Button
-							</span>
-							<div className="pt-1 flex justify-center">
-								<MotionButton variant="primary" size="icon">
-									<HugeiconsIcon icon={SparklesIcon} size={16} strokeWidth={2} />
-								</MotionButton>
-							</div>
-						</div>
-					</div>
-				</Card>
-			</section>
-
-			{/* 6. SIZES MATRIX */}
-			<section className="space-y-4">
-				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
-					<HugeiconsIcon icon={Settings02Icon} size={18} strokeWidth={2} />
-					Sizes Matrix
-				</h2>
-				<Card className="border border-border bg-card p-6">
-					<div className="flex flex-wrap items-center justify-center gap-4">
-						<MotionButton variant="primary" size="sm">
-							Small (h-8)
-						</MotionButton>
-						<MotionButton variant="primary" size="md">
-							Medium (h-10)
-						</MotionButton>
-						<MotionButton variant="primary" size="lg">
-							Large (h-12)
-						</MotionButton>
-					</div>
-				</Card>
-			</section>
-
-			{/* 7. COLORS & DESIGN SYSTEM */}
+			{/* 5. COLORS & DESIGN SYSTEM */}
 			<section className="space-y-3">
 				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
 					<HugeiconsIcon icon={BrushIcon} size={18} strokeWidth={2} />
@@ -511,30 +440,16 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				</h2>
 				<Card className="border border-border bg-card p-6 space-y-3">
 					<p className="text-xs text-muted-foreground leading-relaxed">
-						Rabtx UI components consume native shadcn HSL semantic tokens (
-						<code className="font-mono text-foreground">--primary</code>,{" "}
-						<code className="font-mono text-foreground">--secondary</code>,{" "}
-						<code className="font-mono text-foreground">--border</code>). Automatic light/dark mode
-						adaptation without hardcoded hex colors or artificial RGB gradients.
+						Consumes native shadcn HSL semantic tokens (
+						<code className="font-mono text-foreground">--input</code>,{" "}
+						<code className="font-mono text-foreground">--ring</code>,{" "}
+						<code className="font-mono text-foreground">--destructive</code>). Automatic light/dark
+						mode adaptation.
 					</p>
-					<div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs pt-2">
-						<div className="p-3 rounded-lg border border-border bg-primary text-primary-foreground text-center">
-							bg-primary
-						</div>
-						<div className="p-3 rounded-lg border border-border bg-secondary text-secondary-foreground text-center">
-							bg-secondary
-						</div>
-						<div className="p-3 rounded-lg border border-border bg-card text-card-foreground text-center">
-							bg-card
-						</div>
-						<div className="p-3 rounded-lg border border-destructive bg-destructive text-destructive-foreground text-center">
-							bg-destructive
-						</div>
-					</div>
 				</Card>
 			</section>
 
-			{/* 8. MOTION PHYSICS */}
+			{/* 6. MOTION PHYSICS SPECIFICATIONS */}
 			<section className="space-y-3">
 				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
 					<HugeiconsIcon icon={ActivityIcon} size={18} strokeWidth={2} />
@@ -546,37 +461,24 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 							<thead className="bg-muted/50 border-b border-border text-muted-foreground font-mono">
 								<tr>
 									<th className="p-3">Physics Property</th>
-									<th className="p-3">Web Value (Framer)</th>
-									<th className="p-3">Mobile Value (Reanimated)</th>
+									<th className="p-3">Web Value</th>
 									<th className="p-3">Behavior</th>
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-border">
 								<tr>
-									<td className="p-3 font-mono text-foreground">Stiffness</td>
-									<td className="p-3 font-mono">500</td>
-									<td className="p-3 font-mono">500</td>
+									<td className="p-3 font-mono text-foreground">Focus Scale</td>
+									<td className="p-3 font-mono">1.01</td>
 									<td className="p-3 text-muted-foreground">
-										High elasticity tactile press feedback
+										Tactile scale feedback on element focus
 									</td>
 								</tr>
 								<tr>
-									<td className="p-3 font-mono text-foreground">Damping</td>
-									<td className="p-3 font-mono">30</td>
-									<td className="p-3 font-mono">30</td>
-									<td className="p-3 text-muted-foreground">Prevents overshooting oscillation</td>
-								</tr>
-								<tr>
-									<td className="p-3 font-mono text-foreground">Mass</td>
-									<td className="p-3 font-mono">0.6</td>
-									<td className="p-3 font-mono">0.6</td>
-									<td className="p-3 text-muted-foreground">Lightweight responsive press weight</td>
-								</tr>
-								<tr>
-									<td className="p-3 font-mono text-foreground">Press Scale</td>
-									<td className="p-3 font-mono">0.93</td>
-									<td className="p-3 font-mono">0.93</td>
-									<td className="p-3 text-muted-foreground">Tactile press compression ratio</td>
+									<td className="p-3 font-mono text-foreground">Stiffness</td>
+									<td className="p-3 font-mono">500</td>
+									<td className="p-3 text-muted-foreground">
+										Elastic spring stiffness for focus ring ring/20 glow
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -584,7 +486,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				</Card>
 			</section>
 
-			{/* 9. ACCESSIBILITY (A11Y) */}
+			{/* 7. ACCESSIBILITY (A11Y) */}
 			<section className="space-y-3">
 				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
 					<HugeiconsIcon icon={AccessibilityIcon} size={18} strokeWidth={2} />
@@ -593,86 +495,17 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				<Card className="border border-border bg-card p-6 space-y-3">
 					<ul className="space-y-2 text-xs text-muted-foreground list-disc list-inside leading-relaxed">
 						<li>
-							<strong className="text-foreground font-mono">Keyboard Navigation:</strong> Native
-							support for <code className="font-mono">Tab</code>,{" "}
-							<code className="font-mono">Space</code>, and <code className="font-mono">Enter</code>{" "}
-							key activation.
+							<strong className="text-foreground font-mono">Keyboard Navigation:</strong> Fully
+							focusable with <code className="font-mono">Tab</code>,{" "}
+							<code className="font-mono">Enter</code>, and{" "}
+							<code className="font-mono">Escape</code> keys.
 						</li>
 						<li>
-							<strong className="text-foreground font-mono">ARIA State:</strong> Automatically
-							injects <code className="font-mono">aria-busy="true"</code> during loading states and{" "}
-							<code className="font-mono">aria-disabled</code> when disabled.
-						</li>
-						<li>
-							<strong className="text-foreground font-mono">Reduced Motion:</strong> Respects system
-							preferences via <code className="font-mono">useReducedMotion</code> to disable scale
-							spring physics for users who prefer reduced motion.
+							<strong className="text-foreground font-mono">ARIA Attributes:</strong> Injects{" "}
+							<code className="font-mono">aria-invalid</code> when error is true and{" "}
+							<code className="font-mono">aria-expanded</code> on dropdown panel open.
 						</li>
 					</ul>
-				</Card>
-			</section>
-
-			{/* 10. API REFERENCE */}
-			<section className="space-y-3">
-				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
-					<HugeiconsIcon icon={CodeIcon} size={18} strokeWidth={2} />
-					API Reference
-				</h2>
-				<Card className="border border-border bg-card overflow-hidden">
-					<div className="overflow-x-auto">
-						<table className="w-full text-xs text-left">
-							<thead className="bg-muted/50 border-b border-border text-muted-foreground font-mono">
-								<tr>
-									<th className="p-3">Prop</th>
-									<th className="p-3">Type</th>
-									<th className="p-3">Default</th>
-									<th className="p-3">Description</th>
-								</tr>
-							</thead>
-							<tbody className="divide-y divide-border">
-								<tr>
-									<td className="p-3 font-mono text-foreground">variant</td>
-									<td className="p-3 font-mono text-teal-400">
-										"primary" | "secondary" | "outline" | "ghost" | "destructive"
-									</td>
-									<td className="p-3 font-mono">"primary"</td>
-									<td className="p-3 text-muted-foreground">Visual button styling variant</td>
-								</tr>
-								<tr>
-									<td className="p-3 font-mono text-foreground">size</td>
-									<td className="p-3 font-mono text-teal-400">"sm" | "md" | "lg" | "icon"</td>
-									<td className="p-3 font-mono">"md"</td>
-									<td className="p-3 text-muted-foreground">Button dimensions and padding</td>
-								</tr>
-								<tr>
-									<td className="p-3 font-mono text-foreground">ripple</td>
-									<td className="p-3 font-mono text-teal-400">boolean</td>
-									<td className="p-3 font-mono">false</td>
-									<td className="p-3 text-muted-foreground">
-										Spawn Material press point ripple beam
-									</td>
-								</tr>
-								<tr>
-									<td className="p-3 font-mono text-foreground">state</td>
-									<td className="p-3 font-mono text-teal-400">
-										"idle" | "loading" | "success" | "error"
-									</td>
-									<td className="p-3 font-mono">"idle"</td>
-									<td className="p-3 text-muted-foreground">
-										Stateful button slot transition state
-									</td>
-								</tr>
-								<tr>
-									<td className="p-3 font-mono text-foreground">pressScale</td>
-									<td className="p-3 font-mono text-teal-400">number</td>
-									<td className="p-3 font-mono">0.93</td>
-									<td className="p-3 text-muted-foreground">
-										Spring press scale ratio down on pointer tap
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
 				</Card>
 			</section>
 		</div>

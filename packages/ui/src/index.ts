@@ -19,6 +19,8 @@ export {
 } from "./components/breadcrumb";
 export { Button, buttonVariants } from "./components/button";
 export { MotionButton, StatefulButton } from "./components/motion/button";
+export { MotionInput } from "./components/motion/input";
+export { MotionSelect } from "./components/motion/select";
 export {
 	Card,
 	CardAction,
