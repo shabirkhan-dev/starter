@@ -82,6 +82,7 @@ export {
 	InputGroupTextarea,
 } from "./components/input-group";
 export { Label } from "./components/label";
+export * from "./components/mobile";
 export {
 	Tabs as MotionTabs,
 	TabsContent as MotionTabsContent,

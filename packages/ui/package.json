@@ -6,6 +6,8 @@
 	"type": "module",
 	"exports": {
 		"./globals.css": "./src/styles/globals.css",
+		"./components/mobile": "./src/components/mobile/index.ts",
+		"./components/mobile/*": "./src/components/mobile/*.tsx",
 		"./components/*": "./src/components/*.tsx",
 		"./lib/*": "./src/lib/*.ts",
 		"./hooks/*": "./src/hooks/*.ts",
