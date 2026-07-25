@@ -1,6 +1,6 @@
 import type React from "react";
 import { createContext, useContext, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 type Variant = "pill" | "underline" | "segment";
 
@@ -25,6 +25,7 @@ export function Tabs({
 	variant = "pill",
 	children,
 	style,
+	className,
 }: {
 	defaultValue?: string;
 	value?: string;
@@ -32,6 +33,7 @@ export function Tabs({
 	variant?: Variant;
 	children: React.ReactNode;
 	style?: object;
+	className?: string;
 }) {
 	const [internal, setInternal] = useState(defaultValue);
 	const controlled = value !== undefined;
@@ -44,23 +46,35 @@ export function Tabs({
 
 	return (
 		<TabsCtx.Provider value={{ value: current, setValue, variant }}>
-			<View style={style}>{children}</View>
+			<View className={className} style={style}>
+				{children}
+			</View>
 		</TabsCtx.Provider>
 	);
 }
 
-export function TabsList({ children, style }: { children: React.ReactNode; style?: object }) {
+export function TabsList({
+	children,
+	style,
+	className,
+}: {
+	children: React.ReactNode;
+	style?: object;
+	className?: string;
+}) {
 	const { variant } = useTabs();
+
+	const variantClass =
+		variant === "pill"
+			? "bg-zinc-900 rounded-full p-1 gap-1"
+			: variant === "underline"
+				? "border-b border-zinc-800 gap-2"
+				: "bg-zinc-900 rounded-lg p-0.5";
 
 	return (
 		<View
-			style={[
-				styles.listBase,
-				variant === "pill" && styles.listPill,
-				variant === "underline" && styles.listUnderline,
-				variant === "segment" && styles.listSegment,
-				style,
-			]}
+			className={`flex-row items-center self-center ${variantClass} ${className || ""}`}
+			style={style}
 		>
 			{children}
 		</View>
@@ -71,36 +85,41 @@ export function TabsTrigger({
 	value,
 	children,
 	style,
+	className,
 }: {
 	value: string;
 	children: React.ReactNode;
 	style?: object;
+	className?: string;
 }) {
 	const { value: current, setValue, variant } = useTabs();
 	const active = current === value;
 
+	const activeClass =
+		active && variant === "pill"
+			? "bg-white rounded-full"
+			: active && variant === "segment"
+				? "bg-zinc-800 rounded-md"
+				: "";
+
+	const textClass = active
+		? variant === "pill"
+			? "text-black font-semibold"
+			: "text-white font-semibold"
+		: "text-zinc-400 font-semibold";
+
 	return (
 		<Pressable
 			onPress={() => setValue(value)}
-			style={[
-				styles.triggerBase,
-				variant === "pill" && styles.triggerPill,
-				variant === "underline" && styles.triggerUnderline,
-				active && variant === "pill" && styles.triggerPillActive,
-				active && variant === "segment" && styles.triggerSegmentActive,
-				style,
-			]}
+			className={`px-3.5 py-2 items-center justify-center ${
+				variant === "underline" ? "pb-2.5 relative" : ""
+			} ${activeClass} ${className || ""}`}
+			style={style}
 		>
-			<Text
-				style={[
-					styles.triggerText,
-					active ? styles.textActive : styles.textInactive,
-					active && variant === "pill" && styles.textPillActive,
-				]}
-			>
-				{children}
-			</Text>
-			{active && variant === "underline" && <View style={styles.underlineIndicator} />}
+			<Text className={`text-[13px] ${textClass}`}>{children}</Text>
+			{active && variant === "underline" && (
+				<View className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
+			)}
 		</Pressable>
 	);
 }
@@ -109,78 +128,19 @@ export function TabsContent({
 	value,
 	children,
 	style,
+	className,
 }: {
 	value: string;
 	children: React.ReactNode;
 	style?: object;
+	className?: string;
 }) {
 	const { value: current } = useTabs();
 	if (current !== value) return null;
 
-	return <View style={style}>{children}</View>;
+	return (
+		<View className={className} style={style}>
+			{children}
+		</View>
+	);
 }
-
-const styles = StyleSheet.create({
-	listBase: {
-		flexDirection: "row",
-		alignItems: "center",
-		alignSelf: "center",
-	},
-	listPill: {
-		backgroundColor: "#18181b",
-		borderRadius: 9999,
-		padding: 4,
-		gap: 4,
-	},
-	listUnderline: {
-		borderBottomWidth: 1,
-		borderBottomColor: "#27272a",
-		gap: 8,
-	},
-	listSegment: {
-		backgroundColor: "#18181b",
-		borderRadius: 8,
-		padding: 2,
-	},
-	triggerBase: {
-		paddingHorizontal: 14,
-		paddingVertical: 8,
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	triggerPill: {
-		borderRadius: 9999,
-	},
-	triggerUnderline: {
-		paddingBottom: 10,
-		position: "relative",
-	},
-	triggerPillActive: {
-		backgroundColor: "#ffffff",
-	},
-	triggerSegmentActive: {
-		backgroundColor: "#27272a",
-		borderRadius: 6,
-	},
-	triggerText: {
-		fontSize: 13,
-		fontWeight: "600",
-	},
-	textActive: {
-		color: "#ffffff",
-	},
-	textPillActive: {
-		color: "#000000",
-	},
-	textInactive: {
-		color: "#a1a1aa",
-	},
-	underlineIndicator: {
-		position: "absolute",
-		bottom: 0,
-		left: 0,
-		right: 0,
-		height: 2,
-		backgroundColor: "#ffffff",
-	},
-});

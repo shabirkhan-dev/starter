@@ -1,5 +1,5 @@
 import type React from "react";
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 export type ButtonVariant = "default" | "destructive" | "outline" | "secondary" | "ghost";
 export type ButtonSize = "default" | "sm" | "lg" | "icon";
@@ -14,6 +14,29 @@ export interface MobileButtonProps {
 	style?: object;
 	textStyle?: object;
 }
+
+const VARIANT_CLASS: Record<ButtonVariant, string> = {
+	default: "bg-white",
+	destructive: "bg-red-500",
+	outline: "bg-transparent border border-zinc-800",
+	secondary: "bg-zinc-800",
+	ghost: "bg-transparent",
+};
+
+const SIZE_CLASS: Record<ButtonSize, string> = {
+	default: "h-10 px-4 rounded-lg",
+	sm: "h-8 px-3 rounded-md",
+	lg: "h-12 px-6 rounded-xl",
+	icon: "w-10 h-10 px-0 rounded-lg",
+};
+
+const TEXT_VARIANT_CLASS: Record<ButtonVariant, string> = {
+	default: "text-black",
+	destructive: "text-white",
+	outline: "text-white",
+	secondary: "text-white",
+	ghost: "text-zinc-400",
+};
 
 export function MobileButton({
 	variant = "default",
@@ -31,21 +54,18 @@ export function MobileButton({
 		<Pressable
 			onPress={isDisabled ? undefined : onPress}
 			disabled={isDisabled}
-			style={({ pressed }: { pressed: boolean }) => [
-				styles.base,
-				styles[variant],
-				styles[`size_${size}` as keyof typeof styles],
-				pressed && !isDisabled && styles.pressed,
-				isDisabled && styles.disabled,
-				style,
-			]}
+			className={`flex-row items-center justify-center ${VARIANT_CLASS[variant]} ${SIZE_CLASS[size]} ${
+				isDisabled ? "opacity-50" : "active:opacity-80"
+			}`}
+			style={style}
 		>
 			{loading ? (
-				<View style={styles.contentRow}>
+				<View className="flex-row items-center gap-2">
 					<ActivityIndicator size="small" color={variant === "default" ? "#000" : "#fff"} />
 					{typeof children === "string" ? (
 						<Text
-							style={[styles.textBase, styles[`text_${variant}` as keyof typeof styles], textStyle]}
+							className={`text-sm font-semibold ${TEXT_VARIANT_CLASS[variant]}`}
+							style={textStyle}
 						>
 							{children}
 						</Text>
@@ -54,9 +74,7 @@ export function MobileButton({
 					)}
 				</View>
 			) : typeof children === "string" ? (
-				<Text
-					style={[styles.textBase, styles[`text_${variant}` as keyof typeof styles], textStyle]}
-				>
+				<Text className={`text-sm font-semibold ${TEXT_VARIANT_CLASS[variant]}`} style={textStyle}>
 					{children}
 				</Text>
 			) : (
@@ -65,80 +83,3 @@ export function MobileButton({
 		</Pressable>
 	);
 }
-
-const styles = StyleSheet.create({
-	base: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		borderRadius: 8,
-		paddingHorizontal: 16,
-		paddingVertical: 10,
-	},
-	contentRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 8,
-	},
-	pressed: {
-		opacity: 0.8,
-	},
-	disabled: {
-		opacity: 0.5,
-	},
-	default: {
-		backgroundColor: "#ffffff",
-	},
-	destructive: {
-		backgroundColor: "#ef4444",
-	},
-	outline: {
-		backgroundColor: "transparent",
-		borderWidth: 1,
-		borderColor: "#27272a",
-	},
-	secondary: {
-		backgroundColor: "#27272a",
-	},
-	ghost: {
-		backgroundColor: "transparent",
-	},
-	size_default: {
-		height: 40,
-		paddingHorizontal: 16,
-	},
-	size_sm: {
-		height: 32,
-		paddingHorizontal: 12,
-		borderRadius: 6,
-	},
-	size_lg: {
-		height: 48,
-		paddingHorizontal: 24,
-		borderRadius: 10,
-	},
-	size_icon: {
-		width: 40,
-		height: 40,
-		paddingHorizontal: 0,
-	},
-	textBase: {
-		fontSize: 14,
-		fontWeight: "600",
-	},
-	text_default: {
-		color: "#000000",
-	},
-	text_destructive: {
-		color: "#ffffff",
-	},
-	text_outline: {
-		color: "#ffffff",
-	},
-	text_secondary: {
-		color: "#ffffff",
-	},
-	text_ghost: {
-		color: "#a1a1aa",
-	},
-});

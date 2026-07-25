@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const MOBILE_COMPONENT_SLUGS = [
@@ -37,28 +37,36 @@ export default function MobileUICatalogScreen() {
 	const router = useRouter();
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<ScrollView contentContainerStyle={styles.scrollContent}>
-				<View style={styles.header}>
-					<Text style={styles.title}>Mobile UI Catalog</Text>
-					<Text style={styles.subtitle}>Expo Router & Reanimated Component System</Text>
+		<SafeAreaView className="flex-1 bg-zinc-950">
+			<ScrollView className="p-5">
+				<View className="mb-6">
+					<Text className="text-2xl font-bold text-white">Mobile UI Catalog</Text>
+					<Text className="text-[13px] text-zinc-400 mt-1">
+						Expo Router & Reanimated Component System
+					</Text>
 				</View>
 
-				<View style={styles.categoryGroup}>
-					<Text style={styles.categoryTitle}>Motion Components</Text>
+				<View className="gap-3">
+					<Text className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
+						Motion Components
+					</Text>
 
 					{MOBILE_COMPONENT_SLUGS.map((item) => (
 						<Pressable
 							key={item.slug}
 							onPress={() => router.push({ pathname: "/ui/[slug]", params: { slug: item.slug } })}
-							style={styles.componentCard}
+							className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 gap-1.5 active:opacity-80"
 						>
-							<View style={styles.cardHeader}>
-								<Text style={styles.componentName}>{item.name}</Text>
-								<Text style={styles.badge}>{item.status}</Text>
+							<View className="flex-row items-center justify-between">
+								<Text className="text-base font-semibold text-white">{item.name}</Text>
+								<Text className="text-[10px] text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded font-mono overflow-hidden">
+									{item.status}
+								</Text>
 							</View>
-							<Text style={styles.componentDesc}>{item.description}</Text>
-							<Text style={styles.slugTag}>slug: /ui/{item.slug}</Text>
+							<Text className="text-xs text-zinc-400 leading-[18px]">{item.description}</Text>
+							<Text className="text-[10px] text-zinc-500 font-mono mt-1">
+								slug: /ui/{item.slug}
+							</Text>
 						</Pressable>
 					))}
 				</View>
@@ -66,76 +74,3 @@ export default function MobileUICatalogScreen() {
 		</SafeAreaView>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#09090b",
-	},
-	scrollContent: {
-		padding: 20,
-	},
-	header: {
-		marginBottom: 24,
-	},
-	title: {
-		fontSize: 24,
-		fontWeight: "bold",
-		color: "#ffffff",
-	},
-	subtitle: {
-		fontSize: 13,
-		color: "#a1a1aa",
-		marginTop: 4,
-	},
-	categoryGroup: {
-		gap: 12,
-	},
-	categoryTitle: {
-		fontSize: 11,
-		fontWeight: "bold",
-		color: "#a1a1aa",
-		textTransform: "uppercase",
-		letterSpacing: 1,
-		marginBottom: 4,
-	},
-	componentCard: {
-		backgroundColor: "#18181b",
-		padding: 16,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#27272a",
-		gap: 6,
-	},
-	cardHeader: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-	},
-	componentName: {
-		fontSize: 16,
-		fontWeight: "600",
-		color: "#ffffff",
-	},
-	badge: {
-		fontSize: 10,
-		color: "#14b8a6",
-		backgroundColor: "rgba(20, 184, 166, 0.1)",
-		paddingHorizontal: 8,
-		paddingVertical: 2,
-		borderRadius: 4,
-		overflow: "hidden",
-		fontFamily: "monospace",
-	},
-	componentDesc: {
-		fontSize: 12,
-		color: "#a1a1aa",
-		lineHeight: 18,
-	},
-	slugTag: {
-		fontSize: 10,
-		color: "#71717a",
-		fontFamily: "monospace",
-		marginTop: 4,
-	},
-});

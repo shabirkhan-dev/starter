@@ -8,7 +8,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
 	Input,
@@ -118,22 +118,26 @@ export default function ComponentSlugScreen() {
 				: "Motion Tabs";
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<ScrollView contentContainerStyle={styles.scrollContent}>
+		<SafeAreaView className="flex-1 bg-zinc-950">
+			<ScrollView className="p-5 pb-10">
 				{/* 1. HEADER SECTION */}
-				<View style={styles.header}>
-					<View style={styles.badgeRow}>
-						<Text style={styles.badgeText}>Mobile Component</Text>
-						<Text style={styles.slugBadge}>slug: /ui/{slug}</Text>
+				<View className="mb-4">
+					<View className="flex-row items-center gap-2 mb-2">
+						<Text className="text-[11px] text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded font-mono overflow-hidden">
+							Mobile Component
+						</Text>
+						<Text className="text-[11px] text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded font-mono overflow-hidden">
+							slug: /ui/{slug}
+						</Text>
 					</View>
-					<Text style={styles.title}>{componentTitle}</Text>
-					<Text style={styles.subtitle}>
+					<Text className="text-[22px] font-bold text-white">{componentTitle}</Text>
+					<Text className="text-xs text-zinc-400 mt-1">
 						React Native Reanimated component running on UI thread for Expo apps.
 					</Text>
 				</View>
 
 				{/* PREVIEW / CODE SWITCHER */}
-				<View style={styles.viewSwitcherContainer}>
+				<View className="items-center mb-5">
 					<MotionTabs
 						value={activePlatformView}
 						onValueChange={(v) => setActivePlatformView(v as "preview" | "code")}
@@ -149,10 +153,10 @@ export default function ComponentSlugScreen() {
 				{activePlatformView === "preview" ? (
 					isInputSlug ? (
 						/* INPUT MOBILE PREVIEW & EXTENSIVE EXAMPLES */
-						<View style={styles.previewSection}>
+						<View className="gap-4">
 							{/* EX 1: SUCCESS ANIMATED CHECKMARK */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">
 									1. Verified Account Email (Success Checkmark):
 								</Text>
 								<MotionInput
@@ -166,8 +170,8 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 2: ERROR REANIMATED SHAKE */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>2. Error Shake & Message:</Text>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">2. Error Shake & Message:</Text>
 								<MotionInput
 									label="Workspace Domain"
 									value={errorInputVal}
@@ -175,7 +179,7 @@ export default function ComponentSlugScreen() {
 									error={inputErrorState ? "Domain contains invalid characters" : undefined}
 									leftIcon={<HugeiconsIcon icon={UserIcon} size={16} color="#a1a1aa" />}
 								/>
-								<View style={{ marginTop: 8 }}>
+								<View className="mt-2">
 									<MobileMotionButton
 										variant="outline"
 										size="sm"
@@ -187,8 +191,8 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 3: SEARCH WITH LEFT & RIGHT ICON */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>3. Search Bar with Clear Button:</Text>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">3. Search Bar with Clear Button:</Text>
 								<MotionInput
 									label="Global Search"
 									placeholder="Search components or icons..."
@@ -201,8 +205,10 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 4: PASSWORD VISIBILITY TOGGLE */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>4. Password Input with Eye Toggle:</Text>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">
+									4. Password Input with Eye Toggle:
+								</Text>
 								<MotionInput
 									label="Account Security Password"
 									secureTextEntry
@@ -212,17 +218,19 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 5: UNANIMATED BASE PRIMITIVE */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>5. Un-animated Base Primitive Input:</Text>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">
+									5. Un-animated Base Primitive Input:
+								</Text>
 								<Input placeholder="Standard TextInput fallback..." />
 							</View>
 						</View>
 					) : isSelectSlug ? (
 						/* SELECT MOBILE PREVIEW & EXTENSIVE EXAMPLES */
-						<View style={styles.previewSection}>
+						<View className="gap-4">
 							{/* EX 1: SCROLLABLE LONG LIST (15+ TIMEZONES) */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">
 									1. Scrollable Long List (15+ World Timezones):
 								</Text>
 								<MotionSelect
@@ -235,8 +243,10 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 2: SEARCHABLE COMBOBOX SELECT */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>2. Searchable Filter Combobox Select:</Text>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">
+									2. Searchable Filter Combobox Select:
+								</Text>
 								<MotionSelect
 									label="Select Country"
 									options={countryOptions}
@@ -247,8 +257,8 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 3: GROUPED SELECT */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>3. Grouped Technologies Select:</Text>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">3. Grouped Technologies Select:</Text>
 								<MotionSelect
 									label="Stack Target"
 									options={groupedTechOptions}
@@ -258,8 +268,8 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 4: ERROR STATE SELECT */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>4. Invalid / Error State Select:</Text>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">4. Invalid / Error State Select:</Text>
 								<MotionSelect
 									label="Required Selection"
 									options={roleOptions}
@@ -267,7 +277,7 @@ export default function ComponentSlugScreen() {
 									onValueChange={setErrorSelectVal}
 									error={selectErrorState}
 								/>
-								<View style={{ marginTop: 8 }}>
+								<View className="mt-2">
 									<MobileMotionButton
 										variant="outline"
 										size="sm"
@@ -279,8 +289,10 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 5: RTL SELECT */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>5. RTL Support (Right-to-Left Layout):</Text>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">
+									5. RTL Support (Right-to-Left Layout):
+								</Text>
 								<MotionSelect
 									label="اختر اللغة"
 									options={rtlOptions}
@@ -291,18 +303,22 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 6: UNANIMATED BASE SELECT */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>6. Base Un-animated Select Primitive:</Text>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">
+									6. Base Un-animated Select Primitive:
+								</Text>
 								<Select options={roleOptions} value={roleSelect} onValueChange={setRoleSelect} />
 							</View>
 						</View>
 					) : isButtonSlug ? (
 						/* BUTTON MOBILE PREVIEW & EXTENSIVE EXAMPLES */
-						<View style={styles.previewSection}>
+						<View className="gap-4">
 							{/* EX 1: STATEFUL BUTTON */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>1. Cascading Stagger & Icon Slot Swap:</Text>
-								<View style={styles.buttonList}>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">
+									1. Cascading Stagger & Icon Slot Swap:
+								</Text>
+								<View className="gap-2.5 mt-2">
 									<StatefulButton
 										state={okState}
 										variant="primary"
@@ -328,9 +344,9 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 2: SIZES */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>2. Button Size Matrix:</Text>
-								<View style={styles.buttonRow}>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">2. Button Size Matrix:</Text>
+								<View className="flex-row flex-wrap items-center gap-2 mt-2">
 									<MobileMotionButton variant="primary" size="sm">
 										Small Pill
 									</MobileMotionButton>
@@ -344,9 +360,9 @@ export default function ComponentSlugScreen() {
 							</View>
 
 							{/* EX 3: VARIANTS */}
-							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>3. Button Styling Variants:</Text>
-								<View style={styles.buttonList}>
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<Text className="text-xs text-zinc-400 mb-2">3. Button Styling Variants:</Text>
+								<View className="gap-2.5 mt-2">
 									<MobileMotionButton
 										loading={buttonLoading}
 										variant="primary"
@@ -369,18 +385,23 @@ export default function ComponentSlugScreen() {
 						</View>
 					) : (
 						/* TABS MOBILE PREVIEW */
-						<View style={styles.previewSection}>
-							<View style={styles.playgroundCard}>
+						<View className="gap-4">
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
 								<MotionTabs defaultValue="overview" variant="pill">
 									<MotionTabsList>
 										<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
 										<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
 										<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
 									</MotionTabsList>
-									<View style={styles.contentContainer}>
-										<MotionTabsContent value="overview" style={styles.cardInner}>
-											<Text style={styles.cardHeader}>System Overview</Text>
-											<Text style={styles.cardText}>
+									<View className="w-full mt-4">
+										<MotionTabsContent
+											value="overview"
+											className="bg-zinc-950 p-4 rounded-[10px] border border-zinc-800 min-h-[100px]"
+										>
+											<Text className="text-sm font-semibold text-white mb-1.5">
+												System Overview
+											</Text>
+											<Text className="text-xs text-zinc-400 leading-[18px]">
 												React Native Reanimated spring physics running on UI thread.
 											</Text>
 										</MotionTabsContent>
@@ -391,9 +412,11 @@ export default function ComponentSlugScreen() {
 					)
 				) : (
 					/* CODE VIEW */
-					<View style={styles.codeCard}>
-						<Text style={styles.codeHeader}>React Native Code Snippet:</Text>
-						<Text style={styles.codeText}>
+					<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+						<Text className="text-xs font-semibold text-zinc-400 mb-3">
+							React Native Code Snippet:
+						</Text>
+						<Text className="font-mono text-[11px] text-teal-400 leading-[18px]">
 							{isInputSlug
 								? INPUT_CODE_EXAMPLE
 								: isSelectSlug
@@ -408,126 +431,3 @@ export default function ComponentSlugScreen() {
 		</SafeAreaView>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#09090b",
-	},
-	scrollContent: {
-		padding: 20,
-		paddingBottom: 40,
-	},
-	header: {
-		marginBottom: 16,
-	},
-	badgeRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 8,
-		marginBottom: 8,
-	},
-	badgeText: {
-		fontSize: 11,
-		color: "#14b8a6",
-		backgroundColor: "rgba(20, 184, 166, 0.1)",
-		paddingHorizontal: 8,
-		paddingVertical: 2,
-		borderRadius: 4,
-		overflow: "hidden",
-		fontFamily: "monospace",
-	},
-	slugBadge: {
-		fontSize: 11,
-		color: "#a1a1aa",
-		backgroundColor: "#18181b",
-		paddingHorizontal: 8,
-		paddingVertical: 2,
-		borderRadius: 4,
-		overflow: "hidden",
-		fontFamily: "monospace",
-	},
-	title: {
-		fontSize: 22,
-		fontWeight: "bold",
-		color: "#ffffff",
-	},
-	subtitle: {
-		fontSize: 12,
-		color: "#a1a1aa",
-		marginTop: 4,
-	},
-	viewSwitcherContainer: {
-		alignItems: "center",
-		marginBottom: 20,
-	},
-	previewSection: {
-		gap: 16,
-	},
-	sectionLabel: {
-		fontSize: 12,
-		color: "#a1a1aa",
-		marginBottom: 8,
-	},
-	playgroundCard: {
-		backgroundColor: "#18181b",
-		padding: 16,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#27272a",
-		alignItems: "stretch",
-	},
-	buttonList: {
-		gap: 10,
-		marginTop: 8,
-	},
-	buttonRow: {
-		flexDirection: "row",
-		flexWrap: "wrap",
-		alignItems: "center",
-		gap: 8,
-		marginTop: 8,
-	},
-	contentContainer: {
-		width: "100%",
-		marginTop: 16,
-	},
-	cardInner: {
-		backgroundColor: "#09090b",
-		padding: 16,
-		borderRadius: 10,
-		borderWidth: 1,
-		borderColor: "#27272a",
-		minHeight: 100,
-	},
-	cardHeader: {
-		fontSize: 14,
-		fontWeight: "600",
-		color: "#ffffff",
-		marginBottom: 6,
-	},
-	cardText: {
-		fontSize: 12,
-		color: "#a1a1aa",
-		lineHeight: 18,
-	},
-	codeCard: {
-		backgroundColor: "#18181b",
-		padding: 16,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#27272a",
-	},
-	codeHeader: {
-		fontSize: 12,
-		fontWeight: "600",
-		color: "#a1a1aa",
-		marginBottom: 12,
-	},
-	codeText: {
-		fontFamily: "monospace",
-		fontSize: 11,
-		color: "#14b8a6",
-		lineHeight: 18,
-	},
-});

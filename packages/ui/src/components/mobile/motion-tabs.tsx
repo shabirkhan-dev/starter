@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { type LayoutChangeEvent, Pressable, StyleSheet, Text, View } from "react-native";
+import { type LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 
 type Variant = "pill" | "underline" | "segment";
@@ -33,6 +33,7 @@ export function MotionTabs({
 	variant = "pill",
 	children,
 	style,
+	className,
 }: {
 	defaultValue?: string;
 	value?: string;
@@ -40,6 +41,7 @@ export function MotionTabs({
 	variant?: Variant;
 	children: React.ReactNode;
 	style?: object;
+	className?: string;
 }) {
 	const [internal, setInternal] = useState(defaultValue);
 	const controlled = value !== undefined;
@@ -83,32 +85,46 @@ export function MotionTabs({
 				indicatorAnimatedStyle,
 			}}
 		>
-			<View style={style}>{children}</View>
+			<View className={className} style={style}>
+				{children}
+			</View>
 		</TabsCtx.Provider>
 	);
 }
 
-export function MotionTabsList({ children, style }: { children: React.ReactNode; style?: object }) {
+export function MotionTabsList({
+	children,
+	style,
+	className,
+}: {
+	children: React.ReactNode;
+	style?: object;
+	className?: string;
+}) {
 	const { variant, indicatorAnimatedStyle } = useTabs();
+
+	const listVariantClass =
+		variant === "pill"
+			? "bg-zinc-900 rounded-full p-1"
+			: variant === "underline"
+				? "border-b border-zinc-800"
+				: "bg-zinc-900 rounded-lg p-0.5";
+
+	const indicatorVariantClass =
+		variant === "pill"
+			? "top-1 bottom-1 bg-white rounded-full"
+			: variant === "underline"
+				? "bottom-0 h-0.5 bg-white"
+				: "top-1 bottom-1 bg-zinc-800 rounded-md";
 
 	return (
 		<View
-			style={[
-				styles.listBase,
-				variant === "pill" && styles.listPill,
-				variant === "underline" && styles.listUnderline,
-				variant === "segment" && styles.listSegment,
-				style,
-			]}
+			className={`flex-row items-center self-center relative ${listVariantClass} ${className || ""}`}
+			style={style}
 		>
 			<Animated.View
-				style={[
-					styles.indicatorBase,
-					variant === "pill" && styles.indicatorPill,
-					variant === "underline" && styles.indicatorUnderline,
-					variant === "segment" && styles.indicatorSegment,
-					indicatorAnimatedStyle,
-				]}
+				className={`absolute z-10 ${indicatorVariantClass}`}
+				style={indicatorAnimatedStyle}
 			/>
 			{children}
 		</View>
@@ -119,10 +135,12 @@ export function MotionTabsTrigger({
 	value,
 	children,
 	style,
+	className,
 }: {
 	value: string;
 	children: React.ReactNode;
 	style?: object;
+	className?: string;
 }) {
 	const { value: current, setValue, variant, registerLayout } = useTabs();
 	const active = current === value;
@@ -132,26 +150,27 @@ export function MotionTabsTrigger({
 		registerLayout(value, x, width);
 	};
 
+	const triggerVariantClass =
+		variant === "pill"
+			? "px-3.5 py-2 rounded-full items-center justify-center z-20"
+			: variant === "underline"
+				? "px-3.5 py-2 pb-2.5 items-center justify-center z-20"
+				: "px-3.5 py-2 items-center justify-center z-20";
+
+	const textColorClass = active
+		? variant === "pill"
+			? "text-black font-semibold"
+			: "text-white font-semibold"
+		: "text-zinc-400 font-semibold";
+
 	return (
 		<Pressable
 			onLayout={handleLayout}
 			onPress={() => setValue(value)}
-			style={[
-				styles.triggerBase,
-				variant === "pill" && styles.triggerPill,
-				variant === "underline" && styles.triggerUnderline,
-				style,
-			]}
+			className={`${triggerVariantClass} ${className || ""}`}
+			style={style}
 		>
-			<Text
-				style={[
-					styles.triggerText,
-					active ? styles.textActive : styles.textInactive,
-					variant === "pill" && active && styles.textPillActive,
-				]}
-			>
-				{children}
-			</Text>
+			<Text className={`text-[13px] ${textColorClass}`}>{children}</Text>
 		</Pressable>
 	);
 }
@@ -160,84 +179,19 @@ export function MotionTabsContent({
 	value,
 	children,
 	style,
+	className,
 }: {
 	value: string;
 	children: React.ReactNode;
 	style?: object;
+	className?: string;
 }) {
 	const { value: current } = useTabs();
 	if (current !== value) return null;
 
-	return <View style={style}>{children}</View>;
+	return (
+		<View className={className} style={style}>
+			{children}
+		</View>
+	);
 }
-
-const styles = StyleSheet.create({
-	listBase: {
-		flexDirection: "row",
-		alignItems: "center",
-		alignSelf: "center",
-		position: "relative",
-	},
-	listPill: {
-		backgroundColor: "#18181b",
-		borderRadius: 9999,
-		padding: 4,
-	},
-	listUnderline: {
-		borderBottomWidth: 1,
-		borderBottomColor: "#27272a",
-	},
-	listSegment: {
-		backgroundColor: "#18181b",
-		borderRadius: 8,
-		padding: 3,
-	},
-	indicatorBase: {
-		position: "absolute",
-		top: 4,
-		bottom: 4,
-		zIndex: 1,
-	},
-	indicatorPill: {
-		backgroundColor: "#ffffff",
-		borderRadius: 9999,
-	},
-	indicatorUnderline: {
-		top: "auto",
-		bottom: -1,
-		height: 2,
-		backgroundColor: "#ffffff",
-	},
-	indicatorSegment: {
-		top: 3,
-		bottom: 3,
-		backgroundColor: "#27272a",
-		borderRadius: 6,
-	},
-	triggerBase: {
-		paddingHorizontal: 14,
-		paddingVertical: 8,
-		alignItems: "center",
-		justifyContent: "center",
-		zIndex: 10,
-	},
-	triggerPill: {
-		borderRadius: 9999,
-	},
-	triggerUnderline: {
-		paddingBottom: 10,
-	},
-	triggerText: {
-		fontSize: 13,
-		fontWeight: "600",
-	},
-	textActive: {
-		color: "#ffffff",
-	},
-	textPillActive: {
-		color: "#000000",
-	},
-	textInactive: {
-		color: "#a1a1aa",
-	},
-});

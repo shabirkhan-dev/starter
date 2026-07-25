@@ -2,7 +2,7 @@ import { Cancel01Icon, CheckIcon, EyeIcon, ViewOffIcon } from "@hugeicons/core-f
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -91,21 +91,22 @@ export function MobileMotionInput({
 	const isPassword = secureTextEntry;
 
 	return (
-		<View style={styles.container}>
-			{label && <Text style={styles.label}>{label}</Text>}
+		<View className="w-full gap-1.5">
+			{label && <Text className="text-xs font-semibold text-white">{label}</Text>}
 
 			<Animated.View
-				style={[
-					styles.inputWrapper,
-					isFocused && styles.focusedBorder,
-					success && styles.successBorder,
-					hasError && styles.errorBorder,
-					disabled && styles.disabled,
-					animatedWrapperStyle,
-					style,
-				]}
+				className={`flex-row items-center h-11 rounded-xl border bg-zinc-900 px-3 ${
+					hasError
+						? "border-red-500"
+						: success
+							? "border-emerald-500"
+							: isFocused
+								? "border-white"
+								: "border-zinc-800"
+				} ${disabled ? "opacity-50" : ""}`}
+				style={[animatedWrapperStyle, style]}
 			>
-				{leftIcon && <View style={styles.leftSlot}>{leftIcon}</View>}
+				{leftIcon && <View className="mr-2">{leftIcon}</View>}
 
 				<TextInput
 					placeholder={placeholder}
@@ -116,85 +117,33 @@ export function MobileMotionInput({
 					onBlur={handleBlur}
 					editable={!disabled}
 					secureTextEntry={isPassword && !showPassword}
-					style={styles.input}
+					className="flex-1 text-sm text-white p-0"
 				/>
 
 				{success ? (
-					<View style={styles.iconButton}>
+					<View className="p-1 ml-1">
 						<HugeiconsIcon icon={CheckIcon} size={16} color="#10b981" />
 					</View>
 				) : clearable && value ? (
-					<Pressable onPress={onClear} hitSlop={8} style={styles.iconButton}>
+					<Pressable onPress={onClear} hitSlop={8} className="p-1 ml-1">
 						<HugeiconsIcon icon={Cancel01Icon} size={15} color="#a1a1aa" />
 					</Pressable>
 				) : isPassword ? (
 					<Pressable
 						onPress={() => setShowPassword(!showPassword)}
 						hitSlop={8}
-						style={styles.iconButton}
+						className="p-1 ml-1"
 					>
 						<HugeiconsIcon icon={showPassword ? ViewOffIcon : EyeIcon} size={16} color="#a1a1aa" />
 					</Pressable>
 				) : rightIcon ? (
-					<View style={styles.rightSlot}>{rightIcon}</View>
+					<View className="ml-2">{rightIcon}</View>
 				) : null}
 			</Animated.View>
 
-			{typeof error === "string" && <Text style={styles.errorText}>{error}</Text>}
+			{typeof error === "string" && (
+				<Text className="text-[11px] font-medium text-red-500">{error}</Text>
+			)}
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		width: "100%",
-		gap: 6,
-	},
-	label: {
-		fontSize: 12,
-		fontWeight: "600",
-		color: "#ffffff",
-	},
-	inputWrapper: {
-		flexDirection: "row",
-		alignItems: "center",
-		height: 44,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#27272a",
-		backgroundColor: "#18181b",
-		paddingHorizontal: 12,
-	},
-	focusedBorder: {
-		borderColor: "#ffffff",
-	},
-	successBorder: {
-		borderColor: "#10b981",
-	},
-	errorBorder: {
-		borderColor: "#ef4444",
-	},
-	disabled: {
-		opacity: 0.5,
-	},
-	leftSlot: {
-		marginRight: 8,
-	},
-	rightSlot: {
-		marginLeft: 8,
-	},
-	input: {
-		flex: 1,
-		fontSize: 14,
-		color: "#ffffff",
-	},
-	iconButton: {
-		padding: 4,
-		marginLeft: 4,
-	},
-	errorText: {
-		fontSize: 11,
-		color: "#ef4444",
-		fontWeight: "500",
-	},
-});

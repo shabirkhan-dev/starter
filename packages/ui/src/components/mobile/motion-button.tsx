@@ -2,7 +2,7 @@ import { Cancel01Icon, CheckIcon, Loading01Icon } from "@hugeicons/core-free-ico
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import type React from "react";
 import { useEffect } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -39,6 +39,31 @@ export interface MobileMotionButtonProps {
 	style?: object;
 	textStyle?: object;
 }
+
+const VARIANT_CLASS: Record<ButtonVariant, string> = {
+	primary: "bg-white",
+	default: "bg-white",
+	secondary: "bg-zinc-900 border border-zinc-700",
+	outline: "bg-transparent border border-zinc-800",
+	ghost: "bg-transparent",
+	destructive: "bg-red-500",
+};
+
+const SIZE_CLASS: Record<ButtonSize, string> = {
+	sm: "h-8 px-3.5",
+	md: "h-10 px-5",
+	lg: "h-12 px-6",
+	icon: "w-9 h-9 px-0",
+};
+
+const TEXT_VARIANT_CLASS: Record<ButtonVariant, string> = {
+	primary: "text-black",
+	default: "text-black",
+	secondary: "text-white",
+	outline: "text-white",
+	ghost: "text-zinc-400",
+	destructive: "text-white",
+};
 
 export function MobileMotionButton({
 	variant = "primary",
@@ -77,18 +102,13 @@ export function MobileMotionButton({
 			onPressOut={handlePressOut}
 			onPress={isDisabled ? undefined : onPress}
 			disabled={isDisabled}
-			style={[
-				styles.base,
-				styles[variant],
-				styles[`size_${size}` as keyof typeof styles],
-				elevated && (variant === "primary" || variant === "default") && styles.elevatedPrimary,
-				isDisabled && styles.disabled,
-				animatedStyle,
-				style,
-			]}
+			className={`flex-row items-center justify-center rounded-full ${VARIANT_CLASS[variant]} ${SIZE_CLASS[size]} ${
+				isDisabled ? "opacity-50" : ""
+			} ${elevated && (variant === "primary" || variant === "default") ? "shadow-sm shadow-black" : ""}`}
+			style={[animatedStyle, style]}
 		>
 			{loading ? (
-				<View style={styles.contentRow}>
+				<View className="flex-row items-center gap-2">
 					<HugeiconsIcon
 						icon={Loading01Icon}
 						size={size === "sm" ? 14 : 16}
@@ -96,7 +116,8 @@ export function MobileMotionButton({
 					/>
 					{typeof children === "string" ? (
 						<Text
-							style={[styles.textBase, styles[`text_${variant}` as keyof typeof styles], textStyle]}
+							className={`text-sm font-semibold ${TEXT_VARIANT_CLASS[variant]}`}
+							style={textStyle}
 						>
 							{children}
 						</Text>
@@ -105,9 +126,7 @@ export function MobileMotionButton({
 					)}
 				</View>
 			) : typeof children === "string" ? (
-				<Text
-					style={[styles.textBase, styles[`text_${variant}` as keyof typeof styles], textStyle]}
-				>
+				<Text className={`text-sm font-semibold ${TEXT_VARIANT_CLASS[variant]}`} style={textStyle}>
 					{children}
 				</Text>
 			) : (
@@ -170,7 +189,7 @@ export function MobileStatefulButton({
 
 	return (
 		<MobileMotionButton variant={variant} size={size} loading={false} disabled={isBusy} {...props}>
-			<View style={styles.contentRow}>
+			<View className="flex-row items-center gap-2">
 				{state === "loading" && (
 					<HugeiconsIcon icon={Loading01Icon} size={size === "sm" ? 14 : 16} color={iconColor} />
 				)}
@@ -184,11 +203,8 @@ export function MobileStatefulButton({
 
 				<Animated.View style={animatedTextStyle}>
 					<Text
-						style={[
-							styles.textBase,
-							styles[`text_${variant}` as keyof typeof styles],
-							props.textStyle,
-						]}
+						className={`text-sm font-semibold ${TEXT_VARIANT_CLASS[variant]}`}
+						style={props.textStyle}
 					>
 						{currentText}
 					</Text>
@@ -197,90 +213,3 @@ export function MobileStatefulButton({
 		</MobileMotionButton>
 	);
 }
-
-const styles = StyleSheet.create({
-	base: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		borderRadius: 9999,
-		paddingHorizontal: 20,
-	},
-	contentRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 8,
-	},
-	disabled: {
-		opacity: 0.5,
-	},
-	elevatedPrimary: {
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.15,
-		shadowRadius: 4,
-		elevation: 3,
-	},
-	primary: {
-		backgroundColor: "#ffffff",
-	},
-	default: {
-		backgroundColor: "#ffffff",
-	},
-	secondary: {
-		backgroundColor: "#27272a",
-		borderWidth: 1,
-		borderColor: "#3f3f46",
-	},
-	outline: {
-		backgroundColor: "transparent",
-		borderWidth: 1,
-		borderColor: "#27272a",
-	},
-	ghost: {
-		backgroundColor: "transparent",
-	},
-	destructive: {
-		backgroundColor: "#ef4444",
-	},
-	size_sm: {
-		height: 32,
-		paddingHorizontal: 14,
-	},
-	size_md: {
-		height: 40,
-		paddingHorizontal: 20,
-	},
-	size_lg: {
-		height: 48,
-		paddingHorizontal: 24,
-	},
-	size_icon: {
-		width: 36,
-		height: 36,
-		paddingHorizontal: 0,
-		borderRadius: 9999,
-	},
-	textBase: {
-		fontSize: 14,
-		fontWeight: "600",
-	},
-	text_primary: {
-		color: "#000000",
-	},
-	text_default: {
-		color: "#000000",
-	},
-	text_secondary: {
-		color: "#ffffff",
-	},
-	text_outline: {
-		color: "#ffffff",
-	},
-	text_ghost: {
-		color: "#a1a1aa",
-	},
-	text_destructive: {
-		color: "#ffffff",
-	},
-});

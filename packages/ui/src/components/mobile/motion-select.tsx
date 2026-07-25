@@ -1,7 +1,7 @@
 import { ArrowDown01Icon, CheckIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Modal, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -109,8 +109,12 @@ export function MobileMotionSelect({
 		: options;
 
 	return (
-		<View style={styles.container}>
-			{label && <Text style={[styles.label, isRtl && styles.rtlText]}>{label}</Text>}
+		<View className="w-full gap-1.5">
+			{label && (
+				<Text className={`text-xs font-semibold text-white ${isRtl ? "text-right" : ""}`}>
+					{label}
+				</Text>
+			)}
 
 			<Animated.View style={animatedTriggerStyle}>
 				<Pressable
@@ -118,20 +122,15 @@ export function MobileMotionSelect({
 					onPressOut={handlePressOut}
 					onPress={() => !disabled && setIsOpen(true)}
 					disabled={disabled}
-					style={[
-						styles.trigger,
-						isRtl && styles.rtlRow,
-						hasError && styles.errorBorder,
-						disabled && styles.disabled,
-						style,
-					]}
+					className={`flex-row items-center justify-between h-11 rounded-xl border bg-zinc-900 px-3 ${
+						isRtl ? "flex-row-reverse" : ""
+					} ${hasError ? "border-red-500" : "border-zinc-800"} ${disabled ? "opacity-40" : ""}`}
+					style={style}
 				>
 					<Text
-						style={[
-							styles.triggerText,
-							!selectedOption && styles.placeholder,
-							isRtl && styles.rtlText,
-						]}
+						className={`text-sm ${selectedOption ? "text-white" : "text-zinc-400"} ${
+							isRtl ? "text-right" : ""
+						}`}
 					>
 						{selectedOption ? selectedOption.label : placeholder}
 					</Text>
@@ -147,29 +146,32 @@ export function MobileMotionSelect({
 				animationType="none"
 				onRequestClose={() => setIsOpen(false)}
 			>
-				<Pressable style={styles.modalOverlay} onPress={() => setIsOpen(false)}>
-					<Animated.View style={[styles.backdrop, animatedBackdropStyle]} />
+				<Pressable className="flex-1 justify-end" onPress={() => setIsOpen(false)}>
+					<Animated.View className="absolute inset-0 bg-black/70" style={animatedBackdropStyle} />
 
-					<Animated.View style={[styles.modalCard, animatedSheetStyle]}>
-						<View style={styles.modalHeader}>
-							<Text style={styles.modalTitle}>{label || "Select Option"}</Text>
-							<View style={styles.dragHandle} />
+					<Animated.View
+						className="bg-zinc-900 rounded-t-3xl p-5 max-h-[380px] border-t border-zinc-800 gap-3"
+						style={animatedSheetStyle}
+					>
+						<View className="flex-row items-center justify-between pb-2 border-b border-zinc-800">
+							<Text className="text-base font-bold text-white">{label || "Select Option"}</Text>
+							<View className="w-9 h-1 bg-zinc-700 rounded-full" />
 						</View>
 
 						{searchable && (
-							<View style={styles.searchWrapper}>
+							<View className="flex-row items-center h-9 rounded-lg bg-zinc-800 px-2.5 gap-2">
 								<HugeiconsIcon icon={Search01Icon} size={16} color="#a1a1aa" />
 								<TextInput
 									placeholder="Search options..."
 									placeholderTextColor="#71717a"
 									value={searchQuery}
 									onChangeText={setSearchQuery}
-									style={styles.searchInput}
+									className="flex-1 text-xs text-white p-0"
 								/>
 							</View>
 						)}
 
-						<ScrollView style={styles.optionsList}>
+						<ScrollView className="w-full">
 							{filteredOptions.map((opt) => {
 								const isSelected = opt.value === value;
 								return (
@@ -182,13 +184,15 @@ export function MobileMotionSelect({
 											}
 										}}
 										disabled={opt.disabled}
-										style={[
-											styles.optionItem,
-											isSelected && styles.optionSelected,
-											opt.disabled && styles.disabled,
-										]}
+										className={`flex-row items-center justify-between py-3 px-3 rounded-lg mb-1 ${
+											isSelected ? "bg-zinc-800" : ""
+										} ${opt.disabled ? "opacity-40" : ""}`}
 									>
-										<Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>
+										<Text
+											className={`text-sm ${
+												isSelected ? "text-white font-semibold" : "text-zinc-400"
+											}`}
+										>
 											{opt.label}
 										</Text>
 										{isSelected && <HugeiconsIcon icon={CheckIcon} size={16} color="#14b8a6" />}
@@ -202,119 +206,3 @@ export function MobileMotionSelect({
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		width: "100%",
-		gap: 6,
-	},
-	label: {
-		fontSize: 12,
-		fontWeight: "600",
-		color: "#ffffff",
-	},
-	trigger: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		height: 44,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#27272a",
-		backgroundColor: "#18181b",
-		paddingHorizontal: 12,
-	},
-	rtlRow: {
-		flexDirection: "row-reverse",
-	},
-	rtlText: {
-		textAlign: "right",
-	},
-	errorBorder: {
-		borderColor: "#ef4444",
-	},
-	disabled: {
-		opacity: 0.4,
-	},
-	triggerText: {
-		fontSize: 14,
-		color: "#ffffff",
-	},
-	placeholder: {
-		color: "#a1a1aa",
-	},
-	modalOverlay: {
-		flex: 1,
-		justifyContent: "flex-end",
-	},
-	backdrop: {
-		...StyleSheet.absoluteFillObject,
-		backgroundColor: "rgba(0, 0, 0, 0.7)",
-	},
-	modalCard: {
-		backgroundColor: "#18181b",
-		borderTopLeftRadius: 24,
-		borderTopRightRadius: 24,
-		padding: 20,
-		maxHeight: 380,
-		borderWidth: 1,
-		borderColor: "#27272a",
-		gap: 12,
-	},
-	modalHeader: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		paddingBottom: 8,
-		borderBottomWidth: 1,
-		borderBottomColor: "#27272a",
-	},
-	modalTitle: {
-		fontSize: 16,
-		fontWeight: "bold",
-		color: "#ffffff",
-	},
-	dragHandle: {
-		width: 36,
-		height: 4,
-		backgroundColor: "#3f3f46",
-		borderRadius: 2,
-	},
-	searchWrapper: {
-		flexDirection: "row",
-		alignItems: "center",
-		height: 38,
-		borderRadius: 8,
-		backgroundColor: "#27272a",
-		paddingHorizontal: 10,
-		gap: 8,
-	},
-	searchInput: {
-		flex: 1,
-		fontSize: 13,
-		color: "#ffffff",
-	},
-	optionsList: {
-		width: "100%",
-	},
-	optionItem: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		paddingVertical: 12,
-		paddingHorizontal: 12,
-		borderRadius: 10,
-		marginBottom: 4,
-	},
-	optionSelected: {
-		backgroundColor: "#27272a",
-	},
-	optionText: {
-		fontSize: 14,
-		color: "#a1a1aa",
-	},
-	optionTextSelected: {
-		color: "#ffffff",
-		fontWeight: "600",
-	},
-});

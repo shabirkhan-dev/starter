@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 
 export interface MobileSelectOption {
 	value: string;
@@ -27,11 +27,15 @@ export function MobileSelect({
 	const selectedOption = options.find((opt) => opt.value === value);
 
 	return (
-		<View style={styles.container}>
-			{label && <Text style={styles.label}>{label}</Text>}
+		<View className="w-full gap-1.5">
+			{label && <Text className="text-xs font-semibold text-white">{label}</Text>}
 
-			<Pressable onPress={() => setIsOpen(true)} style={[styles.trigger, style]}>
-				<Text style={[styles.triggerText, !selectedOption && styles.placeholder]}>
+			<Pressable
+				onPress={() => setIsOpen(true)}
+				className="h-11 rounded-xl border border-zinc-800 bg-zinc-900 px-3 justify-center"
+				style={style}
+			>
+				<Text className={`text-sm ${selectedOption ? "text-white" : "text-zinc-400"}`}>
 					{selectedOption ? selectedOption.label : placeholder}
 				</Text>
 			</Pressable>
@@ -42,10 +46,10 @@ export function MobileSelect({
 				animationType="fade"
 				onRequestClose={() => setIsOpen(false)}
 			>
-				<Pressable style={styles.backdrop} onPress={() => setIsOpen(false)}>
-					<View style={styles.modalCard}>
-						<Text style={styles.modalTitle}>{label || "Select Option"}</Text>
-						<ScrollView style={styles.optionsList}>
+				<Pressable className="flex-1 bg-black/60 justify-end" onPress={() => setIsOpen(false)}>
+					<View className="bg-zinc-900 rounded-t-2xl p-5 max-h-[320px] gap-3">
+						<Text className="text-base font-bold text-white">{label || "Select Option"}</Text>
+						<ScrollView className="w-full">
 							{options.map((opt) => (
 								<Pressable
 									key={opt.value}
@@ -53,10 +57,12 @@ export function MobileSelect({
 										onValueChange?.(opt.value);
 										setIsOpen(false);
 									}}
-									style={[styles.optionItem, opt.value === value && styles.optionSelected]}
+									className={`py-3.5 px-3 rounded-lg ${opt.value === value ? "bg-zinc-800" : ""}`}
 								>
 									<Text
-										style={[styles.optionText, opt.value === value && styles.optionTextSelected]}
+										className={`text-sm ${
+											opt.value === value ? "text-white font-semibold" : "text-zinc-400"
+										}`}
 									>
 										{opt.label}
 									</Text>
@@ -69,68 +75,3 @@ export function MobileSelect({
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		width: "100%",
-		gap: 6,
-	},
-	label: {
-		fontSize: 12,
-		fontWeight: "600",
-		color: "#ffffff",
-	},
-	trigger: {
-		height: 44,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#27272a",
-		backgroundColor: "#18181b",
-		paddingHorizontal: 12,
-		justifyContent: "center",
-	},
-	triggerText: {
-		fontSize: 14,
-		color: "#ffffff",
-	},
-	placeholder: {
-		color: "#a1a1aa",
-	},
-	backdrop: {
-		flex: 1,
-		backgroundColor: "rgba(0, 0, 0, 0.6)",
-		justifyContent: "flex-end",
-	},
-	modalCard: {
-		backgroundColor: "#18181b",
-		borderTopLeftRadius: 20,
-		borderTopRightRadius: 20,
-		padding: 20,
-		maxHeight: 320,
-		gap: 12,
-	},
-	modalTitle: {
-		fontSize: 16,
-		fontWeight: "bold",
-		color: "#ffffff",
-	},
-	optionsList: {
-		width: "100%",
-	},
-	optionItem: {
-		paddingVertical: 14,
-		paddingHorizontal: 12,
-		borderRadius: 8,
-	},
-	optionSelected: {
-		backgroundColor: "#27272a",
-	},
-	optionText: {
-		fontSize: 14,
-		color: "#a1a1aa",
-	},
-	optionTextSelected: {
-		color: "#ffffff",
-		fontWeight: "600",
-	},
-});
