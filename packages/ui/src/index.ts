@@ -18,6 +18,7 @@ export {
 	BreadcrumbSeparator,
 } from "./components/breadcrumb";
 export { Button, buttonVariants } from "./components/button";
+export { MotionButton, StatefulButton } from "./components/motion/button";
 export {
 	Card,
 	CardAction,

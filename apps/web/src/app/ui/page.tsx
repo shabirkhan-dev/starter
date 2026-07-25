@@ -2,6 +2,7 @@
 
 import {
 	ActivityIcon,
+	ArrowRightIcon,
 	CodeIcon,
 	Copy01Icon,
 	EyeIcon,
@@ -17,7 +18,11 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Badge } from "@school-os/ui/components/badge";
 import { Button } from "@school-os/ui/components/button";
 import { Card, CardContent, CardHeader } from "@school-os/ui/components/card";
-import { MotionButton } from "@school-os/ui/components/motion/button";
+import {
+	type ButtonState,
+	MotionButton,
+	StatefulButton,
+} from "@school-os/ui/components/motion/button";
 import {
 	Tabs as MotionTabs,
 	TabsContent as MotionTabsContent,
@@ -82,7 +87,18 @@ export default function RabtxUIPage() {
 	const [activeSize, setActiveSize] = useState<"sm" | "md" | "lg">("md");
 	const [activeViewTab, setActiveViewTab] = useState<"preview" | "code">("preview");
 	const [buttonLoading, setButtonLoading] = useState(false);
+	const [okState, setOkState] = useState<ButtonState>("idle");
+	const [errState, setErrState] = useState<ButtonState>("idle");
 	const [copied, setCopied] = useState(false);
+
+	const runStatefulDemo = (target: "ok" | "err") => {
+		const setter = target === "ok" ? setOkState : setErrState;
+		setter("loading");
+		setTimeout(() => {
+			setter(target === "ok" ? "success" : "error");
+			setTimeout(() => setter("idle"), 1800);
+		}, 1400);
+	};
 
 	const isButtonComponent = activeComponent === "button";
 
@@ -240,34 +256,50 @@ export default function RabtxUIPage() {
 								activePlatform === "web" ? (
 									/* WEB MOTION BUTTON SHOWCASE */
 									<div className="space-y-6 w-full max-w-md flex flex-col items-center justify-center pt-2">
+										{/* Stateful Cascading Text Stagger & Icon Slot Swap Buttons */}
 										<div className="flex flex-wrap items-center justify-center gap-3">
-											<MotionButton
-												elevated
-												variant="default"
-												onClick={() => setButtonLoading(!buttonLoading)}
+											<StatefulButton
+												state={okState}
+												variant="primary"
+												size="md"
+												ripple
+												onClick={() => runStatefulDemo("ok")}
+												loadingText="Saving changes"
+												successText="Saved successfully"
+												icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} strokeWidth={2} />}
 											>
-												Elevated Motion Button
-											</MotionButton>
-											<MotionButton elevated variant="secondary">
-												Secondary Depth
-											</MotionButton>
-											<MotionButton elevated variant="outline">
-												Outline Reflection
-											</MotionButton>
-											<MotionButton elevated variant="destructive">
-												Destructive Action
-											</MotionButton>
+												Save changes
+											</StatefulButton>
+
+											<StatefulButton
+												state={errState}
+												variant="secondary"
+												size="md"
+												ripple
+												onClick={() => runStatefulDemo("err")}
+												loadingText="Submitting form"
+												errorText="Failed to save"
+											>
+												Submit form
+											</StatefulButton>
 										</div>
 
 										<div className="flex flex-wrap items-center justify-center gap-3 pt-2">
 											<MotionButton
-												loading={buttonLoading}
-												variant="default"
+												elevated
+												ripple
+												variant="primary"
+												size="md"
 												onClick={() => setButtonLoading(!buttonLoading)}
 											>
-												{buttonLoading ? "Processing State..." : "Click to Test Loader"}
+												Ripple Motion Button
 											</MotionButton>
-											<Button variant="outline">Standard Base Primitive</Button>
+											<MotionButton elevated variant="outline" size="md">
+												Outline Reflection
+											</MotionButton>
+											<MotionButton elevated variant="destructive" size="md">
+												Destructive
+											</MotionButton>
 										</div>
 									</div>
 								) : (

@@ -9,6 +9,7 @@ import {
 	MotionTabsContent,
 	MotionTabsList,
 	MotionTabsTrigger,
+	StatefulButton,
 } from "../../modules/ui";
 
 const TABS_CODE_EXAMPLE = `import {
@@ -49,7 +50,17 @@ export default function ComponentSlugScreen() {
 	const { slug = "tabs" } = useLocalSearchParams<{ slug: string }>();
 	const [activePlatformView, setActivePlatformView] = useState<"preview" | "code">("preview");
 	const [activeVariant, setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
-	const [buttonLoading, setButtonLoading] = useState(false);
+	const [okState, setOkState] = useState<"idle" | "loading" | "success" | "error">("idle");
+	const [errState, setErrState] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+	const runStatefulDemo = (target: "ok" | "err") => {
+		const setter = target === "ok" ? setOkState : setErrState;
+		setter("loading");
+		setTimeout(() => {
+			setter(target === "ok" ? "success" : "error");
+			setTimeout(() => setter("idle"), 1800);
+		}, 1400);
+	};
 
 	const isButtonSlug = slug === "button";
 	const componentTitle = isButtonSlug ? "Motion Button" : "Motion Tabs";
@@ -90,20 +101,28 @@ export default function ComponentSlugScreen() {
 						/* BUTTON MOBILE PREVIEW */
 						<View style={styles.previewSection}>
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Reanimated Spring Motion Buttons:</Text>
+								<Text style={styles.sectionLabel}>Stateful Spring Motion Buttons:</Text>
 								<View style={styles.buttonList}>
-									<MobileMotionButton
-										variant="default"
-										onPress={() => setButtonLoading(!buttonLoading)}
+									<StatefulButton
+										state={okState}
+										variant="primary"
+										onPress={() => runStatefulDemo("ok")}
+										loadingText="Saving changes"
+										successText="Saved successfully"
 									>
-										Primary Motion Button
-									</MobileMotionButton>
-									<MobileMotionButton variant="secondary">Secondary Motion</MobileMotionButton>
+										Save changes
+									</StatefulButton>
+									<StatefulButton
+										state={errState}
+										variant="secondary"
+										onPress={() => runStatefulDemo("err")}
+										loadingText="Submitting form"
+										errorText="Failed to save"
+									>
+										Submit form
+									</StatefulButton>
 									<MobileMotionButton variant="outline">Outline Variant</MobileMotionButton>
 									<MobileMotionButton variant="destructive">Destructive Action</MobileMotionButton>
-									<MobileMotionButton loading={buttonLoading} variant="default">
-										{buttonLoading ? "Processing..." : "Tap to test loading"}
-									</MobileMotionButton>
 								</View>
 							</View>
 

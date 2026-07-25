@@ -5,6 +5,7 @@ export {
 	MobileMotionTabsContent as MotionTabsContent,
 	MobileMotionTabsList as MotionTabsList,
 	MobileMotionTabsTrigger as MotionTabsTrigger,
+	MobileStatefulButton as StatefulButton,
 	MobileTabs as Tabs,
 	MobileTabsContent as TabsContent,
 	MobileTabsList as TabsList,
