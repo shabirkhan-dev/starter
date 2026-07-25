@@ -21,19 +21,14 @@ import {
 } from "@school-os/ui/components/sidebar";
 import { cn } from "@school-os/ui/lib/utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { SHADCN_COMPONENTS_NAV } from "../data/shadcn-components";
 
-interface RabtxSidebarProps {
-	activeItem: string;
-	onSelectItem: (id: string) => void;
-	depthMode: boolean;
-	onToggleDepth: () => void;
-}
-
-export function RabtxSidebar({ activeItem, onSelectItem }: RabtxSidebarProps) {
+export function RabtxSidebar() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const { state } = useSidebar();
+	const pathname = usePathname();
 	const isCollapsed = state === "collapsed";
 
 	const filteredCategories = SHADCN_COMPONENTS_NAV.map((category) => ({
@@ -49,7 +44,7 @@ export function RabtxSidebar({ activeItem, onSelectItem }: RabtxSidebarProps) {
 		<Sidebar collapsible="icon" className="border-r border-border bg-sidebar">
 			<SidebarHeader className="border-b border-border p-3.5 space-y-3">
 				<div className="flex items-center justify-between">
-					<Link href="/ui" className="flex items-center gap-2.5 group">
+					<Link href="/ui/tabs" className="flex items-center gap-2.5 group">
 						<div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-primary-foreground font-semibold shadow-xs">
 							<HugeiconsIcon icon={SparklesIcon} size={18} strokeWidth={2} />
 						</div>
@@ -99,12 +94,13 @@ export function RabtxSidebar({ activeItem, onSelectItem }: RabtxSidebarProps) {
 						<SidebarGroupContent>
 							<SidebarMenu>
 								{category.items.map((item) => {
-									const isActive = activeItem === item.id;
+									const itemPath = `/ui/${item.id}`;
+									const isActive =
+										pathname === itemPath || (pathname === "/ui" && item.id === "tabs");
 									return (
 										<SidebarMenuItem key={item.id}>
 											<SidebarMenuButton
 												isActive={isActive}
-												onClick={() => onSelectItem(item.id)}
 												tooltip={item.name}
 												className={cn(
 													"h-8 px-2.5 text-xs font-medium rounded-md transition-colors",
@@ -113,8 +109,10 @@ export function RabtxSidebar({ activeItem, onSelectItem }: RabtxSidebarProps) {
 														: "text-muted-foreground hover:text-foreground hover:bg-muted/60",
 												)}
 											>
-												<HugeiconsIcon icon={item.icon} size={15} strokeWidth={2} />
-												<span>{item.name}</span>
+												<Link href={itemPath} className="flex items-center gap-2 w-full">
+													<HugeiconsIcon icon={item.icon} size={15} strokeWidth={2} />
+													<span>{item.name}</span>
+												</Link>
 											</SidebarMenuButton>
 											{item.badge && !isCollapsed && (
 												<SidebarMenuBadge className="text-[10px] font-mono px-1.5 py-0">
