@@ -1,5 +1,7 @@
 "use client";
 
+// beui.dev/components/motion/tabs
+
 import { EASE_OUT } from "@school-os/ui/lib/ease";
 import { cn } from "@school-os/ui/lib/utils";
 import { MotionConfig, motion, type Transition, useReducedMotion } from "motion/react";
