@@ -24,7 +24,11 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Badge } from "@school-os/ui/components/badge";
 import { Button } from "@school-os/ui/components/button";
 import { Card, CardContent } from "@school-os/ui/components/card";
-import { type ButtonState, StatefulButton } from "@school-os/ui/components/motion/button";
+import {
+	type ButtonState,
+	MotionButton,
+	StatefulButton,
+} from "@school-os/ui/components/motion/button";
 import { MotionInput } from "@school-os/ui/components/motion/input";
 import {
 	MotionSelect,
@@ -130,7 +134,6 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 	const [inputErrorState, _setInputErrorState] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
 
-	const [_roleSelect, _setRoleSelect] = useState("admin");
 	const [groupedSelect, setGroupedSelect] = useState("nextjs");
 	const [searchableSelect, setSearchableSelect] = useState("us");
 	const [errorSelect, setErrorSelect] = useState("");
@@ -257,7 +260,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				<div className="flex items-center justify-between">
 					<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
 						<HugeiconsIcon icon={EyeIcon} size={18} strokeWidth={2} />
-						Interactive Showcase
+						Interactive Showcase ({activePlatform === "web" ? "Web Edition" : "Mobile Expo Frame"})
 					</h2>
 
 					<MotionTabs
@@ -283,186 +286,300 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 					<CardContent className="p-0">
 						{activeViewTab === "preview" && (
 							<div className="relative min-h-[380px] w-full flex flex-col items-center justify-center p-8 bg-background border-b border-border space-y-6">
-								{slug === "select" ? (
-									/* SELECT EXTENSIVE VARIANTS (SEARCHABLE, GROUPED, SCROLLABLE, ERROR, RTL) */
-									<div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
-										{/* 1. SEARCHABLE COMBOBOX SELECT */}
-										<div className="space-y-1.5">
-											{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
-											<label className="text-xs font-medium text-foreground tracking-tight block">
-												1. Searchable Filter Combobox
-											</label>
-											<MotionSelect value={searchableSelect} onValueChange={setSearchableSelect}>
-												<SelectTrigger>
-													<SelectValue placeholder="Search country..." />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectSearch placeholder="Filter countries..." />
-													<SelectItem value="us">United States 🇺🇸</SelectItem>
-													<SelectItem value="ca">Canada 🇨🇦</SelectItem>
-													<SelectItem value="uk">United Kingdom 🇬🇧</SelectItem>
-													<SelectItem value="de">Germany 🇩🇪</SelectItem>
-													<SelectItem value="jp">Japan 🇯🇵</SelectItem>
-												</SelectContent>
-											</MotionSelect>
+								{activePlatform === "web" ? (
+									/* WEB PLATFORM SHOWCASE */
+									slug === "select" ? (
+										<div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
+											{/* 1. SEARCHABLE COMBOBOX SELECT */}
+											<div className="space-y-1.5">
+												{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
+												<label className="text-xs font-medium text-foreground tracking-tight block">
+													1. Searchable Filter Combobox
+												</label>
+												<MotionSelect value={searchableSelect} onValueChange={setSearchableSelect}>
+													<SelectTrigger>
+														<SelectValue placeholder="Search country..." />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectSearch placeholder="Filter countries..." />
+														<SelectItem value="us">United States 🇺🇸</SelectItem>
+														<SelectItem value="ca">Canada 🇨🇦</SelectItem>
+														<SelectItem value="uk">United Kingdom 🇬🇧</SelectItem>
+														<SelectItem value="de">Germany 🇩🇪</SelectItem>
+														<SelectItem value="jp">Japan 🇯🇵</SelectItem>
+													</SelectContent>
+												</MotionSelect>
+											</div>
+
+											{/* 2. GROUPED SELECT */}
+											<div className="space-y-1.5">
+												{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
+												<label className="text-xs font-medium text-foreground tracking-tight block">
+													2. Grouped Categories Select
+												</label>
+												<MotionSelect value={groupedSelect} onValueChange={setGroupedSelect}>
+													<SelectTrigger>
+														<SelectValue placeholder="Select technology..." />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectGroup>
+															<SelectLabel>Frontend Stack</SelectLabel>
+															<SelectItem value="nextjs">Next.js 16 (App Router)</SelectItem>
+															<SelectItem value="expo">Expo Router (React Native)</SelectItem>
+														</SelectGroup>
+														<SelectGroup>
+															<SelectLabel>Backend & Database</SelectLabel>
+															<SelectItem value="nestjs">NestJS Production API</SelectItem>
+															<SelectItem value="postgres">PostgreSQL (Neon DB)</SelectItem>
+														</SelectGroup>
+													</SelectContent>
+												</MotionSelect>
+											</div>
+
+											{/* 3. ERROR SHAKE SELECT */}
+											<div className="space-y-1.5">
+												{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
+												<label className="text-xs font-medium text-foreground tracking-tight block">
+													3. Invalid / Error State Select
+												</label>
+												<MotionSelect
+													value={errorSelect}
+													onValueChange={setErrorSelect}
+													error={selectErrorState}
+												>
+													<SelectTrigger>
+														<SelectValue placeholder="Required selection..." />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="opt1">Valid Option 1</SelectItem>
+														<SelectItem value="opt2">Valid Option 2</SelectItem>
+													</SelectContent>
+												</MotionSelect>
+												<Button
+													variant="outline"
+													size="sm"
+													onClick={() => setSelectErrorState(!selectErrorState)}
+													className="mt-1 text-[11px] h-7"
+												>
+													{selectErrorState ? "Clear Select Error" : "Trigger Select Error"}
+												</Button>
+											</div>
+
+											{/* 4. RTL LAYOUT SELECT */}
+											<div className="space-y-1.5">
+												{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
+												<label className="text-xs font-medium text-foreground tracking-tight block">
+													4. RTL Support (Right-to-Left Layout)
+												</label>
+												<MotionSelect value={rtlSelect} onValueChange={setRtlSelect} dir="rtl">
+													<SelectTrigger>
+														<SelectValue placeholder="اختر اللغة..." />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="ar">العربية (Arabic RTL)</SelectItem>
+														<SelectItem value="fa">فارسی (Persian RTL)</SelectItem>
+														<SelectItem value="ur">اردو (Urdu RTL)</SelectItem>
+													</SelectContent>
+												</MotionSelect>
+											</div>
 										</div>
+									) : slug === "input" ? (
+										<div className="space-y-5 w-full max-w-md">
+											<MotionInput
+												label="1. Verified Account Email (Success Checkmark)"
+												value={emailValue}
+												onChange={setEmailValue}
+												success
+												leftIcon={<HugeiconsIcon icon={Mail01Icon} size={16} strokeWidth={2} />}
+											/>
 
-										{/* 2. GROUPED SELECT */}
-										<div className="space-y-1.5">
-											{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
-											<label className="text-xs font-medium text-foreground tracking-tight block">
-												2. Grouped Categories Select
-											</label>
-											<MotionSelect value={groupedSelect} onValueChange={setGroupedSelect}>
-												<SelectTrigger>
-													<SelectValue placeholder="Select technology..." />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														<SelectLabel>Frontend Stack</SelectLabel>
-														<SelectItem value="nextjs">Next.js 16 (App Router)</SelectItem>
-														<SelectItem value="expo">Expo Router (React Native)</SelectItem>
-													</SelectGroup>
-													<SelectGroup>
-														<SelectLabel>Backend & Database</SelectLabel>
-														<SelectItem value="nestjs">NestJS Production API</SelectItem>
-														<SelectItem value="postgres">PostgreSQL (Neon DB)</SelectItem>
-													</SelectGroup>
-												</SelectContent>
-											</MotionSelect>
+											<MotionInput
+												label="2. Workspace Domain (Error Shake & Blur)"
+												value={errorInputVal}
+												onChange={setErrorInputVal}
+												error={
+													inputErrorState ? "Domain contains invalid special characters" : undefined
+												}
+												leftIcon={<HugeiconsIcon icon={UserIcon} size={16} strokeWidth={2} />}
+											/>
+
+											<MotionInput
+												label="3. Search Query (Left & Right Slot)"
+												placeholder="Search components or icons..."
+												value={searchValue}
+												onChange={setSearchValue}
+												leftIcon={<HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={2} />}
+											/>
 										</div>
+									) : slug === "button" ? (
+										<div className="space-y-6 w-full max-w-lg flex flex-col items-center justify-center">
+											<div className="flex flex-wrap items-center justify-center gap-3">
+												<StatefulButton
+													state={okState}
+													variant="primary"
+													size="md"
+													ripple
+													onClick={() => runStatefulDemo("ok")}
+													loadingText="Saving changes"
+													successText="Saved successfully"
+													icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} strokeWidth={2} />}
+												>
+													Save changes
+												</StatefulButton>
 
-										{/* 3. ERROR SHAKE SELECT */}
-										<div className="space-y-1.5">
-											{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
-											<label className="text-xs font-medium text-foreground tracking-tight block">
-												3. Invalid / Error State Select
-											</label>
-											<MotionSelect
-												value={errorSelect}
-												onValueChange={setErrorSelect}
-												error={selectErrorState}
-											>
-												<SelectTrigger>
-													<SelectValue placeholder="Required selection..." />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectItem value="opt1">Valid Option 1</SelectItem>
-													<SelectItem value="opt2">Valid Option 2</SelectItem>
-												</SelectContent>
-											</MotionSelect>
-											<Button
-												variant="outline"
-												size="sm"
-												onClick={() => setSelectErrorState(!selectErrorState)}
-												className="mt-1 text-[11px] h-7"
-											>
-												{selectErrorState ? "Clear Select Error" : "Trigger Select Error"}
-											</Button>
+												<StatefulButton
+													state={errState}
+													variant="secondary"
+													size="md"
+													ripple
+													onClick={() => runStatefulDemo("err")}
+													loadingText="Submitting form"
+													errorText="Failed to save"
+												>
+													Submit form
+												</StatefulButton>
+											</div>
 										</div>
-
-										{/* 4. RTL LAYOUT SELECT */}
-										<div className="space-y-1.5">
-											{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
-											<label className="text-xs font-medium text-foreground tracking-tight block">
-												4. RTL Support (Right-to-Left Layout)
-											</label>
-											<MotionSelect value={rtlSelect} onValueChange={setRtlSelect} dir="rtl">
-												<SelectTrigger>
-													<SelectValue placeholder="اختر اللغة..." />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectItem value="ar">العربية (Arabic RTL)</SelectItem>
-													<SelectItem value="fa">فارسی (Persian RTL)</SelectItem>
-													<SelectItem value="ur">اردو (Urdu RTL)</SelectItem>
-												</SelectContent>
-											</MotionSelect>
-										</div>
-									</div>
-								) : slug === "input" ? (
-									/* INPUT EXTENSIVE PREVIEWS */
-									<div className="space-y-5 w-full max-w-md">
-										<MotionInput
-											label="1. Verified Account Email (Success Checkmark)"
-											value={emailValue}
-											onChange={setEmailValue}
-											success
-											leftIcon={<HugeiconsIcon icon={Mail01Icon} size={16} strokeWidth={2} />}
-										/>
-
-										<MotionInput
-											label="2. Workspace Domain (Error Shake & Blur)"
-											value={errorInputVal}
-											onChange={setErrorInputVal}
-											error={
-												inputErrorState ? "Domain contains invalid special characters" : undefined
-											}
-											leftIcon={<HugeiconsIcon icon={UserIcon} size={16} strokeWidth={2} />}
-										/>
-
-										<MotionInput
-											label="3. Search Query (Left & Right Slot)"
-											placeholder="Search components or icons..."
-											value={searchValue}
-											onChange={setSearchValue}
-											leftIcon={<HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={2} />}
-										/>
-									</div>
-								) : slug === "button" ? (
-									/* BUTTON PREVIEW */
-									<div className="space-y-6 w-full max-w-lg flex flex-col items-center justify-center">
-										<div className="flex flex-wrap items-center justify-center gap-3">
-											<StatefulButton
-												state={okState}
-												variant="primary"
+									) : (
+										<div className="relative z-10 w-full max-w-md flex flex-col items-center">
+											<MotionTabs
+												defaultValue="overview"
+												variant="pill"
 												size="md"
-												ripple
-												onClick={() => runStatefulDemo("ok")}
-												loadingText="Saving changes"
-												successText="Saved successfully"
-												icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} strokeWidth={2} />}
+												className="w-full"
 											>
-												Save changes
-											</StatefulButton>
+												<div className="flex justify-center w-full">
+													<MotionTabsList>
+														<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
+														<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
+													</MotionTabsList>
+												</div>
 
-											<StatefulButton
-												state={errState}
-												variant="secondary"
-												size="md"
-												ripple
-												onClick={() => runStatefulDemo("err")}
-												loadingText="Submitting form"
-												errorText="Failed to save"
-											>
-												Submit form
-											</StatefulButton>
+												<div className="mt-4 w-full">
+													<MotionTabsContent value="overview">
+														<Card className="p-5 border border-border bg-card shadow-xs space-y-2">
+															<div className="font-semibold text-sm text-foreground flex items-center gap-2">
+																<HugeiconsIcon icon={SparklesIcon} size={16} strokeWidth={2} />
+																Spring Layout Glides
+															</div>
+															<p className="text-xs text-muted-foreground leading-relaxed">
+																GPU accelerated active indicator with exclusion text inversion.
+															</p>
+														</Card>
+													</MotionTabsContent>
+												</div>
+											</MotionTabs>
 										</div>
-									</div>
+									)
 								) : (
-									/* TABS PREVIEW */
-									<div className="relative z-10 w-full max-w-md flex flex-col items-center">
-										<MotionTabs defaultValue="overview" variant="pill" size="md" className="w-full">
-											<div className="flex justify-center w-full">
-												<MotionTabsList>
-													<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
-													<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-												</MotionTabsList>
-											</div>
+									/* MOBILE FRAME PLATFORM SHOWCASE */
+									<div className="w-[320px] rounded-[36px] border-[6px] border-zinc-800 bg-zinc-950 p-4 pt-3 shadow-2xl space-y-4">
+										<div className="flex items-center justify-between text-[11px] text-zinc-400 px-2 font-mono">
+											<span>9:41</span>
+											<div className="w-16 h-3.5 bg-zinc-900 rounded-full mx-auto" />
+											<span>100%</span>
+										</div>
 
-											<div className="mt-4 w-full">
-												<MotionTabsContent value="overview">
-													<Card className="p-5 border border-border bg-card shadow-xs space-y-2">
-														<div className="font-semibold text-sm text-foreground flex items-center gap-2">
-															<HugeiconsIcon icon={SparklesIcon} size={16} strokeWidth={2} />
-															Spring Layout Glides
-														</div>
-														<p className="text-xs text-muted-foreground leading-relaxed">
-															GPU accelerated active indicator with exclusion text inversion.
-														</p>
-													</Card>
-												</MotionTabsContent>
-											</div>
-										</MotionTabs>
+										<div className="space-y-4 py-2 flex flex-col items-stretch max-h-[420px] overflow-y-auto pr-1">
+											{slug === "select" ? (
+												<>
+													<div className="space-y-1">
+														<span className="text-[11px] font-medium text-zinc-400">
+															1. Searchable Combobox Select
+														</span>
+														<MotionSelect
+															value={searchableSelect}
+															onValueChange={setSearchableSelect}
+														>
+															<SelectTrigger className="h-9 text-xs">
+																<SelectValue placeholder="Search country..." />
+															</SelectTrigger>
+															<SelectContent>
+																<SelectSearch placeholder="Filter..." />
+																<SelectItem value="us">United States 🇺🇸</SelectItem>
+																<SelectItem value="ca">Canada 🇨🇦</SelectItem>
+																<SelectItem value="uk">United Kingdom 🇬🇧</SelectItem>
+															</SelectContent>
+														</MotionSelect>
+													</div>
+
+													<div className="space-y-1">
+														<span className="text-[11px] font-medium text-zinc-400">
+															2. Grouped Technologies
+														</span>
+														<MotionSelect value={groupedSelect} onValueChange={setGroupedSelect}>
+															<SelectTrigger className="h-9 text-xs">
+																<SelectValue placeholder="Select tech..." />
+															</SelectTrigger>
+															<SelectContent>
+																<SelectGroup>
+																	<SelectLabel>Frontend</SelectLabel>
+																	<SelectItem value="nextjs">Next.js 16</SelectItem>
+																	<SelectItem value="expo">Expo Router</SelectItem>
+																</SelectGroup>
+															</SelectContent>
+														</MotionSelect>
+													</div>
+
+													<div className="space-y-1">
+														<span className="text-[11px] font-medium text-zinc-400">
+															3. RTL Support
+														</span>
+														<MotionSelect value={rtlSelect} onValueChange={setRtlSelect} dir="rtl">
+															<SelectTrigger className="h-9 text-xs">
+																<SelectValue placeholder="اختر اللغة..." />
+															</SelectTrigger>
+															<SelectContent>
+																<SelectItem value="ar">العربية (RTL)</SelectItem>
+																<SelectItem value="fa">فارسی (RTL)</SelectItem>
+															</SelectContent>
+														</MotionSelect>
+													</div>
+												</>
+											) : slug === "input" ? (
+												<>
+													<MotionInput
+														label="Verified Account Email"
+														value={emailValue}
+														onChange={setEmailValue}
+														success
+														leftIcon={<HugeiconsIcon icon={Mail01Icon} size={15} />}
+													/>
+													<MotionInput
+														label="Workspace Domain"
+														value={errorInputVal}
+														onChange={setErrorInputVal}
+														error={inputErrorState ? "Invalid domain" : undefined}
+														leftIcon={<HugeiconsIcon icon={UserIcon} size={15} />}
+													/>
+												</>
+											) : slug === "button" ? (
+												<>
+													<StatefulButton
+														state={okState}
+														variant="primary"
+														size="md"
+														onClick={() => runStatefulDemo("ok")}
+														loadingText="Saving"
+														successText="Saved"
+													>
+														Save changes
+													</StatefulButton>
+													<MotionButton variant="secondary" size="md">
+														Secondary
+													</MotionButton>
+												</>
+											) : (
+												<MotionTabs defaultValue="overview" variant="pill">
+													<MotionTabsList className="w-full justify-center">
+														<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
+														<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
+													</MotionTabsList>
+												</MotionTabs>
+											)}
+										</div>
+
+										<div className="w-24 h-1 bg-zinc-700 rounded-full mx-auto mt-2" />
 									</div>
 								)}
 							</div>

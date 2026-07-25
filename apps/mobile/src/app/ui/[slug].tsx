@@ -40,7 +40,11 @@ export default function ComponentSlugScreen() {
 	const [passwordVal, setPasswordVal] = useState("secret123");
 
 	const [roleSelect, setRoleSelect] = useState("admin");
-	const [envSelect, setEnvSelect] = useState("production");
+	const [searchableSelect, setSearchableSelect] = useState("us");
+	const [groupedSelect, setGroupedSelect] = useState("nextjs");
+	const [errorSelectVal, setErrorSelectVal] = useState("");
+	const [selectErrorState, setSelectErrorState] = useState(true);
+	const [rtlSelectVal, setRtlSelectVal] = useState("ar");
 
 	const [buttonLoading, setButtonLoading] = useState(false);
 	const [okState, setOkState] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -55,16 +59,31 @@ export default function ComponentSlugScreen() {
 		}, 1400);
 	};
 
+	const countryOptions = [
+		{ value: "us", label: "United States 🇺🇸" },
+		{ value: "ca", label: "Canada 🇨🇦" },
+		{ value: "uk", label: "United Kingdom 🇬🇧" },
+		{ value: "de", label: "Germany 🇩🇪" },
+		{ value: "jp", label: "Japan 🇯🇵" },
+	];
+
+	const groupedTechOptions = [
+		{ value: "nextjs", label: "Next.js 16 (App Router)", group: "Frontend" },
+		{ value: "expo", label: "Expo Router (Mobile)", group: "Frontend" },
+		{ value: "nestjs", label: "NestJS Production API", group: "Backend" },
+		{ value: "postgres", label: "PostgreSQL DB", group: "Backend" },
+	];
+
+	const rtlOptions = [
+		{ value: "ar", label: "العربية (Arabic RTL)" },
+		{ value: "fa", label: "فارسی (Persian RTL)" },
+		{ value: "ur", label: "اردو (Urdu RTL)" },
+	];
+
 	const roleOptions = [
 		{ value: "admin", label: "Administrator (Full Access)" },
 		{ value: "developer", label: "Developer (API Keys & Logs)" },
 		{ value: "viewer", label: "Viewer (Read-Only)" },
-	];
-
-	const envOptions = [
-		{ value: "production", label: "Production Cluster (Neon DB)" },
-		{ value: "staging", label: "Staging Preview (Vercel)" },
-		{ value: "local", label: "Local Dev Container (Bun)" },
 	];
 
 	const isButtonSlug = slug === "button";
@@ -164,9 +183,7 @@ export default function ComponentSlugScreen() {
 
 							{/* EX 4: PASSWORD VISIBILITY TOGGLE */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>
-									4. Password Input with Visibility Eye Toggle:
-								</Text>
+								<Text style={styles.sectionLabel}>4. Password Input with Eye Toggle:</Text>
 								<MotionInput
 									label="Account Security Password"
 									secureTextEntry
@@ -184,31 +201,65 @@ export default function ComponentSlugScreen() {
 					) : isSelectSlug ? (
 						/* SELECT MOBILE PREVIEW & EXTENSIVE EXAMPLES */
 						<View style={styles.previewSection}>
-							{/* EX 1: USER ROLE SELECT */}
+							{/* EX 1: SEARCHABLE COMBOBOX SELECT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>1. User Role & Permissions Select:</Text>
+								<Text style={styles.sectionLabel}>1. Searchable Filter Combobox Select:</Text>
 								<MotionSelect
-									label="Select User Role"
+									label="Select Country"
+									options={countryOptions}
+									value={searchableSelect}
+									onValueChange={setSearchableSelect}
+									searchable
+								/>
+							</View>
+
+							{/* EX 2: GROUPED SELECT */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>2. Grouped Technologies Select:</Text>
+								<MotionSelect
+									label="Stack Target"
+									options={groupedTechOptions}
+									value={groupedSelect}
+									onValueChange={setGroupedSelect}
+								/>
+							</View>
+
+							{/* EX 3: ERROR STATE SELECT */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>3. Invalid / Error State Select:</Text>
+								<MotionSelect
+									label="Required Selection"
 									options={roleOptions}
-									value={roleSelect}
-									onValueChange={setRoleSelect}
+									value={errorSelectVal}
+									onValueChange={setErrorSelectVal}
+									error={selectErrorState}
 								/>
+								<View style={{ marginTop: 8 }}>
+									<MobileMotionButton
+										variant="outline"
+										size="sm"
+										onPress={() => setSelectErrorState(!selectErrorState)}
+									>
+										{selectErrorState ? "Clear Select Error" : "Trigger Select Error"}
+									</MobileMotionButton>
+								</View>
 							</View>
 
-							{/* EX 2: DEPLOYMENT ENVIRONMENT SELECT */}
+							{/* EX 4: RTL SELECT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>2. Target Deployment Environment:</Text>
+								<Text style={styles.sectionLabel}>4. RTL Support (Right-to-Left Layout):</Text>
 								<MotionSelect
-									label="Deployment Cluster"
-									options={envOptions}
-									value={envSelect}
-									onValueChange={setEnvSelect}
+									label="اختر اللغة"
+									options={rtlOptions}
+									value={rtlSelectVal}
+									onValueChange={setRtlSelectVal}
+									dir="rtl"
 								/>
 							</View>
 
-							{/* EX 3: UNANIMATED BASE SELECT */}
+							{/* EX 5: UNANIMATED BASE SELECT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>3. Base Un-animated Select Primitive:</Text>
+								<Text style={styles.sectionLabel}>5. Base Un-animated Select Primitive:</Text>
 								<Select options={roleOptions} value={roleSelect} onValueChange={setRoleSelect} />
 							</View>
 						</View>
