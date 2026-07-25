@@ -1,7 +1,7 @@
-import { ArrowDown01Icon, CheckIcon } from "@hugeicons/core-free-icons";
+import { ArrowDown01Icon, CheckIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -24,6 +24,8 @@ const SPRING_SLIDE = {
 export interface MobileMotionSelectOption {
 	value: string;
 	label: string;
+	group?: string;
+	disabled?: boolean;
 }
 
 export interface MobileMotionSelectProps {
@@ -32,7 +34,10 @@ export interface MobileMotionSelectProps {
 	onValueChange?: (val: string) => void;
 	placeholder?: string;
 	label?: string;
+	searchable?: boolean;
 	disabled?: boolean;
+	error?: boolean | string;
+	dir?: "ltr" | "rtl";
 	style?: object;
 }
 
@@ -42,10 +47,14 @@ export function MobileMotionSelect({
 	onValueChange,
 	placeholder = "Select an option...",
 	label,
+	searchable = false,
 	disabled = false,
+	error = false,
+	dir = "ltr",
 	style,
 }: MobileMotionSelectProps) {
 	const [isOpen, setIsOpen] = useState(false);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	const triggerScale = useSharedValue(1);
 	const chevronRotate = useSharedValue(0);
@@ -53,6 +62,8 @@ export function MobileMotionSelect({
 	const backdropOpacity = useSharedValue(0);
 
 	const selectedOption = options.find((opt) => opt.value === value);
+	const isRtl = dir === "rtl";
+	const hasError = Boolean(error);
 
 	// Trigger animation on open state change
 	// biome-ignore lint/correctness/useExhaustiveDependencies: animate sheet on open
@@ -65,6 +76,7 @@ export function MobileMotionSelect({
 			chevronRotate.value = withSpring(0, SPRING_PRESS);
 			sheetTranslateY.value = withTiming(300, { duration: 200 });
 			backdropOpacity.value = withTiming(0, { duration: 200 });
+			setSearchQuery("");
 		}
 	}, [isOpen]);
 
@@ -92,14 +104,13 @@ export function MobileMotionSelect({
 		opacity: backdropOpacity.value,
 	}));
 
-	const handleSelectOption = (optValue: string) => {
-		onValueChange?.(optValue);
-		setIsOpen(false);
-	};
+	const filteredOptions = searchQuery
+		? options.filter((opt) => opt.label.toLowerCase().includes(searchQuery.toLowerCase()))
+		: options;
 
 	return (
 		<View style={styles.container}>
-			{label && <Text style={styles.label}>{label}</Text>}
+			{label && <Text style={[styles.label, isRtl && styles.rtlText]}>{label}</Text>}
 
 			<Animated.View style={animatedTriggerStyle}>
 				<Pressable
@@ -107,9 +118,21 @@ export function MobileMotionSelect({
 					onPressOut={handlePressOut}
 					onPress={() => !disabled && setIsOpen(true)}
 					disabled={disabled}
-					style={[styles.trigger, disabled && styles.disabled, style]}
+					style={[
+						styles.trigger,
+						isRtl && styles.rtlRow,
+						hasError && styles.errorBorder,
+						disabled && styles.disabled,
+						style,
+					]}
 				>
-					<Text style={[styles.triggerText, !selectedOption && styles.placeholder]}>
+					<Text
+						style={[
+							styles.triggerText,
+							!selectedOption && styles.placeholder,
+							isRtl && styles.rtlText,
+						]}
+					>
 						{selectedOption ? selectedOption.label : placeholder}
 					</Text>
 					<Animated.View style={animatedChevronStyle}>
@@ -133,14 +156,37 @@ export function MobileMotionSelect({
 							<View style={styles.dragHandle} />
 						</View>
 
+						{searchable && (
+							<View style={styles.searchWrapper}>
+								<HugeiconsIcon icon={Search01Icon} size={16} color="#a1a1aa" />
+								<TextInput
+									placeholder="Search options..."
+									placeholderTextColor="#71717a"
+									value={searchQuery}
+									onChangeText={setSearchQuery}
+									style={styles.searchInput}
+								/>
+							</View>
+						)}
+
 						<ScrollView style={styles.optionsList}>
-							{options.map((opt) => {
+							{filteredOptions.map((opt) => {
 								const isSelected = opt.value === value;
 								return (
 									<Pressable
 										key={opt.value}
-										onPress={() => handleSelectOption(opt.value)}
-										style={[styles.optionItem, isSelected && styles.optionSelected]}
+										onPress={() => {
+											if (!opt.disabled) {
+												onValueChange?.(opt.value);
+												setIsOpen(false);
+											}
+										}}
+										disabled={opt.disabled}
+										style={[
+											styles.optionItem,
+											isSelected && styles.optionSelected,
+											opt.disabled && styles.disabled,
+										]}
 									>
 										<Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>
 											{opt.label}
@@ -178,8 +224,17 @@ const styles = StyleSheet.create({
 		backgroundColor: "#18181b",
 		paddingHorizontal: 12,
 	},
+	rtlRow: {
+		flexDirection: "row-reverse",
+	},
+	rtlText: {
+		textAlign: "right",
+	},
+	errorBorder: {
+		borderColor: "#ef4444",
+	},
 	disabled: {
-		opacity: 0.5,
+		opacity: 0.4,
 	},
 	triggerText: {
 		fontSize: 14,
@@ -201,7 +256,7 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 24,
 		borderTopRightRadius: 24,
 		padding: 20,
-		maxHeight: 360,
+		maxHeight: 380,
 		borderWidth: 1,
 		borderColor: "#27272a",
 		gap: 12,
@@ -225,6 +280,20 @@ const styles = StyleSheet.create({
 		backgroundColor: "#3f3f46",
 		borderRadius: 2,
 	},
+	searchWrapper: {
+		flexDirection: "row",
+		alignItems: "center",
+		height: 38,
+		borderRadius: 8,
+		backgroundColor: "#27272a",
+		paddingHorizontal: 10,
+		gap: 8,
+	},
+	searchInput: {
+		flex: 1,
+		fontSize: 13,
+		color: "#ffffff",
+	},
 	optionsList: {
 		width: "100%",
 	},
@@ -232,7 +301,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
-		paddingVertical: 14,
+		paddingVertical: 12,
 		paddingHorizontal: 12,
 		borderRadius: 10,
 		marginBottom: 4,

@@ -26,6 +26,9 @@ export {
 	SelectValue,
 	SelectContent,
 	SelectItem,
+	SelectGroup,
+	SelectLabel,
+	SelectSearch,
 } from "./components/motion/select";
 export {
 	Card,

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown01Icon, CheckIcon } from "@hugeicons/core-free-icons";
+import { ArrowDown01Icon, CheckIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { EASE_OUT } from "@school-os/ui/lib/ease";
 import { cn } from "@school-os/ui/lib/utils";
@@ -28,7 +28,7 @@ const CHEVRON_TRANSITION: Transition = {
 
 const LIST_VARIANTS: Variants = {
 	hidden: {},
-	show: { transition: { staggerChildren: 0.035, delayChildren: 0.05 } },
+	show: { transition: { staggerChildren: 0.025, delayChildren: 0.04 } },
 };
 
 const ITEM_VARIANTS: Variants = {
@@ -50,8 +50,12 @@ interface SelectContextValue {
 	triggerId: string;
 	listId: string;
 	disabled: boolean;
+	error: boolean;
+	dir: "ltr" | "rtl";
 	placement: Placement;
 	setPlacement: (p: Placement) => void;
+	searchQuery: string;
+	setSearchQuery: (q: string) => void;
 }
 
 const SelectContext = createContext<SelectContextValue | null>(null);
@@ -67,6 +71,8 @@ export interface SelectProps {
 	defaultValue?: string;
 	onValueChange?: (value: string) => void;
 	disabled?: boolean;
+	error?: boolean | string;
+	dir?: "ltr" | "rtl";
 	className?: string;
 	children: ReactNode;
 }
@@ -76,6 +82,8 @@ export function MotionSelect({
 	defaultValue,
 	onValueChange,
 	disabled = false,
+	error = false,
+	dir = "ltr",
 	className,
 	children,
 }: SelectProps) {
@@ -86,15 +94,18 @@ export function MotionSelect({
 	const [internal, setInternal] = useState(defaultValue);
 	const [labels, setLabels] = useState<Map<string, string>>(new Map());
 	const [placement, setPlacement] = useState<Placement>("bottom");
+	const [searchQuery, setSearchQuery] = useState("");
 
 	const controlled = value !== undefined;
 	const current = controlled ? value : internal;
+	const hasError = Boolean(error);
 
 	const select = useCallback(
 		(next: string) => {
 			if (!controlled) setInternal(next);
 			onValueChange?.(next);
 			setOpen(false);
+			setSearchQuery("");
 		},
 		[controlled, onValueChange],
 	);
@@ -115,9 +126,13 @@ export function MotionSelect({
 	// close on outside pointer / escape
 	useEffect(() => {
 		if (!open) return;
-		const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === "Escape") setOpen(false);
+		};
 		const onPointer = (e: PointerEvent) => {
-			if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
+			if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+				setOpen(false);
+			}
 		};
 		window.addEventListener("keydown", onKey);
 		window.addEventListener("pointerdown", onPointer);
@@ -140,15 +155,37 @@ export function MotionSelect({
 			triggerId: `${baseId}-trigger`,
 			listId: `${baseId}-list`,
 			disabled,
+			error: hasError,
+			dir,
 			placement,
 			setPlacement,
+			searchQuery,
+			setSearchQuery,
 		}),
-		[current, open, select, register, unregister, labels, reduce, baseId, disabled, placement],
+		[
+			current,
+			open,
+			select,
+			register,
+			unregister,
+			labels,
+			reduce,
+			baseId,
+			disabled,
+			hasError,
+			dir,
+			placement,
+			searchQuery,
+		],
 	);
 
 	return (
 		<SelectContext.Provider value={ctx}>
-			<div ref={rootRef} className={cn("relative w-full", className)}>
+			<div
+				ref={rootRef}
+				dir={dir}
+				className={cn("relative w-full", dir === "rtl" && "text-right", className)}
+			>
 				{children}
 			</div>
 		</SelectContext.Provider>
@@ -163,6 +200,7 @@ export interface SelectTriggerProps {
 export function SelectTrigger({ className, children }: SelectTriggerProps) {
 	const ctx = useSelectContext("SelectTrigger");
 	const isTop = ctx.placement === "top";
+	const isRtl = ctx.dir === "rtl";
 	const kf = ctx.open ? [0, 0, 12] : [12, 0, 12];
 	const kfT: Transition = ctx.reduce
 		? { duration: 0 }
@@ -178,6 +216,7 @@ export function SelectTrigger({ className, children }: SelectTriggerProps) {
 			aria-haspopup="listbox"
 			aria-expanded={ctx.open}
 			aria-controls={ctx.listId}
+			aria-invalid={ctx.error || undefined}
 			onClick={() => ctx.setOpen(!ctx.open)}
 			initial={false}
 			animate={{
@@ -185,16 +224,21 @@ export function SelectTrigger({ className, children }: SelectTriggerProps) {
 				borderTopRightRadius: isTop ? kf : 12,
 				borderBottomLeftRadius: isTop ? 12 : kf,
 				borderBottomRightRadius: isTop ? 12 : kf,
+				x: ctx.error && ctx.open ? [0, -4, 4, -4, 4, 0] : 0,
 			}}
 			transition={{
 				borderTopLeftRadius: isTop ? kfT : INSTANT_TRANSITION,
 				borderTopRightRadius: isTop ? kfT : INSTANT_TRANSITION,
 				borderBottomLeftRadius: isTop ? INSTANT_TRANSITION : kfT,
 				borderBottomRightRadius: isTop ? INSTANT_TRANSITION : kfT,
+				x: { duration: 0.3 },
 			}}
 			className={cn(
 				"relative z-10 flex h-10 w-full items-center justify-between gap-2 rounded-xl border border-input bg-background px-3.5 py-2 text-sm text-foreground outline-none transition-colors",
-				"hover:border-foreground/40 focus-visible:ring-3 focus-visible:ring-ring/20",
+				isRtl && "flex-row-reverse text-right",
+				ctx.open && !ctx.error && "border-foreground/40 ring-3 ring-ring/20",
+				ctx.error && "border-destructive ring-3 ring-destructive/25",
+				"hover:border-foreground/40",
 				"disabled:pointer-events-none disabled:opacity-50",
 				className,
 			)}
@@ -229,7 +273,7 @@ export function SelectValue({ placeholder, className }: SelectValueProps) {
 				className,
 			)}
 		>
-			{label ?? placeholder ?? "Select"}
+			{label ?? placeholder ?? "Select..."}
 		</span>
 	);
 }
@@ -322,7 +366,7 @@ export function SelectContent({ className, children }: SelectContentProps) {
 				pointerEvents: open ? "auto" : "none",
 			}}
 			className={cn(
-				"absolute left-0 right-0 z-50 rounded-xl border border-border bg-popover text-popover-foreground shadow-lg",
+				"absolute left-0 right-0 z-50 rounded-xl border border-border bg-popover text-popover-foreground shadow-lg max-h-60 overflow-y-auto scrollbar-thin",
 				isTop ? "bottom-full" : "top-full",
 				className,
 			)}
@@ -357,6 +401,13 @@ export function SelectItem({ value, disabled = false, className, children }: Sel
 		return () => ctx.unregister(value);
 	}, [ctx.register, ctx.unregister, value, label]);
 
+	// Filter search
+	if (ctx.searchQuery && !label.toLowerCase().includes(ctx.searchQuery.toLowerCase())) {
+		return null;
+	}
+
+	const isRtl = ctx.dir === "rtl";
+
 	return (
 		<motion.li variants={ctx.reduce ? undefined : ITEM_VARIANTS} className="list-none">
 			<button
@@ -367,10 +418,11 @@ export function SelectItem({ value, disabled = false, className, children }: Sel
 				onClick={() => ctx.select(value)}
 				className={cn(
 					"flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs font-medium outline-none transition-colors cursor-pointer",
+					isRtl && "flex-row-reverse text-right",
 					selected
 						? "bg-accent text-accent-foreground font-semibold"
 						: "text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:bg-muted",
-					"disabled:pointer-events-none disabled:opacity-50",
+					disabled && "pointer-events-none opacity-40",
 					className,
 				)}
 			>
@@ -380,5 +432,47 @@ export function SelectItem({ value, disabled = false, className, children }: Sel
 				) : null}
 			</button>
 		</motion.li>
+	);
+}
+
+export function SelectGroup({ children, className }: { children: ReactNode; className?: string }) {
+	return <div className={cn("py-1", className)}>{children}</div>;
+}
+
+export function SelectLabel({ children, className }: { children: ReactNode; className?: string }) {
+	const ctx = useSelectContext("SelectLabel");
+	const isRtl = ctx.dir === "rtl";
+
+	return (
+		<div
+			className={cn(
+				"px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground/70 select-none",
+				isRtl && "text-right",
+				className,
+			)}
+		>
+			{children}
+		</div>
+	);
+}
+
+export function SelectSearch({ placeholder = "Search options..." }: { placeholder?: string }) {
+	const ctx = useSelectContext("SelectSearch");
+	const isRtl = ctx.dir === "rtl";
+
+	return (
+		<div className="p-1.5 border-b border-border mb-1 flex items-center gap-2 px-2.5">
+			<HugeiconsIcon icon={Search01Icon} size={14} className="text-muted-foreground shrink-0" />
+			<input
+				type="text"
+				placeholder={placeholder}
+				value={ctx.searchQuery}
+				onChange={(e) => ctx.setSearchQuery(e.target.value)}
+				className={cn(
+					"w-full bg-transparent text-xs text-foreground placeholder:text-muted-foreground outline-none border-none",
+					isRtl && "text-right",
+				)}
+			/>
+		</div>
 	);
 }

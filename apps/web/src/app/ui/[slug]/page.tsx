@@ -29,7 +29,10 @@ import { MotionInput } from "@school-os/ui/components/motion/input";
 import {
 	MotionSelect,
 	SelectContent,
+	SelectGroup,
 	SelectItem,
+	SelectLabel,
+	SelectSearch,
 	SelectTrigger,
 	SelectValue,
 } from "@school-os/ui/components/motion/select";
@@ -69,30 +72,14 @@ export function MotionButtonDemo() {
 }`;
 
 const WEB_INPUT_CODE = `import { MotionInput } from "@school-os/ui/components/motion/input";
-import { Mail01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 
 export function MotionInputDemo() {
-  const [email, setEmail] = useState("shabir@example.com");
-
   return (
-    <div className="space-y-4 max-w-sm">
-      {/* 1. Success Animated Checkmark Path */}
-      <MotionInput
-        label="Verified Email"
-        value={email}
-        onChange={setEmail}
-        success
-        leftIcon={<HugeiconsIcon icon={Mail01Icon} size={16} />}
-      />
-
-      {/* 2. Error Shake with Blur Transition */}
-      <MotionInput
-        label="Workspace URL"
-        defaultValue="invalid workspace domain!"
-        error="Domain contains invalid characters"
-      />
-    </div>
+    <MotionInput
+      label="Verified Email"
+      defaultValue="shabir@school-os.dev"
+      success
+    />
   );
 }`;
 
@@ -102,20 +89,30 @@ const WEB_SELECT_CODE = `import {
   SelectValue,
   SelectContent,
   SelectItem,
+  SelectGroup,
+  SelectLabel,
+  SelectSearch,
 } from "@school-os/ui/components/motion/select";
 
 export function MotionSelectDemo() {
-  const [role, setRole] = useState("admin");
+  const [val, setVal] = useState("nextjs");
 
   return (
-    <MotionSelect value={role} onValueChange={setRole} className="max-w-xs">
+    <MotionSelect value={val} onValueChange={setVal}>
       <SelectTrigger>
-        <SelectValue placeholder="Select user role..." />
+        <SelectValue placeholder="Select framework..." />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="admin">Administrator</SelectItem>
-        <SelectItem value="developer">Developer</SelectItem>
-        <SelectItem value="viewer">Viewer</SelectItem>
+        <SelectSearch placeholder="Filter frameworks..." />
+        <SelectGroup>
+          <SelectLabel font-mono font-bold>Frontend</SelectLabel>
+          <SelectItem value="nextjs">Next.js 16 (App Router)</SelectItem>
+          <SelectItem value="expo">Expo Router (React Native)</SelectItem>
+        </SelectGroup>
+        <SelectGroup>
+          <SelectLabel font-mono font-bold>Backend</SelectLabel>
+          <SelectItem value="nestjs">NestJS API Spine</SelectItem>
+        </SelectGroup>
       </SelectContent>
     </MotionSelect>
   );
@@ -130,10 +127,15 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 
 	const [emailValue, setEmailValue] = useState("shabir@school-os.dev");
 	const [errorInputVal, setErrorInputVal] = useState("invalid domain!");
-	const [inputErrorState, setInputErrorState] = useState(true);
+	const [inputErrorState, _setInputErrorState] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
-	const [roleSelect, setRoleSelect] = useState("admin");
-	const [envSelect, setEnvSelect] = useState("production");
+
+	const [_roleSelect, _setRoleSelect] = useState("admin");
+	const [groupedSelect, setGroupedSelect] = useState("nextjs");
+	const [searchableSelect, setSearchableSelect] = useState("us");
+	const [errorSelect, setErrorSelect] = useState("");
+	const [selectErrorState, setSelectErrorState] = useState(true);
+	const [rtlSelect, setRtlSelect] = useState("ar");
 
 	const [okState, setOkState] = useState<ButtonState>("idle");
 	const [errState, setErrState] = useState<ButtonState>("idle");
@@ -222,10 +224,10 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 						Motion {slug.charAt(0).toUpperCase() + slug.slice(1)} Component
 					</h1>
 					<p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-						{slug === "input"
-							? "Shadcn motion input with error shake animations, animated checkmark path draw, left/right icon slots, and blur error messages."
-							: slug === "select"
-								? "Compositional motion select with gooey corner flattening, auto-placement flip, and staggered list item blur transitions."
+						{slug === "select"
+							? "Compositional motion select supporting grouped headers, searchable filter inputs, scrollable lists, invalid error shake, and RTL alignment."
+							: slug === "input"
+								? "Shadcn motion input with error shake animations, animated checkmark path draw, left/right icon slots, and blur error messages."
 								: slug === "button"
 									? "Production-ready motion button with cascading text stagger, icon slot swaps, material ripples, and spring press scaling physics."
 									: "Spring-animated layout projection tabs with exclusion text blending and active indicator glide."}
@@ -240,10 +242,10 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 					Overview
 				</h2>
 				<p className="text-sm text-muted-foreground leading-relaxed">
-					{slug === "input"
-						? "Rabtx UI Motion Input combines smooth focus border ring feedback with SVG checkmark path draw animations and automatic error shake physics. Includes full classNames customization and ARIA accessibility."
-						: slug === "select"
-							? "Rabtx UI Motion Select delivers bouncy accordion corner flattening transitions when unfolding option panels. Sits above or below the trigger automatically depending on viewport bounds."
+					{slug === "select"
+						? "Rabtx UI Motion Select delivers bouncy accordion corner flattening transitions with automatic viewport flip placement. Supports SelectGroup, SelectLabel, inline SelectSearch filtering, scrollable containers, error shakes, and RTL."
+						: slug === "input"
+							? "Rabtx UI Motion Input combines smooth focus border ring feedback with SVG checkmark path draw animations and automatic error shake physics. Includes full classNames customization and ARIA accessibility."
 							: slug === "button"
 								? "Rabtx UI Motion Button is engineered for high-performance interactive interfaces. It provides tactile spring physics, material press ripples, elevated glossy reflection highlights, and slot-swapping stateful loaders."
 								: "Rabtx UI Motion Tabs provides GPU-accelerated spring glides across active tabs using Framer Motion on Web and React Native Reanimated on Mobile."}
@@ -280,11 +282,106 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				<Card className="overflow-hidden border border-border bg-card shadow-xs">
 					<CardContent className="p-0">
 						{activeViewTab === "preview" && (
-							<div className="relative min-h-[360px] w-full flex flex-col items-center justify-center p-8 bg-background border-b border-border space-y-6">
-								{slug === "input" ? (
+							<div className="relative min-h-[380px] w-full flex flex-col items-center justify-center p-8 bg-background border-b border-border space-y-6">
+								{slug === "select" ? (
+									/* SELECT EXTENSIVE VARIANTS (SEARCHABLE, GROUPED, SCROLLABLE, ERROR, RTL) */
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
+										{/* 1. SEARCHABLE COMBOBOX SELECT */}
+										<div className="space-y-1.5">
+											{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
+											<label className="text-xs font-medium text-foreground tracking-tight block">
+												1. Searchable Filter Combobox
+											</label>
+											<MotionSelect value={searchableSelect} onValueChange={setSearchableSelect}>
+												<SelectTrigger>
+													<SelectValue placeholder="Search country..." />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectSearch placeholder="Filter countries..." />
+													<SelectItem value="us">United States 🇺🇸</SelectItem>
+													<SelectItem value="ca">Canada 🇨🇦</SelectItem>
+													<SelectItem value="uk">United Kingdom 🇬🇧</SelectItem>
+													<SelectItem value="de">Germany 🇩🇪</SelectItem>
+													<SelectItem value="jp">Japan 🇯🇵</SelectItem>
+												</SelectContent>
+											</MotionSelect>
+										</div>
+
+										{/* 2. GROUPED SELECT */}
+										<div className="space-y-1.5">
+											{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
+											<label className="text-xs font-medium text-foreground tracking-tight block">
+												2. Grouped Categories Select
+											</label>
+											<MotionSelect value={groupedSelect} onValueChange={setGroupedSelect}>
+												<SelectTrigger>
+													<SelectValue placeholder="Select technology..." />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectGroup>
+														<SelectLabel>Frontend Stack</SelectLabel>
+														<SelectItem value="nextjs">Next.js 16 (App Router)</SelectItem>
+														<SelectItem value="expo">Expo Router (React Native)</SelectItem>
+													</SelectGroup>
+													<SelectGroup>
+														<SelectLabel>Backend & Database</SelectLabel>
+														<SelectItem value="nestjs">NestJS Production API</SelectItem>
+														<SelectItem value="postgres">PostgreSQL (Neon DB)</SelectItem>
+													</SelectGroup>
+												</SelectContent>
+											</MotionSelect>
+										</div>
+
+										{/* 3. ERROR SHAKE SELECT */}
+										<div className="space-y-1.5">
+											{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
+											<label className="text-xs font-medium text-foreground tracking-tight block">
+												3. Invalid / Error State Select
+											</label>
+											<MotionSelect
+												value={errorSelect}
+												onValueChange={setErrorSelect}
+												error={selectErrorState}
+											>
+												<SelectTrigger>
+													<SelectValue placeholder="Required selection..." />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="opt1">Valid Option 1</SelectItem>
+													<SelectItem value="opt2">Valid Option 2</SelectItem>
+												</SelectContent>
+											</MotionSelect>
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={() => setSelectErrorState(!selectErrorState)}
+												className="mt-1 text-[11px] h-7"
+											>
+												{selectErrorState ? "Clear Select Error" : "Trigger Select Error"}
+											</Button>
+										</div>
+
+										{/* 4. RTL LAYOUT SELECT */}
+										<div className="space-y-1.5">
+											{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
+											<label className="text-xs font-medium text-foreground tracking-tight block">
+												4. RTL Support (Right-to-Left Layout)
+											</label>
+											<MotionSelect value={rtlSelect} onValueChange={setRtlSelect} dir="rtl">
+												<SelectTrigger>
+													<SelectValue placeholder="اختر اللغة..." />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="ar">العربية (Arabic RTL)</SelectItem>
+													<SelectItem value="fa">فارسی (Persian RTL)</SelectItem>
+													<SelectItem value="ur">اردو (Urdu RTL)</SelectItem>
+												</SelectContent>
+											</MotionSelect>
+										</div>
+									</div>
+								) : slug === "input" ? (
 									/* INPUT EXTENSIVE PREVIEWS */
 									<div className="space-y-5 w-full max-w-md">
-										{/* 1. SUCCESS ANIMATED CHECKMARK */}
 										<MotionInput
 											label="1. Verified Account Email (Success Checkmark)"
 											value={emailValue}
@@ -293,7 +390,6 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 											leftIcon={<HugeiconsIcon icon={Mail01Icon} size={16} strokeWidth={2} />}
 										/>
 
-										{/* 2. ERROR SHAKE & BLUR MESSAGE */}
 										<MotionInput
 											label="2. Workspace Domain (Error Shake & Blur)"
 											value={errorInputVal}
@@ -304,67 +400,13 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 											leftIcon={<HugeiconsIcon icon={UserIcon} size={16} strokeWidth={2} />}
 										/>
 
-										{/* 3. SEARCH WITH LEFT & RIGHT ICON */}
 										<MotionInput
 											label="3. Search Query (Left & Right Slot)"
 											placeholder="Search components or icons..."
 											value={searchValue}
 											onChange={setSearchValue}
 											leftIcon={<HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={2} />}
-											rightIcon={
-												<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-													<span className="text-xs">⌘</span>K
-												</kbd>
-											}
 										/>
-
-										<div className="pt-2 flex justify-center">
-											<Button
-												variant="outline"
-												size="sm"
-												onClick={() => setInputErrorState(!inputErrorState)}
-												className="text-xs"
-											>
-												{inputErrorState ? "Clear Error State" : "Re-trigger Error Shake"}
-											</Button>
-										</div>
-									</div>
-								) : slug === "select" ? (
-									/* SELECT EXTENSIVE PREVIEWS */
-									<div className="space-y-6 w-full max-w-sm">
-										<div className="space-y-1.5">
-											{/* biome-ignore lint/a11y/noLabelWithoutControl: section title label */}
-											<label className="text-xs font-medium text-foreground tracking-tight block">
-												1. Select User Role (Bouncy Accordion Gooey Corners)
-											</label>
-											<MotionSelect value={roleSelect} onValueChange={setRoleSelect}>
-												<SelectTrigger>
-													<SelectValue placeholder="Select user role..." />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectItem value="admin">Administrator (Full Access)</SelectItem>
-													<SelectItem value="developer">Developer (API Keys & Logs)</SelectItem>
-													<SelectItem value="viewer">Viewer (Read-Only)</SelectItem>
-												</SelectContent>
-											</MotionSelect>
-										</div>
-
-										<div className="space-y-1.5">
-											{/* biome-ignore lint/a11y/noLabelWithoutControl: section title label */}
-											<label className="text-xs font-medium text-foreground tracking-tight block">
-												2. Deployment Environment Target
-											</label>
-											<MotionSelect value={envSelect} onValueChange={setEnvSelect}>
-												<SelectTrigger>
-													<SelectValue placeholder="Select target environment..." />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectItem value="production">Production Cluster (Neon DB)</SelectItem>
-													<SelectItem value="staging">Staging Preview (Vercel)</SelectItem>
-													<SelectItem value="local">Local Dev Container (Bun)</SelectItem>
-												</SelectContent>
-											</MotionSelect>
-										</div>
 									</div>
 								) : slug === "button" ? (
 									/* BUTTON PREVIEW */
