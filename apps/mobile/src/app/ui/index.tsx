@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -20,6 +20,8 @@ export const MOBILE_COMPONENT_SLUGS = [
 ];
 
 export default function MobileUICatalogScreen() {
+	const router = useRouter();
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView contentContainerStyle={styles.scrollContent}>

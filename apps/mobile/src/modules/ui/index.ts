@@ -1,4 +1,6 @@
 export {
+	MobileButton,
+	MobileMotionButton,
 	MobileMotionTabs as MotionTabs,
 	MobileMotionTabsContent as MotionTabsContent,
 	MobileMotionTabsList as MotionTabsList,
