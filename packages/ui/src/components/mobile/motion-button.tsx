@@ -1,6 +1,8 @@
+import { Cancel01Icon, CheckIcon, Loading01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react-native";
 import type React from "react";
 import { useEffect } from "react";
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -8,20 +10,27 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated";
 
-export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "destructive";
+export type ButtonVariant =
+	| "primary"
+	| "secondary"
+	| "ghost"
+	| "outline"
+	| "destructive"
+	| "default";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-const SPRING_CONFIG = {
-	stiffness: 400,
-	damping: 25,
+const SPRING_PRESS = {
+	stiffness: 500,
+	damping: 30,
 	mass: 0.6,
 };
 
 export interface MobileMotionButtonProps {
 	variant?: ButtonVariant;
 	size?: ButtonSize;
+	pressScale?: number;
 	loading?: boolean;
 	disabled?: boolean;
 	elevated?: boolean;
@@ -34,6 +43,7 @@ export interface MobileMotionButtonProps {
 export function MobileMotionButton({
 	variant = "primary",
 	size = "md",
+	pressScale = 0.93,
 	loading = false,
 	disabled = false,
 	elevated = true,
@@ -44,23 +54,20 @@ export function MobileMotionButton({
 }: MobileMotionButtonProps) {
 	const isDisabled = disabled || loading;
 	const scale = useSharedValue(1);
-	const translateY = useSharedValue(0);
 
 	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }, { translateY: translateY.value }],
+		transform: [{ scale: scale.value }],
 	}));
 
 	const handlePressIn = () => {
 		if (!isDisabled) {
-			scale.value = withSpring(0.94, SPRING_CONFIG);
-			translateY.value = withSpring(1.5, SPRING_CONFIG);
+			scale.value = withSpring(pressScale, SPRING_PRESS);
 		}
 	};
 
 	const handlePressOut = () => {
 		if (!isDisabled) {
-			scale.value = withSpring(1, SPRING_CONFIG);
-			translateY.value = withSpring(0, SPRING_CONFIG);
+			scale.value = withSpring(1, SPRING_PRESS);
 		}
 	};
 
@@ -74,7 +81,7 @@ export function MobileMotionButton({
 				styles.base,
 				styles[variant],
 				styles[`size_${size}` as keyof typeof styles],
-				elevated && variant === "primary" && styles.elevatedPrimary,
+				elevated && (variant === "primary" || variant === "default") && styles.elevatedPrimary,
 				isDisabled && styles.disabled,
 				animatedStyle,
 				style,
@@ -82,7 +89,11 @@ export function MobileMotionButton({
 		>
 			{loading ? (
 				<View style={styles.contentRow}>
-					<ActivityIndicator size="small" color={variant === "primary" ? "#000" : "#fff"} />
+					<HugeiconsIcon
+						icon={Loading01Icon}
+						size={size === "sm" ? 14 : 16}
+						color={variant === "primary" || variant === "default" ? "#000000" : "#ffffff"}
+					/>
 					{typeof children === "string" ? (
 						<Text
 							style={[styles.textBase, styles[`text_${variant}` as keyof typeof styles], textStyle]}
@@ -114,28 +125,37 @@ export interface MobileStatefulButtonProps extends Omit<MobileMotionButtonProps,
 	loadingText?: string;
 	successText?: string;
 	errorText?: string;
+	icon?: React.ReactNode;
 }
 
 export function MobileStatefulButton({
 	state = "idle",
 	children,
 	loadingText = "Loading",
-	successText = "Saved",
-	errorText = "Failed",
+	successText = "Done",
+	errorText = "Try again",
+	icon,
+	variant = "primary",
+	size = "md",
 	...props
 }: MobileStatefulButtonProps) {
 	const textOpacity = useSharedValue(1);
+	const textTranslateY = useSharedValue(0);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: trigger text animation on state change
 	useEffect(() => {
 		textOpacity.value = 0;
-		textOpacity.value = withTiming(1, { duration: 200 });
+		textTranslateY.value = 8;
+		textOpacity.value = withTiming(1, { duration: 180 });
+		textTranslateY.value = withSpring(0, SPRING_PRESS);
 	}, [state]);
 
-	const textAnimatedStyle = useAnimatedStyle(() => ({
+	const animatedTextStyle = useAnimatedStyle(() => ({
 		opacity: textOpacity.value,
+		transform: [{ translateY: textTranslateY.value }],
 	}));
 
+	const isBusy = state === "loading";
 	const currentText =
 		state === "loading"
 			? loadingText
@@ -145,19 +165,35 @@ export function MobileStatefulButton({
 					? errorText
 					: children;
 
+	const isPrimary = variant === "primary" || variant === "default";
+	const iconColor = isPrimary ? "#000000" : "#ffffff";
+
 	return (
-		<MobileMotionButton loading={state === "loading"} disabled={state === "loading"} {...props}>
-			<Animated.View style={textAnimatedStyle}>
-				<Text
-					style={[
-						styles.textBase,
-						styles[`text_${props.variant || "primary"}` as keyof typeof styles],
-						props.textStyle,
-					]}
-				>
-					{currentText}
-				</Text>
-			</Animated.View>
+		<MobileMotionButton variant={variant} size={size} loading={false} disabled={isBusy} {...props}>
+			<View style={styles.contentRow}>
+				{state === "loading" && (
+					<HugeiconsIcon icon={Loading01Icon} size={size === "sm" ? 14 : 16} color={iconColor} />
+				)}
+				{state === "success" && (
+					<HugeiconsIcon icon={CheckIcon} size={size === "sm" ? 14 : 16} color="#10b981" />
+				)}
+				{state === "error" && (
+					<HugeiconsIcon icon={Cancel01Icon} size={size === "sm" ? 14 : 16} color="#ef4444" />
+				)}
+				{state === "idle" && icon}
+
+				<Animated.View style={animatedTextStyle}>
+					<Text
+						style={[
+							styles.textBase,
+							styles[`text_${variant}` as keyof typeof styles],
+							props.textStyle,
+						]}
+					>
+						{currentText}
+					</Text>
+				</Animated.View>
+			</View>
 		</MobileMotionButton>
 	);
 }
@@ -169,7 +205,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		borderRadius: 9999,
 		paddingHorizontal: 20,
-		paddingVertical: 10,
 	},
 	contentRow: {
 		flexDirection: "row",
@@ -189,8 +224,13 @@ const styles = StyleSheet.create({
 	primary: {
 		backgroundColor: "#ffffff",
 	},
+	default: {
+		backgroundColor: "#ffffff",
+	},
 	secondary: {
 		backgroundColor: "#27272a",
+		borderWidth: 1,
+		borderColor: "#3f3f46",
 	},
 	outline: {
 		backgroundColor: "transparent",
@@ -219,12 +259,16 @@ const styles = StyleSheet.create({
 		width: 36,
 		height: 36,
 		paddingHorizontal: 0,
+		borderRadius: 9999,
 	},
 	textBase: {
 		fontSize: 14,
 		fontWeight: "600",
 	},
 	text_primary: {
+		color: "#000000",
+	},
+	text_default: {
 		color: "#000000",
 	},
 	text_secondary: {

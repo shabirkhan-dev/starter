@@ -1,3 +1,5 @@
+import { ArrowRightIcon, SparklesIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
@@ -33,15 +35,29 @@ export function MobileTabsDemo() {
   );
 }`;
 
-const BUTTON_CODE_EXAMPLE = `import { MobileMotionButton, MobileButton } from "@school-os/ui/components/mobile";
+const BUTTON_CODE_EXAMPLE = `import { MobileMotionButton, MobileStatefulButton } from "@school-os/ui/components/mobile";
+import { ArrowRightIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react-native";
 
 export function MobileButtonDemo() {
+  const [okState, setOkState] = useState("idle");
+
   return (
-    <View style={{ gap: 10 }}>
-      <MobileMotionButton variant="default">Primary Spring Button</MobileMotionButton>
-      <MobileMotionButton variant="destructive">Destructive</MobileMotionButton>
-      <MobileMotionButton variant="outline">Outline</MobileMotionButton>
-      <MobileMotionButton loading variant="secondary">Loading...</MobileMotionButton>
+    <View style={{ gap: 12 }}>
+      <MobileStatefulButton
+        state={okState}
+        variant="primary"
+        size="md"
+        onPress={() => run("ok")}
+        loadingText="Saving changes"
+        successText="Saved successfully"
+        icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} color="#000" />}
+      >
+        Save changes
+      </MobileStatefulButton>
+
+      <MobileMotionButton variant="secondary" size="md">Secondary</MobileMotionButton>
+      <MobileMotionButton variant="outline" size="md">Outline</MobileMotionButton>
     </View>
   );
 }`;
@@ -50,6 +66,8 @@ export default function ComponentSlugScreen() {
 	const { slug = "tabs" } = useLocalSearchParams<{ slug: string }>();
 	const [activePlatformView, setActivePlatformView] = useState<"preview" | "code">("preview");
 	const [activeVariant, setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
+
+	const [buttonLoading, setButtonLoading] = useState(false);
 	const [okState, setOkState] = useState<"idle" | "loading" | "success" | "error">("idle");
 	const [errState, setErrState] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -77,7 +95,7 @@ export default function ComponentSlugScreen() {
 					<Text style={styles.title}>{componentTitle}</Text>
 					<Text style={styles.subtitle}>
 						{isButtonSlug
-							? "React Native Reanimated press scale spring physics with loading states."
+							? "React Native Reanimated press scale spring physics with Hugeicons & stateful text transitions."
 							: "React Native Reanimated spring physics for Expo Router applications."}
 					</Text>
 				</View>
@@ -98,39 +116,73 @@ export default function ComponentSlugScreen() {
 
 				{activePlatformView === "preview" ? (
 					isButtonSlug ? (
-						/* BUTTON MOBILE PREVIEW */
+						/* BUTTON MOBILE PREVIEW MATCHING WEB EXACTLY */
 						<View style={styles.previewSection}>
+							{/* GROUP 1: STATEFUL CASCADING TEXT STAGGER & ICON SLOT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Stateful Spring Motion Buttons:</Text>
+								<Text style={styles.sectionLabel}>Cascading Text Stagger & Icon Slot Swap:</Text>
 								<View style={styles.buttonList}>
 									<StatefulButton
 										state={okState}
 										variant="primary"
+										size="md"
 										onPress={() => runStatefulDemo("ok")}
 										loadingText="Saving changes"
 										successText="Saved successfully"
+										icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} color="#000000" />}
 									>
 										Save changes
 									</StatefulButton>
 									<StatefulButton
 										state={errState}
 										variant="secondary"
+										size="md"
 										onPress={() => runStatefulDemo("err")}
 										loadingText="Submitting form"
 										errorText="Failed to save"
 									>
 										Submit form
 									</StatefulButton>
-									<MobileMotionButton variant="outline">Outline Variant</MobileMotionButton>
-									<MobileMotionButton variant="destructive">Destructive Action</MobileMotionButton>
 								</View>
 							</View>
 
-							<Text style={styles.groupTitle}>Base Un-animated Mobile Buttons</Text>
+							{/* GROUP 2: BUTTON SIZES & ELEVATION */}
 							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>Button Sizes & Elevation:</Text>
+								<View style={styles.buttonRow}>
+									<MobileMotionButton variant="primary" size="sm">
+										Small Pill
+									</MobileMotionButton>
+									<MobileMotionButton variant="primary" size="md">
+										Medium Primary
+									</MobileMotionButton>
+									<MobileMotionButton variant="primary" size="icon">
+										<HugeiconsIcon icon={SparklesIcon} size={16} color="#000000" />
+									</MobileMotionButton>
+								</View>
+							</View>
+
+							{/* GROUP 3: VARIANTS & LOADING SPINNER STATE */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>Variants & Loading Spinner State:</Text>
 								<View style={styles.buttonList}>
-									<MobileButton variant="default">Base Primitive Button</MobileButton>
-									<MobileButton variant="outline">Base Outline</MobileButton>
+									<MobileMotionButton
+										loading={buttonLoading}
+										variant="primary"
+										size="md"
+										onPress={() => setButtonLoading(!buttonLoading)}
+									>
+										{buttonLoading ? "Processing State..." : "Click for Loader"}
+									</MobileMotionButton>
+									<MobileMotionButton variant="outline" size="md">
+										Outline Reflection
+									</MobileMotionButton>
+									<MobileMotionButton variant="destructive" size="md">
+										Destructive Action
+									</MobileMotionButton>
+									<MobileButton variant="outline" size="md">
+										Base Primitive
+									</MobileButton>
 								</View>
 							</View>
 						</View>
@@ -290,6 +342,13 @@ const styles = StyleSheet.create({
 		gap: 10,
 		marginTop: 8,
 	},
+	buttonRow: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		alignItems: "center",
+		gap: 8,
+		marginTop: 8,
+	},
 	contentContainer: {
 		width: "100%",
 		marginTop: 16,
@@ -312,12 +371,6 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 		color: "#a1a1aa",
 		lineHeight: 18,
-	},
-	groupTitle: {
-		fontSize: 16,
-		fontWeight: "600",
-		color: "#ffffff",
-		marginTop: 8,
 	},
 	codeCard: {
 		backgroundColor: "#18181b",
