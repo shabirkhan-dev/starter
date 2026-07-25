@@ -1,58 +1,44 @@
-import { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { MotionTabs, MotionTabsContent, MotionTabsList, MotionTabsTrigger } from "../../modules/ui";
+import { router } from "expo-router";
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
-export default function MobileUIScreen() {
-	const [activeVariant, setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
+export const MOBILE_COMPONENT_SLUGS = [
+	{
+		slug: "tabs",
+		name: "Motion Tabs",
+		description: "React Native Reanimated spring sliding tabs (Pill, Underline, Segment)",
+		category: "Motion Components",
+		status: "Ready",
+	},
+];
 
+export default function MobileUICatalogScreen() {
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.header}>
-				<Text style={styles.title}>Mobile Motion Tabs</Text>
-				<Text style={styles.subtitle}>Expo Router & React Native Reanimated</Text>
-			</View>
+			<ScrollView contentContainerStyle={styles.scrollContent}>
+				<View style={styles.header}>
+					<Text style={styles.title}>Mobile UI Catalog</Text>
+					<Text style={styles.subtitle}>Expo Router & Reanimated Component System</Text>
+				</View>
 
-			<View style={styles.variantSelector}>
-				<Text style={styles.label}>Variant:</Text>
-				<MotionTabs
-					value={activeVariant}
-					onValueChange={(v) => setActiveVariant(v as "pill" | "underline" | "segment")}
-					variant="pill"
-				>
-					<MotionTabsList>
-						<MotionTabsTrigger value="pill">Pill</MotionTabsTrigger>
-						<MotionTabsTrigger value="underline">Underline</MotionTabsTrigger>
-						<MotionTabsTrigger value="segment">Segment</MotionTabsTrigger>
-					</MotionTabsList>
-				</MotionTabs>
-			</View>
+				<View style={styles.categoryGroup}>
+					<Text style={styles.categoryTitle}>Motion Components</Text>
 
-			<View style={styles.showcase}>
-				<MotionTabs defaultValue="overview" variant={activeVariant}>
-					<MotionTabsList>
-						<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
-						<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-						<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
-					</MotionTabsList>
-
-					<MotionTabsContent value="overview" style={styles.card}>
-						<Text style={styles.cardTitle}>Mobile Overview</Text>
-						<Text style={styles.cardBody}>
-							Native Reanimated spring physics optimized for 120Hz mobile displays.
-						</Text>
-					</MotionTabsContent>
-					<MotionTabsContent value="analytics" style={styles.card}>
-						<Text style={styles.cardTitle}>Mobile Analytics</Text>
-						<Text style={styles.cardBody}>
-							Real-time mobile app telemetry metrics and performance indicators.
-						</Text>
-					</MotionTabsContent>
-					<MotionTabsContent value="settings" style={styles.card}>
-						<Text style={styles.cardTitle}>Mobile Settings</Text>
-						<Text style={styles.cardBody}>Configure haptic feedback and screen transitions.</Text>
-					</MotionTabsContent>
-				</MotionTabs>
-			</View>
+					{MOBILE_COMPONENT_SLUGS.map((item) => (
+						<Pressable
+							key={item.slug}
+							onPress={() => router.push({ pathname: "/ui/[slug]", params: { slug: item.slug } })}
+							style={styles.componentCard}
+						>
+							<View style={styles.cardHeader}>
+								<Text style={styles.componentName}>{item.name}</Text>
+								<Text style={styles.badge}>{item.status}</Text>
+							</View>
+							<Text style={styles.componentDesc}>{item.description}</Text>
+							<Text style={styles.slugTag}>slug: /ui/{item.slug}</Text>
+						</Pressable>
+					))}
+				</View>
+			</ScrollView>
 		</SafeAreaView>
 	);
 }
@@ -61,8 +47,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#09090b",
-		paddingHorizontal: 20,
-		paddingTop: 40,
+	},
+	scrollContent: {
+		padding: 20,
 	},
 	header: {
 		marginBottom: 24,
@@ -77,35 +64,54 @@ const styles = StyleSheet.create({
 		color: "#a1a1aa",
 		marginTop: 4,
 	},
-	variantSelector: {
-		marginBottom: 24,
+	categoryGroup: {
+		gap: 12,
 	},
-	label: {
-		fontSize: 12,
+	categoryTitle: {
+		fontSize: 11,
+		fontWeight: "bold",
 		color: "#a1a1aa",
-		marginBottom: 8,
+		textTransform: "uppercase",
+		letterSpacing: 1,
+		marginBottom: 4,
 	},
-	showcase: {
-		alignItems: "center",
-	},
-	card: {
-		marginTop: 20,
-		padding: 20,
+	componentCard: {
 		backgroundColor: "#18181b",
+		padding: 16,
 		borderRadius: 12,
 		borderWidth: 1,
 		borderColor: "#27272a",
-		width: "100%",
+		gap: 6,
 	},
-	cardTitle: {
+	cardHeader: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+	},
+	componentName: {
 		fontSize: 16,
 		fontWeight: "600",
 		color: "#ffffff",
-		marginBottom: 6,
 	},
-	cardBody: {
-		fontSize: 13,
+	badge: {
+		fontSize: 10,
+		color: "#14b8a6",
+		backgroundColor: "rgba(20, 184, 166, 0.1)",
+		paddingHorizontal: 8,
+		paddingVertical: 2,
+		borderRadius: 4,
+		overflow: "hidden",
+		fontFamily: "monospace",
+	},
+	componentDesc: {
+		fontSize: 12,
 		color: "#a1a1aa",
 		lineHeight: 18,
+	},
+	slugTag: {
+		fontSize: 10,
+		color: "#71717a",
+		fontFamily: "monospace",
+		marginTop: 4,
 	},
 });
