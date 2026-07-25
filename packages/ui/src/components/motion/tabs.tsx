@@ -1,5 +1,4 @@
 "use client";
-
 // beui.dev/components/motion/tabs
 
 import { EASE_OUT } from "@school-os/ui/lib/ease";
@@ -16,12 +15,14 @@ import {
 } from "react";
 
 type Variant = "pill" | "underline" | "segment";
+type Size = "sm" | "md" | "lg";
 
 type Ctx = {
 	value: string;
 	setValue: (v: string) => void;
 	layoutId: string;
 	variant: Variant;
+	size: Size;
 };
 
 const TabsCtx = createContext<Ctx | null>(null);
@@ -46,6 +47,7 @@ export function Tabs({
 	value,
 	onValueChange,
 	variant = "pill",
+	size = "md",
 	children,
 	className,
 }: {
@@ -53,6 +55,7 @@ export function Tabs({
 	value?: string;
 	onValueChange?: (v: string) => void;
 	variant?: Variant;
+	size?: Size;
 	children: ReactNode;
 	className?: string;
 }) {
@@ -69,8 +72,8 @@ export function Tabs({
 		[controlled, onValueChange],
 	);
 	const contextValue = useMemo(
-		() => ({ value: current, setValue, layoutId, variant }),
-		[current, layoutId, setValue, variant],
+		() => ({ value: current, setValue, layoutId, variant, size }),
+		[current, layoutId, setValue, variant, size],
 	);
 	return (
 		<MotionConfig transition={reduce ? { duration: 0 } : transition}>
@@ -93,14 +96,26 @@ const listClasses: Record<Variant, string> = {
 	segment: "inline-flex items-center gap-0 rounded-lg bg-card p-0.5",
 };
 
+const listSizeClasses: Record<Size, string> = {
+	sm: "h-8 text-xs",
+	md: "h-9 text-xs sm:text-sm",
+	lg: "h-11 text-sm sm:text-base",
+};
+
 export function TabsList({ children, className }: { children: ReactNode; className?: string }) {
-	const { variant } = useTabs();
+	const { variant, size } = useTabs();
 	return (
-		<div role="tablist" className={cn(listClasses[variant], className)}>
+		<div role="tablist" className={cn(listClasses[variant], listSizeClasses[size], className)}>
 			{children}
 		</div>
 	);
 }
+
+const triggerSizeClasses: Record<Size, string> = {
+	sm: "px-2.5 py-1 text-xs min-h-[32px]",
+	md: "px-3.5 py-1.5 text-xs sm:text-sm min-h-[36px]",
+	lg: "px-4.5 py-2 text-sm sm:text-base min-h-[44px]",
+};
 
 export function TabsTrigger({
 	value,
@@ -113,7 +128,7 @@ export function TabsTrigger({
 	className?: string;
 	indicatorClassName?: string;
 }) {
-	const { value: current, setValue, layoutId, variant } = useTabs();
+	const { value: current, setValue, layoutId, variant, size } = useTabs();
 	const active = current === value;
 	const usesDefaultIndicator = indicatorClassName === undefined;
 
@@ -125,7 +140,8 @@ export function TabsTrigger({
 				aria-selected={active}
 				onClick={() => setValue(value)}
 				className={cn(
-					"relative isolate px-3 pb-2.5 pt-1 -mb-px text-sm font-medium transition-colors min-h-[44px] inline-flex items-center",
+					"relative isolate px-3 pb-2.5 pt-1 -mb-px font-medium transition-colors inline-flex items-center",
+					triggerSizeClasses[size],
 					active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
 					className,
 				)}
@@ -161,7 +177,8 @@ export function TabsTrigger({
 				aria-selected={active}
 				onClick={() => setValue(value)}
 				className={cn(
-					"relative z-10 inline-flex items-center justify-center whitespace-nowrap bg-transparent px-3.5 py-1.5 text-sm font-medium outline-none",
+					"relative z-10 inline-flex items-center justify-center whitespace-nowrap bg-transparent font-medium outline-none",
+					triggerSizeClasses[size],
 					usesDefaultIndicator
 						? "text-white mix-blend-exclusion transition-opacity"
 						: "transition-colors",

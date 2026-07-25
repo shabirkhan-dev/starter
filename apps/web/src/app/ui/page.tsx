@@ -13,7 +13,6 @@ import {
 	Tick02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@school-os/ui/components/avatar";
 import { Badge } from "@school-os/ui/components/badge";
 import { Button } from "@school-os/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@school-os/ui/components/card";
@@ -23,7 +22,6 @@ import {
 	TabsList as MotionTabsList,
 	TabsTrigger as MotionTabsTrigger,
 } from "@school-os/ui/components/motion/tabs";
-import { cn } from "@school-os/ui/lib/utils";
 import { motion } from "motion/react";
 import { useState } from "react";
 
@@ -36,7 +34,7 @@ const CODE_EXAMPLE = `import {
 
 export function MotionTabsExample() {
   return (
-    <Tabs defaultValue="overview" variant="pill">
+    <Tabs defaultValue="overview" variant="pill" size="md">
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -58,6 +56,7 @@ export function MotionTabsExample() {
 
 export default function RabtxUIPage() {
 	const [activeVariant, setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
+	const [activeSize, setActiveSize] = useState<"sm" | "md" | "lg">("md");
 	const [activeViewTab, setActiveViewTab] = useState<"preview" | "code">("preview");
 	const [copied, setCopied] = useState(false);
 
@@ -89,95 +88,82 @@ export default function RabtxUIPage() {
 						Motion Tabs
 					</h1>
 					<p className="text-xs text-muted-foreground mt-1">
-						Spring-animated tab indicator with text exclusion blending, reduced motion support, and
-						animated content panels.
+						Spring-animated tab indicator with text exclusion blending, rounded pill controls,
+						customizable sizes (sm, md, lg), and animated panels.
 					</p>
 				</div>
 			</div>
 
-			{/* INTERACTIVE DEMO 1: MAIN VARIANT SWITCHER */}
+			{/* INTERACTIVE DEMO 1: MAIN VARIANT & SIZE SWITCHER */}
 			<Card className="overflow-hidden border border-border bg-card shadow-sm">
-				<CardHeader className="flex flex-row items-center justify-between border-b border-border p-4">
-					<div className="flex items-center gap-2">
-						<span className="text-xs font-mono font-medium text-muted-foreground mr-1">
-							Variant:
-						</span>
-						<div className="inline-flex rounded-lg bg-muted p-1 gap-1 border border-border">
-							<button
-								type="button"
-								onClick={() => setActiveVariant("pill")}
-								className={cn(
-									"px-2.5 py-1 text-xs font-medium rounded-md transition-colors",
-									activeVariant === "pill"
-										? "bg-background text-foreground shadow-xs font-semibold"
-										: "text-muted-foreground hover:text-foreground",
-								)}
+				<CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-border p-4 gap-4">
+					{/* Controls for Variant and Size using MotionTabs pill controls */}
+					<div className="flex flex-wrap items-center gap-4">
+						{/* Variant Switcher powered by MotionTabs */}
+						<div className="flex items-center gap-2">
+							<span className="text-xs font-mono font-medium text-muted-foreground">Variant:</span>
+							<MotionTabs
+								value={activeVariant}
+								onValueChange={(v) => setActiveVariant(v as "pill" | "underline" | "segment")}
+								variant="pill"
+								size="sm"
 							>
-								Pill
-							</button>
-							<button
-								type="button"
-								onClick={() => setActiveVariant("underline")}
-								className={cn(
-									"px-2.5 py-1 text-xs font-medium rounded-md transition-colors",
-									activeVariant === "underline"
-										? "bg-background text-foreground shadow-xs font-semibold"
-										: "text-muted-foreground hover:text-foreground",
-								)}
+								<MotionTabsList>
+									<MotionTabsTrigger value="pill">Pill</MotionTabsTrigger>
+									<MotionTabsTrigger value="underline">Underline</MotionTabsTrigger>
+									<MotionTabsTrigger value="segment">Segment</MotionTabsTrigger>
+								</MotionTabsList>
+							</MotionTabs>
+						</div>
+
+						{/* Size Switcher powered by MotionTabs */}
+						<div className="flex items-center gap-2">
+							<span className="text-xs font-mono font-medium text-muted-foreground">Size:</span>
+							<MotionTabs
+								value={activeSize}
+								onValueChange={(s) => setActiveSize(s as "sm" | "md" | "lg")}
+								variant="pill"
+								size="sm"
 							>
-								Underline
-							</button>
-							<button
-								type="button"
-								onClick={() => setActiveVariant("segment")}
-								className={cn(
-									"px-2.5 py-1 text-xs font-medium rounded-md transition-colors",
-									activeVariant === "segment"
-										? "bg-background text-foreground shadow-xs font-semibold"
-										: "text-muted-foreground hover:text-foreground",
-								)}
-							>
-								Segment
-							</button>
+								<MotionTabsList>
+									<MotionTabsTrigger value="sm">sm</MotionTabsTrigger>
+									<MotionTabsTrigger value="md">md</MotionTabsTrigger>
+									<MotionTabsTrigger value="lg">lg</MotionTabsTrigger>
+								</MotionTabsList>
+							</MotionTabs>
 						</div>
 					</div>
 
-					<div className="inline-flex rounded-lg bg-muted p-0.5 border border-border">
-						<button
-							type="button"
-							onClick={() => setActiveViewTab("preview")}
-							className={cn(
-								"h-7 text-xs px-3 gap-1.5 inline-flex items-center font-medium rounded-md transition-colors",
-								activeViewTab === "preview"
-									? "bg-background text-foreground shadow-xs font-semibold"
-									: "text-muted-foreground hover:text-foreground",
-							)}
-						>
-							<HugeiconsIcon icon={EyeIcon} size={13} strokeWidth={2} />
-							Preview
-						</button>
-						<button
-							type="button"
-							onClick={() => setActiveViewTab("code")}
-							className={cn(
-								"h-7 text-xs px-3 gap-1.5 inline-flex items-center font-medium rounded-md transition-colors",
-								activeViewTab === "code"
-									? "bg-background text-foreground shadow-xs font-semibold"
-									: "text-muted-foreground hover:text-foreground",
-							)}
-						>
-							<HugeiconsIcon icon={CodeIcon} size={13} strokeWidth={2} />
-							Code
-						</button>
-					</div>
+					{/* View Switcher: Preview / Code powered by MotionTabs */}
+					<MotionTabs
+						value={activeViewTab}
+						onValueChange={(v) => setActiveViewTab(v as "preview" | "code")}
+						variant="pill"
+						size="sm"
+					>
+						<MotionTabsList>
+							<MotionTabsTrigger value="preview" className="gap-1.5">
+								<HugeiconsIcon icon={EyeIcon} size={13} strokeWidth={2} />
+								Preview
+							</MotionTabsTrigger>
+							<MotionTabsTrigger value="code" className="gap-1.5">
+								<HugeiconsIcon icon={CodeIcon} size={13} strokeWidth={2} />
+								Code
+							</MotionTabsTrigger>
+						</MotionTabsList>
+					</MotionTabs>
 				</CardHeader>
 
 				<CardContent className="p-0">
 					{activeViewTab === "preview" && (
-						<div className="relative min-h-[300px] w-full flex flex-col items-center justify-start p-8 pt-10 bg-background border-b border-border">
-							{/* Clean shadcn canvas layout */}
+						<div className="relative min-h-[320px] w-full flex flex-col items-center justify-start p-8 pt-10 bg-background border-b border-border">
 							<div className="relative z-10 w-full max-w-md flex flex-col items-center">
-								<MotionTabs defaultValue="overview" variant={activeVariant} className="w-full">
+								<MotionTabs
+									defaultValue="overview"
+									variant={activeVariant}
+									size={activeSize}
+									className="w-full"
+								>
 									<div className="flex justify-center w-full">
 										<MotionTabsList>
 											<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
@@ -205,8 +191,9 @@ export default function RabtxUIPage() {
 														</Badge>
 													</div>
 													<p className="text-xs text-muted-foreground leading-relaxed">
-														Spring layout active indicator with exclusion text inversion.
-														Top-aligned layout ensures zero vertical shifting.
+														Spring layout active indicator with exclusion text inversion. Size:{" "}
+														<strong className="text-foreground">{activeSize}</strong>, Variant:{" "}
+														<strong className="text-foreground">{activeVariant}</strong>.
 													</p>
 													<div className="pt-1 flex items-center gap-3 text-[11px] text-muted-foreground font-mono">
 														<span>
@@ -350,122 +337,69 @@ export default function RabtxUIPage() {
 				</CardContent>
 			</Card>
 
-			{/* ADDITIONAL PRODUCTION PATTERNS */}
+			{/* ADDITIONAL SIZES AND VARIANTS EXAMPLES */}
 			<div className="space-y-4">
 				<div className="space-y-1">
 					<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
 						<HugeiconsIcon icon={Layers01Icon} size={18} strokeWidth={2} />
-						Component Variants
+						Size Options & Real-world Usage
 					</h2>
 					<p className="text-xs text-muted-foreground">
-						Native clean layout patterns for tabs inside cards and panels.
+						Explore compact (sm), standard (md), and large (lg) size variations.
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-					{/* Example 2: Segmented Media Switcher */}
-					<Card className="p-5 border border-border bg-card space-y-4">
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					{/* Size SM Example */}
+					<Card className="p-4 border border-border bg-card space-y-3">
 						<div className="space-y-1">
 							<Badge variant="secondary" className="text-[10px] font-mono">
-								Segment Variant
+								size="sm"
 							</Badge>
-							<CardTitle className="text-sm font-semibold">Tech Stack Filter</CardTitle>
+							<CardTitle className="text-xs font-semibold">Compact Filter</CardTitle>
 						</div>
 
-						<MotionTabs defaultValue="react" variant="segment" className="w-full">
+						<MotionTabs defaultValue="all" variant="pill" size="sm" className="w-full">
 							<MotionTabsList className="w-full">
-								<MotionTabsTrigger value="react">React</MotionTabsTrigger>
-								<MotionTabsTrigger value="vue">Next.js</MotionTabsTrigger>
-								<MotionTabsTrigger value="svelte">TypeScript</MotionTabsTrigger>
+								<MotionTabsTrigger value="all">All</MotionTabsTrigger>
+								<MotionTabsTrigger value="active">Active</MotionTabsTrigger>
+								<MotionTabsTrigger value="archived">Archived</MotionTabsTrigger>
 							</MotionTabsList>
-
-							<MotionTabsContent value="react">
-								<motion.div
-									initial={{ opacity: 0, y: 4 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ type: "spring", stiffness: 400, damping: 28 }}
-									className="p-3.5 rounded-lg bg-muted/50 border border-border text-xs space-y-1"
-								>
-									<span className="font-semibold text-foreground">React 19 Server Components</span>
-									<p className="text-muted-foreground">
-										Full support for concurrent rendering and motion transitions.
-									</p>
-								</motion.div>
-							</MotionTabsContent>
-							<MotionTabsContent value="vue">
-								<motion.div
-									initial={{ opacity: 0, y: 4 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ type: "spring", stiffness: 400, damping: 28 }}
-									className="p-3.5 rounded-lg bg-muted/50 border border-border text-xs space-y-1"
-								>
-									<span className="font-semibold text-foreground">Next.js App Router</span>
-									<p className="text-muted-foreground">
-										Server-rendered HTML with layout projection scoping.
-									</p>
-								</motion.div>
-							</MotionTabsContent>
-							<MotionTabsContent value="svelte">
-								<motion.div
-									initial={{ opacity: 0, y: 4 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ type: "spring", stiffness: 400, damping: 28 }}
-									className="p-3.5 rounded-lg bg-muted/50 border border-border text-xs space-y-1"
-								>
-									<span className="font-semibold text-foreground">TypeScript Strict Mode</span>
-									<p className="text-muted-foreground">100% typed props and state interfaces.</p>
-								</motion.div>
-							</MotionTabsContent>
 						</MotionTabs>
 					</Card>
 
-					{/* Example 3: Underline Navigation Bar */}
-					<Card className="p-5 border border-border bg-card space-y-4">
+					{/* Size MD Example */}
+					<Card className="p-4 border border-border bg-card space-y-3">
 						<div className="space-y-1">
 							<Badge variant="secondary" className="text-[10px] font-mono">
-								Underline Variant
+								size="md" (Default)
 							</Badge>
-							<CardTitle className="text-sm font-semibold">Team Activity Deck</CardTitle>
+							<CardTitle className="text-xs font-semibold">Standard Control</CardTitle>
 						</div>
 
-						<MotionTabs defaultValue="members" variant="underline" className="w-full">
-							<MotionTabsList className="w-full justify-start border-b border-border">
-								<MotionTabsTrigger value="members">Members</MotionTabsTrigger>
-								<MotionTabsTrigger value="activity">Activity</MotionTabsTrigger>
+						<MotionTabs defaultValue="day" variant="pill" size="md" className="w-full">
+							<MotionTabsList className="w-full">
+								<MotionTabsTrigger value="day">Day</MotionTabsTrigger>
+								<MotionTabsTrigger value="week">Week</MotionTabsTrigger>
+								<MotionTabsTrigger value="month">Month</MotionTabsTrigger>
 							</MotionTabsList>
+						</MotionTabs>
+					</Card>
 
-							<MotionTabsContent value="members">
-								<motion.div
-									initial={{ opacity: 0, y: 4 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ type: "spring", stiffness: 400, damping: 28 }}
-									className="space-y-2 pt-1"
-								>
-									<div className="flex items-center gap-3 p-2 rounded-lg bg-muted/50 border border-border text-xs">
-										<Avatar className="w-7 h-7">
-											<AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" />
-											<AvatarFallback>SK</AvatarFallback>
-										</Avatar>
-										<div>
-											<span className="font-semibold text-foreground block">Alex Rivera</span>
-											<span className="text-[10px] text-muted-foreground">
-												Lead Engineer • Active
-											</span>
-										</div>
-									</div>
-								</motion.div>
-							</MotionTabsContent>
-							<MotionTabsContent value="activity">
-								<motion.div
-									initial={{ opacity: 0, y: 4 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ type: "spring", stiffness: 400, damping: 28 }}
-									className="p-3 rounded-lg bg-muted/50 border border-border text-xs space-y-1"
-								>
-									<span className="font-semibold text-foreground">Updated Motion Physics</span>
-									<span className="text-[10px] text-muted-foreground block">2 minutes ago</span>
-								</motion.div>
-							</MotionTabsContent>
+					{/* Size LG Example */}
+					<Card className="p-4 border border-border bg-card space-y-3">
+						<div className="space-y-1">
+							<Badge variant="secondary" className="text-[10px] font-mono">
+								size="lg"
+							</Badge>
+							<CardTitle className="text-xs font-semibold">Prominent Header</CardTitle>
+						</div>
+
+						<MotionTabs defaultValue="summary" variant="pill" size="lg" className="w-full">
+							<MotionTabsList className="w-full">
+								<MotionTabsTrigger value="summary">Summary</MotionTabsTrigger>
+								<MotionTabsTrigger value="details">Details</MotionTabsTrigger>
+							</MotionTabsList>
 						</MotionTabs>
 					</Card>
 				</div>
