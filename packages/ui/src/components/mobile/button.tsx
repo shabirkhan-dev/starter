@@ -1,5 +1,5 @@
 import type React from "react";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "uniwind/components";
 
 export type ButtonVariant = "default" | "destructive" | "outline" | "secondary" | "ghost";
 export type ButtonSize = "default" | "sm" | "lg" | "icon";

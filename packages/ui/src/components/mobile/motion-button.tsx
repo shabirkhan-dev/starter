@@ -2,13 +2,13 @@ import { Cancel01Icon, CheckIcon, Loading01Icon } from "@hugeicons/core-free-ico
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import type React from "react";
 import { useEffect } from "react";
-import { Pressable, Text, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
 	withTiming,
 } from "react-native-reanimated";
+import { Pressable, Text, View } from "uniwind/components";
 
 export type ButtonVariant =
 	| "primary"

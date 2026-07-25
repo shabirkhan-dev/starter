@@ -1,13 +1,13 @@
 import { ArrowDown01Icon, CheckIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
 	withTiming,
 } from "react-native-reanimated";
+import { Modal, Pressable, ScrollView, Text, TextInput, View } from "uniwind/components";
 
 const SPRING_PRESS = {
 	stiffness: 500,
