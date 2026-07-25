@@ -1,11 +1,11 @@
 "use client";
 
-import * as React from "react";
-import { OTPInput, OTPInputContext } from "input-otp";
+import { MinusSignIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { cn } from "@school-os/ui/lib/utils";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { MinusSignIcon } from "@hugeicons/core-free-icons";
+import { OTPInput, OTPInputContext } from "input-otp";
+import * as React from "react";
 
 function InputOTP({
 	className,
@@ -84,4 +84,4 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
 	);
 }
 
-export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };
+export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };

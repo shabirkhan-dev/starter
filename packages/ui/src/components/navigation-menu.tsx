@@ -1,9 +1,8 @@
 import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/navigation-menu";
-import { cva } from "class-variance-authority";
-
-import { cn } from "@school-os/ui/lib/utils";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { cn } from "@school-os/ui/lib/utils";
+import { cva } from "class-variance-authority";
 
 function NavigationMenu({
 	align = "start",
@@ -158,7 +157,7 @@ export {
 	NavigationMenuItem,
 	NavigationMenuLink,
 	NavigationMenuList,
+	NavigationMenuPositioner,
 	NavigationMenuTrigger,
 	navigationMenuTriggerStyle,
-	NavigationMenuPositioner,
 };

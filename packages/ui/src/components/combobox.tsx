@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
-
-import { cn } from "@school-os/ui/lib/utils";
+import { ArrowDown01Icon, Cancel01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@school-os/ui/components/button";
 import {
 	InputGroup,
@@ -11,8 +10,8 @@ import {
 	InputGroupButton,
 	InputGroupInput,
 } from "@school-os/ui/components/input-group";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowDown01Icon, Cancel01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
+import { cn } from "@school-os/ui/lib/utils";
+import * as React from "react";
 
 const Combobox = ComboboxPrimitive.Root;
 
@@ -260,18 +259,18 @@ function useComboboxAnchor() {
 
 export {
 	Combobox,
-	ComboboxInput,
-	ComboboxContent,
-	ComboboxList,
-	ComboboxItem,
-	ComboboxGroup,
-	ComboboxLabel,
-	ComboboxCollection,
-	ComboboxEmpty,
-	ComboboxSeparator,
-	ComboboxChips,
 	ComboboxChip,
+	ComboboxChips,
 	ComboboxChipsInput,
+	ComboboxCollection,
+	ComboboxContent,
+	ComboboxEmpty,
+	ComboboxGroup,
+	ComboboxInput,
+	ComboboxItem,
+	ComboboxLabel,
+	ComboboxList,
+	ComboboxSeparator,
 	ComboboxTrigger,
 	ComboboxValue,
 	useComboboxAnchor,

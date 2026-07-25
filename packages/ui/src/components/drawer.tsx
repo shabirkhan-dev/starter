@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
-
 import { cn } from "@school-os/ui/lib/utils";
+import * as React from "react";
 
 type DrawerContextProps = {
 	hasSnapPoints: boolean;
@@ -196,14 +195,14 @@ function DrawerDescription({ className, ...props }: DrawerPrimitive.Description.
 
 export {
 	Drawer,
-	DrawerPortal,
-	DrawerOverlay,
-	DrawerSwipeHandle,
-	DrawerTrigger,
 	DrawerClose,
 	DrawerContent,
-	DrawerHeader,
-	DrawerFooter,
-	DrawerTitle,
 	DrawerDescription,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerOverlay,
+	DrawerPortal,
+	DrawerSwipeHandle,
+	DrawerTitle,
+	DrawerTrigger,
 };

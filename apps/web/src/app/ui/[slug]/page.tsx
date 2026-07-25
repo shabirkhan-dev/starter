@@ -2,6 +2,7 @@
 
 import {
 	AccessibilityIcon,
+	Add01Icon,
 	ArrowDown01Icon,
 	ArrowRightIcon,
 	BrushIcon,
@@ -17,6 +18,7 @@ import {
 	Search01Icon,
 	SmartPhone01Icon,
 	SparklesIcon,
+	TextFontIcon,
 	Tick02Icon,
 	UserIcon,
 } from "@hugeicons/core-free-icons";
@@ -42,6 +44,12 @@ import {
 	TabsList as MotionTabsList,
 	TabsTrigger as MotionTabsTrigger,
 } from "@school-os/ui/components/motion/tabs";
+import {
+	NotTypeset,
+	Typeset,
+	type TypesetPreset,
+	TypesetScroll,
+} from "@school-os/ui/components/typeset";
 import { use, useState } from "react";
 
 const WEB_TABS_CODE = `import { Tabs, TabsList, TabsTrigger, TabsContent } from "@school-os/ui/components/motion/tabs";
@@ -106,14 +114,42 @@ export function MotionSelectDemo() {
         <SelectSearch placeholder="Search 15+ timezones..." />
         <SelectItem value="utc">UTC (Coordinated Universal Time)</SelectItem>
         <SelectItem value="est">US Eastern Time (EST / UTC-5)</SelectItem>
-        <SelectItem value="pst">US Pacific Time (PST / UTC-8)</SelectItem>
-        <SelectItem value="gmt">Europe London (GMT / UTC+0)</SelectItem>
-        <SelectItem value="cet">Europe Paris (CET / UTC+1)</SelectItem>
-        <SelectItem value="jst">Asia Tokyo (JST / UTC+9)</SelectItem>
-        <SelectItem value="gst">Asia Dubai (GST / UTC+4)</SelectItem>
-        <SelectItem value="sgt">Asia Singapore (SGT / UTC+8)</SelectItem>
       </SelectContent>
     </MotionSelect>
+  );
+}`;
+
+const WEB_TYPESET_CODE = `import { Typeset, TypesetScroll, NotTypeset } from "@school-os/ui";
+
+export function MarkdownContentDemo() {
+  return (
+    <Typeset preset="docs">
+      <h1>Architecting High Performance Systems</h1>
+      <p>
+        Typeset delivers container-aware rhythm controls (<code>--typeset-size</code>,
+        <code>--typeset-leading</code>, <code>--typeset-flow</code>) with streaming append stability.
+      </p>
+
+      <blockquote>
+        "Three controls: size, leading, and flow. Everything derives from them."
+      </blockquote>
+
+      <TypesetScroll>
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>@tailwindcss/typography</th><th>Typeset</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Sizing</td><td>Fixed rem scale</td><td>Container relative</td></tr>
+            <tr><td>Streaming</td><td>No stability contract</td><td>Designed for stable appends</td></tr>
+          </tbody>
+        </table>
+      </TypesetScroll>
+
+      <NotTypeset className="p-4 rounded-xl bg-card border text-sm">
+        <span>Opted out interactive component inside typeset container.</span>
+      </NotTypeset>
+    </Typeset>
   );
 }`;
 
@@ -136,10 +172,27 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 	const [selectErrorState, setSelectErrorState] = useState(true);
 	const [_rtlSelect, _setRtlSelect] = useState("ar");
 
+	// Typeset Interactive State
+	const [typesetPreset, setTypesetPreset] = useState<TypesetPreset>("docs");
+	const [typesetSize, _setTypesetSize] = useState("15px");
+	const [typesetLeading, _setTypesetLeading] = useState("1.75");
+	const [typesetFlow, _setTypesetFlow] = useState("1.25em");
+	const [streamBlocks, setStreamBlocks] = useState<string[]>([
+		"Streaming block #1: Typeset uses margin-block-start exclusively, so prepended and appended streaming chunks never cause margin recalculation layout shift.",
+	]);
+
 	const [okState, setOkState] = useState<ButtonState>("idle");
 	const [errState, setErrState] = useState<ButtonState>("idle");
 	const [copied, setCopied] = useState(false);
 	const [cmdCopied, setCmdCopied] = useState(false);
+
+	const addStreamBlock = () => {
+		const blockId = streamBlocks.length + 1;
+		setStreamBlocks((prev) => [
+			...prev,
+			`Streaming block #${blockId}: Real-time token arrived at ${new Date().toLocaleTimeString()}. Margin flow derives from --typeset-flow.`,
+		]);
+	};
 
 	const runStatefulDemo = (target: "ok" | "err") => {
 		const setter = target === "ok" ? setOkState : setErrState;
@@ -156,6 +209,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 			button: WEB_BUTTON_CODE,
 			input: WEB_INPUT_CODE,
 			select: WEB_SELECT_CODE,
+			typeset: WEB_TYPESET_CODE,
 		};
 		navigator.clipboard.writeText(codeMap[slug as keyof typeof codeMap] || WEB_TABS_CODE);
 		setCopied(true);
@@ -233,21 +287,27 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 										? InputTextIcon
 										: slug === "select"
 											? ArrowDown01Icon
-											: Grid02Icon
+											: slug === "typeset"
+												? TextFontIcon
+												: Grid02Icon
 							}
 							size={28}
 							strokeWidth={2}
 						/>
-						Motion {slug.charAt(0).toUpperCase() + slug.slice(1)} Component
+						{slug === "typeset"
+							? "Typeset Typography System"
+							: `Motion ${slug.charAt(0).toUpperCase() + slug.slice(1)} Component`}
 					</h1>
 					<p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-						{slug === "select"
-							? "Compositional motion select supporting scrollable long list containers (15+ items), grouped headers, searchable filter inputs, invalid error shake, and RTL alignment."
-							: slug === "input"
-								? "Shadcn motion input with error shake animations, animated checkmark path draw, left/right icon slots, and blur error messages."
-								: slug === "button"
-									? "Production-ready motion button with cascading text stagger, icon slot swaps, material ripples, and spring press scaling physics."
-									: "Spring-animated layout projection tabs with exclusion text blending and active indicator glide."}
+						{slug === "typeset"
+							? "A styling system for HTML and rendered markdown, from blog posts to streaming chat. Powered by size, leading, and flow rhythm controls."
+							: slug === "select"
+								? "Compositional motion select supporting scrollable long list containers (15+ items), grouped headers, searchable filter inputs, invalid error shake, and RTL alignment."
+								: slug === "input"
+									? "Shadcn motion input with error shake animations, animated checkmark path draw, left/right icon slots, and blur error messages."
+									: slug === "button"
+										? "Production-ready motion button with cascading text stagger, icon slot swaps, material ripples, and spring press scaling physics."
+										: "Spring-animated layout projection tabs with exclusion text blending and active indicator glide."}
 					</p>
 				</div>
 			</div>
@@ -259,13 +319,15 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 					Overview
 				</h2>
 				<p className="text-sm text-muted-foreground leading-relaxed">
-					{slug === "select"
-						? "Rabtx UI Motion Select delivers bouncy accordion corner flattening transitions with automatic viewport flip placement. Supports SelectGroup, SelectLabel, inline SelectSearch filtering, scrollable 15+ long lists, error shakes, and RTL."
-						: slug === "input"
-							? "Rabtx UI Motion Input combines smooth focus border ring feedback with SVG checkmark path draw animations and automatic error shake physics. Includes full classNames customization and ARIA accessibility."
-							: slug === "button"
-								? "Rabtx UI Motion Button is engineered for high-performance interactive interfaces. It provides tactile spring physics, material press ripples, elevated glossy reflection highlights, and slot-swapping stateful loaders."
-								: "Rabtx UI Motion Tabs provides GPU-accelerated spring glides across active tabs using Framer Motion on Web and React Native Reanimated on Mobile."}
+					{slug === "typeset"
+						? "shadcn/typeset condenses document typography into three rhythm controls: size, leading, and flow. It fits its container, uses native theme tokens, stays stable during AI chat streaming, and provides opt-out escape hatches."
+						: slug === "select"
+							? "Rabtx UI Motion Select delivers bouncy accordion corner flattening transitions with automatic viewport flip placement. Supports SelectGroup, SelectLabel, inline SelectSearch filtering, scrollable 15+ long lists, error shakes, and RTL."
+							: slug === "input"
+								? "Rabtx UI Motion Input combines smooth focus border ring feedback with SVG checkmark path draw animations and automatic error shake physics. Includes full classNames customization and ARIA accessibility."
+								: slug === "button"
+									? "Rabtx UI Motion Button is engineered for high-performance interactive interfaces. It provides tactile spring physics, material press ripples, elevated glossy reflection highlights, and slot-swapping stateful loaders."
+									: "Rabtx UI Motion Tabs provides GPU-accelerated spring glides across active tabs using Framer Motion on Web and React Native Reanimated on Mobile."}
 				</p>
 			</section>
 
@@ -302,7 +364,117 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 							<div className="relative min-h-[380px] w-full flex flex-col items-center justify-center p-8 bg-background border-b border-border space-y-6">
 								{activePlatform === "web" ? (
 									/* WEB PLATFORM SHOWCASE */
-									slug === "select" ? (
+									slug === "typeset" ? (
+										<div className="w-full max-w-2xl space-y-6">
+											{/* PRESET SELECTOR & CONTROLS */}
+											<div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-border bg-card shadow-xs">
+												<div className="flex items-center gap-2">
+													<span className="text-xs font-semibold text-foreground">Preset:</span>
+													<MotionTabs
+														value={typesetPreset}
+														onValueChange={(v) => setTypesetPreset(v as TypesetPreset)}
+														variant="pill"
+														size="sm"
+													>
+														<MotionTabsList>
+															<MotionTabsTrigger value="docs">Docs</MotionTabsTrigger>
+															<MotionTabsTrigger value="chat">Chat</MotionTabsTrigger>
+															<MotionTabsTrigger value="compact">Compact</MotionTabsTrigger>
+															<MotionTabsTrigger value="reading">Reading</MotionTabsTrigger>
+														</MotionTabsList>
+													</MotionTabs>
+												</div>
+
+												<Button
+													variant="outline"
+													size="sm"
+													onClick={addStreamBlock}
+													className="gap-1.5 text-xs h-8"
+												>
+													<HugeiconsIcon icon={Add01Icon} size={14} />
+													Simulate AI Stream Block
+												</Button>
+											</div>
+
+											{/* TYPESET CONTAINER */}
+											<div className="p-6 rounded-2xl border border-border bg-card/60 shadow-sm">
+												<Typeset
+													preset={typesetPreset}
+													size={typesetSize !== "15px" ? typesetSize : undefined}
+													leading={typesetLeading !== "1.75" ? typesetLeading : undefined}
+													flow={typesetFlow !== "1.25em" ? typesetFlow : undefined}
+												>
+													<h1>Architecting High Performance Systems</h1>
+													<p>
+														Typeset delivers container-aware rhythm controls with streaming append
+														stability. Headings, code blocks, blockquotes, and tables derive spacing
+														from <code>--typeset-flow</code>.
+													</p>
+
+													<blockquote>
+														"Three controls: size, leading, and flow. Everything else derives from
+														them."
+													</blockquote>
+
+													<h2>Comparison with Typography Plugins</h2>
+													<p>
+														Typeset uses zero-specificity <code>:where()</code> guards so standard
+														Tailwind classes like <code>text-lg</code> win effortlessly without{" "}
+														<code>!important</code>.
+													</p>
+
+													<TypesetScroll>
+														<table>
+															<thead>
+																<tr>
+																	<th>Metric</th>
+																	<th>@tailwindcss/typography</th>
+																	<th>shadcn/typeset</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>Sizing</td>
+																	<td>Fixed rem scale</td>
+																	<td>Container relative</td>
+																</tr>
+																<tr>
+																	<td>Streaming</td>
+																	<td>No stability contract</td>
+																	<td>Margin-block-start stable</td>
+																</tr>
+																<tr>
+																	<td>Dark Mode</td>
+																	<td>prose-invert modifier</td>
+																	<td>Native HSL tokens flip</td>
+																</tr>
+															</tbody>
+														</table>
+													</TypesetScroll>
+
+													{/* STREAMING BLOCKS */}
+													{streamBlocks.map((block) => (
+														<p key={block}>{block}</p>
+													))}
+
+													{/* OPT-OUT COMPONENT */}
+													<NotTypeset className="mt-6 p-4 rounded-xl bg-muted/60 border border-border flex items-center justify-between">
+														<div>
+															<span className="text-xs font-semibold text-foreground block">
+																Opted-Out Interactive Component
+															</span>
+															<span className="text-xs text-muted-foreground">
+																Wrapped inside NotTypeset / data-not-typeset.
+															</span>
+														</div>
+														<Button variant="default" size="sm">
+															Action
+														</Button>
+													</NotTypeset>
+												</Typeset>
+											</div>
+										</div>
+									) : slug === "select" ? (
 										<div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
 											{/* 1. SCROLLABLE LONG LIST SELECT (15+ ITEMS) */}
 											<div className="space-y-1.5">
@@ -496,50 +668,46 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 										</div>
 
 										<div className="space-y-4 py-2 flex flex-col items-stretch max-h-[420px] overflow-y-auto pr-1">
-											{slug === "select" ? (
-												<>
-													<div className="space-y-1">
-														<span className="text-[11px] font-medium text-zinc-400">
-															1. Scrollable 15+ Timezones
+											{slug === "typeset" ? (
+												<Typeset preset="docs" className="text-xs">
+													<h3 className="text-base font-bold text-white mb-1">Typeset Mobile</h3>
+													<p className="text-xs text-zinc-300">
+														Mobile typography powered by React Native NativeWind rhythm presets.
+													</p>
+													<blockquote className="my-2 border-l-2 border-teal-500 pl-3 text-xs italic text-zinc-400">
+														"Three controls: size, leading, flow."
+													</blockquote>
+													<pre className="my-2 p-2 rounded-lg bg-zinc-900 text-[11px] font-mono text-teal-400">
+														<code>bun add @school-os/ui</code>
+													</pre>
+													<NotTypeset className="p-3 bg-zinc-900 rounded-xl border border-zinc-800 mt-3">
+														<span className="text-xs font-semibold text-white">
+															Opt-out Component
 														</span>
-														<MotionSelect
-															value={scrollableSelect}
-															onValueChange={setScrollableSelect}
-														>
-															<SelectTrigger className="h-9 text-xs">
-																<SelectValue placeholder="Timezone..." />
-															</SelectTrigger>
-															<SelectContent className="max-h-48">
-																<SelectSearch placeholder="Filter 15+ timezones..." />
-																{timezones.map((tz) => (
-																	<SelectItem key={tz.value} value={tz.value}>
-																		{tz.label}
-																	</SelectItem>
-																))}
-															</SelectContent>
-														</MotionSelect>
-													</div>
-
-													<div className="space-y-1">
-														<span className="text-[11px] font-medium text-zinc-400">
-															2. Searchable Combobox
-														</span>
-														<MotionSelect
-															value={searchableSelect}
-															onValueChange={setSearchableSelect}
-														>
-															<SelectTrigger className="h-9 text-xs">
-																<SelectValue placeholder="Search country..." />
-															</SelectTrigger>
-															<SelectContent>
-																<SelectSearch placeholder="Filter..." />
-																<SelectItem value="us">United States 🇺🇸</SelectItem>
-																<SelectItem value="ca">Canada 🇨🇦</SelectItem>
-																<SelectItem value="uk">United Kingdom 🇬🇧</SelectItem>
-															</SelectContent>
-														</MotionSelect>
-													</div>
-												</>
+													</NotTypeset>
+												</Typeset>
+											) : slug === "select" ? (
+												<div className="space-y-1">
+													<span className="text-[11px] font-medium text-zinc-400">
+														1. Scrollable 15+ Timezones
+													</span>
+													<MotionSelect
+														value={scrollableSelect}
+														onValueChange={setScrollableSelect}
+													>
+														<SelectTrigger className="h-9 text-xs">
+															<SelectValue placeholder="Timezone..." />
+														</SelectTrigger>
+														<SelectContent className="max-h-48">
+															<SelectSearch placeholder="Filter 15+ timezones..." />
+															{timezones.map((tz) => (
+																<SelectItem key={tz.value} value={tz.value}>
+																	{tz.label}
+																</SelectItem>
+															))}
+														</SelectContent>
+													</MotionSelect>
+												</div>
 											) : slug === "input" ? (
 												<MotionInput
 													label="Verified Account Email"
@@ -599,7 +767,9 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 												? WEB_SELECT_CODE
 												: slug === "button"
 													? WEB_BUTTON_CODE
-													: WEB_TABS_CODE}
+													: slug === "typeset"
+														? WEB_TYPESET_CODE
+														: WEB_TABS_CODE}
 									</code>
 								</pre>
 							</div>
@@ -616,7 +786,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				</h2>
 				<Card className="border border-border bg-card p-4">
 					<div className="flex items-center justify-between font-mono text-xs bg-zinc-950 text-zinc-100 p-3 rounded-lg border border-zinc-800">
-						<code>bun add @school-os/ui motion</code>
+						<code>bun add @school-os/ui</code>
 						<Button
 							variant="ghost"
 							size="sm"
@@ -639,15 +809,15 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 			<section className="space-y-3">
 				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
 					<HugeiconsIcon icon={BrushIcon} size={18} strokeWidth={2} />
-					Colors & Design System
+					Colors & Rhythm System
 				</h2>
 				<Card className="border border-border bg-card p-6 space-y-3">
 					<p className="text-xs text-muted-foreground leading-relaxed">
-						Consumes native shadcn HSL semantic tokens (
-						<code className="font-mono text-foreground">--input</code>,{" "}
-						<code className="font-mono text-foreground">--ring</code>,{" "}
-						<code className="font-mono text-foreground">--destructive</code>). Automatic light/dark
-						mode adaptation.
+						Typeset uses 3 core rhythm variables:{" "}
+						<code className="font-mono text-foreground">--typeset-size</code>,{" "}
+						<code className="font-mono text-foreground">--typeset-leading</code>, and{" "}
+						<code className="font-mono text-foreground">--typeset-flow</code>. All headings,
+						spacing, and quotes derive from them.
 					</p>
 				</Card>
 			</section>
@@ -656,20 +826,19 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 			<section className="space-y-3">
 				<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
 					<HugeiconsIcon icon={AccessibilityIcon} size={18} strokeWidth={2} />
-					Accessibility (a11y)
+					Accessibility & Dark Mode
 				</h2>
 				<Card className="border border-border bg-card p-6 space-y-3">
 					<ul className="space-y-2 text-xs text-muted-foreground list-disc list-inside leading-relaxed">
 						<li>
-							<strong className="text-foreground font-mono">Keyboard Navigation:</strong> Fully
-							focusable with <code className="font-mono">Tab</code>,{" "}
-							<code className="font-mono">Enter</code>, and{" "}
-							<code className="font-mono">Escape</code> keys.
+							<strong className="text-foreground font-mono">Zero-Specificity Guards:</strong> Uses{" "}
+							<code className="font-mono">:where()</code> so standard Tailwind text utilities win
+							without needing <code className="font-mono">!important</code>.
 						</li>
 						<li>
-							<strong className="text-foreground font-mono">ARIA Attributes:</strong> Injects{" "}
-							<code className="font-mono">aria-invalid</code> when error is true and{" "}
-							<code className="font-mono">aria-expanded</code> on dropdown panel open.
+							<strong className="text-foreground font-mono">Streaming Append Stability:</strong>{" "}
+							Uses <code className="font-mono">margin-block-start</code> only so appending new
+							blocks during AI streaming does not reflow previous margins.
 						</li>
 					</ul>
 				</Card>

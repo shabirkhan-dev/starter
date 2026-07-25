@@ -31,6 +31,13 @@ export const MOBILE_COMPONENT_SLUGS = [
 		category: "Motion Components",
 		status: "Ready",
 	},
+	{
+		slug: "typeset",
+		name: "Typeset",
+		description: "Typography styling system for HTML & markdown with rhythm controls",
+		category: "Typography",
+		status: "New",
+	},
 ];
 
 export default function MobileUICatalogScreen() {
@@ -48,7 +55,7 @@ export default function MobileUICatalogScreen() {
 
 				<View className="gap-3">
 					<Text className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
-						Motion Components
+						Component System
 					</Text>
 
 					{MOBILE_COMPONENT_SLUGS.map((item) => (

@@ -1,17 +1,16 @@
 "use client";
 
-import * as React from "react";
+import { ArrowDown02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@school-os/ui/components/button";
+import { cn } from "@school-os/ui/lib/utils";
 import {
 	MessageScroller as MessageScrollerPrimitive,
 	useMessageScroller,
 	useMessageScrollerScrollable,
 	useMessageScrollerVisibility,
 } from "@shadcn/react/message-scroller";
-
-import { cn } from "@school-os/ui/lib/utils";
-import { Button } from "@school-os/ui/components/button";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowDown02Icon } from "@hugeicons/core-free-icons";
+import type * as React from "react";
 
 function MessageScrollerProvider(
 	props: React.ComponentProps<typeof MessageScrollerPrimitive.Provider>,
@@ -119,12 +118,12 @@ function MessageScrollerButton({
 }
 
 export {
-	MessageScrollerProvider,
 	MessageScroller,
-	MessageScrollerViewport,
+	MessageScrollerButton,
 	MessageScrollerContent,
 	MessageScrollerItem,
-	MessageScrollerButton,
+	MessageScrollerProvider,
+	MessageScrollerViewport,
 	useMessageScroller,
 	useMessageScrollerScrollable,
 	useMessageScrollerVisibility,

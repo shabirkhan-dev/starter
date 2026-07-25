@@ -1,9 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { Command as CommandPrimitive } from "cmdk";
-
-import { cn } from "@school-os/ui/lib/utils";
+import { SearchIcon, Tick02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
 	Dialog,
 	DialogContent,
@@ -12,8 +10,9 @@ import {
 	DialogTitle,
 } from "@school-os/ui/components/dialog";
 import { InputGroup, InputGroupAddon } from "@school-os/ui/components/input-group";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { SearchIcon, Tick02Icon } from "@hugeicons/core-free-icons";
+import { cn } from "@school-os/ui/lib/utils";
+import { Command as CommandPrimitive } from "cmdk";
+import type * as React from "react";
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
 	return (
@@ -176,11 +175,11 @@ function CommandShortcut({ className, ...props }: React.ComponentProps<"span">) 
 export {
 	Command,
 	CommandDialog,
-	CommandInput,
-	CommandList,
 	CommandEmpty,
 	CommandGroup,
+	CommandInput,
 	CommandItem,
-	CommandShortcut,
+	CommandList,
 	CommandSeparator,
+	CommandShortcut,
 };

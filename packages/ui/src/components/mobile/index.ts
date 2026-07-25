@@ -17,3 +17,14 @@ export {
 	TabsList as MobileTabsList,
 	TabsTrigger as MobileTabsTrigger,
 } from "./tabs";
+
+export {
+	MobileNotTypeset,
+	MobileTypeset,
+	MobileTypesetBlockquote,
+	MobileTypesetCode,
+	MobileTypesetHeading,
+	MobileTypesetParagraph,
+	MobileTypesetScroll,
+	useMobileTypeset,
+} from "./typeset";

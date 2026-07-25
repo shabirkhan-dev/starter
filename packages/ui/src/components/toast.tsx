@@ -1,19 +1,18 @@
 "use client";
 
-import * as React from "react";
 import { Toast as ToastPrimitive } from "@base-ui/react/toast";
-
-import { cn } from "@school-os/ui/lib/utils";
-import { Button } from "@school-os/ui/components/button";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
+	Alert02Icon,
 	Cancel01Icon,
 	CheckmarkCircle02Icon,
 	InformationCircleIcon,
-	Alert02Icon,
-	MultiplicationSignCircleIcon,
 	Loading03Icon,
+	MultiplicationSignCircleIcon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@school-os/ui/components/button";
+import { cn } from "@school-os/ui/lib/utils";
+import type * as React from "react";
 
 const toast = ToastPrimitive.createToastManager();
 
@@ -221,17 +220,17 @@ const createToastManager = ToastPrimitive.createToastManager;
 const useToastManager = ToastPrimitive.useToastManager;
 
 export {
-	Toaster,
+	createToastManager,
 	Toast,
 	ToastAction,
 	ToastClose,
 	ToastContent,
 	ToastDescription,
+	Toaster,
 	ToastPortal,
 	ToastProvider,
 	ToastTitle,
 	ToastViewport,
-	createToastManager,
 	toast,
 	useToastManager,
 };

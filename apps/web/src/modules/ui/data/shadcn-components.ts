@@ -3,6 +3,7 @@ import {
 	Grid02Icon,
 	InputTextIcon,
 	Layers01Icon,
+	TextFontIcon,
 } from "@hugeicons/core-free-icons";
 import type { HugeiconsIcon } from "@hugeicons/react";
 import type { ComponentProps } from "react";
@@ -58,6 +59,14 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 				category: "Motion",
 				icon: ArrowDown01Icon,
 				badge: "Ready",
+			},
+			{
+				id: "typeset",
+				name: "Typeset",
+				description: "Typography styling system for HTML & rendered markdown with rhythm presets",
+				category: "Typography",
+				icon: TextFontIcon,
+				badge: "New",
 			},
 		],
 	},

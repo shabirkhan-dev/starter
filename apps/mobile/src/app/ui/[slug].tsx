@@ -14,6 +14,13 @@ import {
 	Input,
 	MobileButton,
 	MobileMotionButton,
+	MobileNotTypeset,
+	MobileTypeset,
+	MobileTypesetBlockquote,
+	MobileTypesetCode,
+	MobileTypesetHeading,
+	MobileTypesetParagraph,
+	MobileTypesetScroll,
 	MotionInput,
 	MotionSelect,
 	MotionTabs,
@@ -28,6 +35,7 @@ const TABS_CODE_EXAMPLE = `import { MotionTabs } from "@school-os/ui/components/
 const BUTTON_CODE_EXAMPLE = `import { MobileMotionButton } from "@school-os/ui/components/mobile";`;
 const INPUT_CODE_EXAMPLE = `import { MobileMotionInput } from "@school-os/ui/components/mobile";`;
 const SELECT_CODE_EXAMPLE = `import { MobileMotionSelect } from "@school-os/ui/components/mobile";`;
+const TYPESET_CODE_EXAMPLE = `import { MobileTypeset, MobileTypesetHeading, MobileTypesetParagraph } from "@school-os/ui/components/mobile";`;
 
 export default function ComponentSlugScreen() {
 	const { slug = "tabs" } = useLocalSearchParams<{ slug: string }>();
@@ -46,6 +54,10 @@ export default function ComponentSlugScreen() {
 	const [errorSelectVal, setErrorSelectVal] = useState("");
 	const [selectErrorState, setSelectErrorState] = useState(true);
 	const [rtlSelectVal, setRtlSelectVal] = useState("ar");
+
+	const [mobileTypesetPreset, setMobileTypesetPreset] = useState<"docs" | "chat" | "reading">(
+		"docs",
+	);
 
 	const [buttonLoading, setButtonLoading] = useState(false);
 	const [okState, setOkState] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -108,6 +120,7 @@ export default function ComponentSlugScreen() {
 	const isButtonSlug = slug === "button";
 	const isInputSlug = slug === "input";
 	const isSelectSlug = slug === "select";
+	const isTypesetSlug = slug === "typeset";
 
 	const componentTitle = isInputSlug
 		? "Motion Input"
@@ -115,7 +128,9 @@ export default function ComponentSlugScreen() {
 			? "Motion Select"
 			: isButtonSlug
 				? "Motion Button"
-				: "Motion Tabs";
+				: isTypesetSlug
+					? "Typeset System"
+					: "Motion Tabs";
 
 	return (
 		<SafeAreaView className="flex-1 bg-zinc-950">
@@ -151,7 +166,59 @@ export default function ComponentSlugScreen() {
 				</View>
 
 				{activePlatformView === "preview" ? (
-					isInputSlug ? (
+					isTypesetSlug ? (
+						/* TYPESET MOBILE PREVIEW & EXTENSIVE EXAMPLES */
+						<View className="gap-4">
+							<View className="items-center mb-2">
+								<MotionTabs
+									value={mobileTypesetPreset}
+									onValueChange={(v) => setMobileTypesetPreset(v as "docs" | "chat" | "reading")}
+									variant="pill"
+								>
+									<MotionTabsList>
+										<MotionTabsTrigger value="docs">Docs</MotionTabsTrigger>
+										<MotionTabsTrigger value="chat">Chat</MotionTabsTrigger>
+										<MotionTabsTrigger value="reading">Reading</MotionTabsTrigger>
+									</MotionTabsList>
+								</MotionTabs>
+							</View>
+
+							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+								<MobileTypeset preset={mobileTypesetPreset}>
+									<MobileTypesetHeading level={1}>Typeset Mobile</MobileTypesetHeading>
+									<MobileTypesetParagraph>
+										Typeset is a single typography rhythm system for HTML and rendered Markdown
+										across Web and React Native Expo.
+									</MobileTypesetParagraph>
+
+									<MobileTypesetHeading level={2}>Rhythm Controls</MobileTypesetHeading>
+									<MobileTypesetParagraph>
+										Three core controls derive all sizes: size, leading, and flow.
+									</MobileTypesetParagraph>
+
+									<MobileTypesetBlockquote>
+										"Three controls: size, leading, and flow. Everything else derives from them."
+									</MobileTypesetBlockquote>
+
+									<MobileTypesetCode block>bun add @school-os/ui</MobileTypesetCode>
+
+									<MobileTypesetScroll>
+										<View className="flex-row items-center gap-6 p-2">
+											<Text className="text-xs font-mono text-zinc-300">Metric</Text>
+											<Text className="text-xs font-mono text-zinc-300">Web CSS</Text>
+											<Text className="text-xs font-mono text-zinc-300">Mobile UniWind</Text>
+										</View>
+									</MobileTypesetScroll>
+
+									<MobileNotTypeset className="mt-4 p-3 bg-zinc-950 rounded-lg border border-zinc-800">
+										<Text className="text-xs font-semibold text-white">
+											Opted Out Component (NotTypeset)
+										</Text>
+									</MobileNotTypeset>
+								</MobileTypeset>
+							</View>
+						</View>
+					) : isInputSlug ? (
 						/* INPUT MOBILE PREVIEW & EXTENSIVE EXAMPLES */
 						<View className="gap-4">
 							{/* EX 1: SUCCESS ANIMATED CHECKMARK */}
@@ -423,7 +490,9 @@ export default function ComponentSlugScreen() {
 									? SELECT_CODE_EXAMPLE
 									: isButtonSlug
 										? BUTTON_CODE_EXAMPLE
-										: TABS_CODE_EXAMPLE}
+										: isTypesetSlug
+											? TYPESET_CODE_EXAMPLE
+											: TABS_CODE_EXAMPLE}
 						</Text>
 					</View>
 				)}

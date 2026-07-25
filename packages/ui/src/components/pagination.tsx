@@ -1,13 +1,12 @@
-import * as React from "react";
-
-import { cn } from "@school-os/ui/lib/utils";
-import { Button } from "@school-os/ui/components/button";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
 	ArrowLeft01Icon,
 	ArrowRight01Icon,
 	MoreHorizontalCircle01Icon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@school-os/ui/components/button";
+import { cn } from "@school-os/ui/lib/utils";
+import type * as React from "react";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
 	return (

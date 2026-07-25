@@ -1,12 +1,11 @@
 "use client";
 
-import * as React from "react";
-import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
-
-import { cn } from "@school-os/ui/lib/utils";
-import { Button } from "@school-os/ui/components/button";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@school-os/ui/components/button";
+import { cn } from "@school-os/ui/lib/utils";
+import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
+import * as React from "react";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -222,11 +221,11 @@ function CarouselNext({
 }
 
 export {
-	type CarouselApi,
 	Carousel,
+	type CarouselApi,
 	CarouselContent,
 	CarouselItem,
-	CarouselPrevious,
 	CarouselNext,
+	CarouselPrevious,
 	useCarousel,
 };
