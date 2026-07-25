@@ -41,6 +41,7 @@ export default function ComponentSlugScreen() {
 
 	const [roleSelect, setRoleSelect] = useState("admin");
 	const [searchableSelect, setSearchableSelect] = useState("us");
+	const [scrollableSelect, setScrollableSelect] = useState("utc");
 	const [groupedSelect, setGroupedSelect] = useState("nextjs");
 	const [errorSelectVal, setErrorSelectVal] = useState("");
 	const [selectErrorState, setSelectErrorState] = useState(true);
@@ -65,6 +66,24 @@ export default function ComponentSlugScreen() {
 		{ value: "uk", label: "United Kingdom 🇬🇧" },
 		{ value: "de", label: "Germany 🇩🇪" },
 		{ value: "jp", label: "Japan 🇯🇵" },
+	];
+
+	const timezoneOptions = [
+		{ value: "utc", label: "UTC (Coordinated Universal Time)" },
+		{ value: "est", label: "US Eastern Time (EST / UTC-5)" },
+		{ value: "cst", label: "US Central Time (CST / UTC-6)" },
+		{ value: "mst", label: "US Mountain Time (MST / UTC-7)" },
+		{ value: "pst", label: "US Pacific Time (PST / UTC-8)" },
+		{ value: "gmt", label: "Europe London (GMT / UTC+0)" },
+		{ value: "cet", label: "Europe Paris (CET / UTC+1)" },
+		{ value: "eet", label: "Europe Athens (EET / UTC+2)" },
+		{ value: "gst", label: "Asia Dubai (GST / UTC+4)" },
+		{ value: "ist", label: "Asia India (IST / UTC+5:30)" },
+		{ value: "sgt", label: "Asia Singapore (SGT / UTC+8)" },
+		{ value: "jst", label: "Asia Tokyo (JST / UTC+9)" },
+		{ value: "kst", label: "Asia Seoul (KST / UTC+9)" },
+		{ value: "aest", label: "Australia Sydney (AEST / UTC+10)" },
+		{ value: "nzst", label: "New Zealand (NZST / UTC+12)" },
 	];
 
 	const groupedTechOptions = [
@@ -201,9 +220,23 @@ export default function ComponentSlugScreen() {
 					) : isSelectSlug ? (
 						/* SELECT MOBILE PREVIEW & EXTENSIVE EXAMPLES */
 						<View style={styles.previewSection}>
-							{/* EX 1: SEARCHABLE COMBOBOX SELECT */}
+							{/* EX 1: SCROLLABLE LONG LIST (15+ TIMEZONES) */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>1. Searchable Filter Combobox Select:</Text>
+								<Text style={styles.sectionLabel}>
+									1. Scrollable Long List (15+ World Timezones):
+								</Text>
+								<MotionSelect
+									label="Select World Timezone"
+									options={timezoneOptions}
+									value={scrollableSelect}
+									onValueChange={setScrollableSelect}
+									searchable
+								/>
+							</View>
+
+							{/* EX 2: SEARCHABLE COMBOBOX SELECT */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>2. Searchable Filter Combobox Select:</Text>
 								<MotionSelect
 									label="Select Country"
 									options={countryOptions}
@@ -213,9 +246,9 @@ export default function ComponentSlugScreen() {
 								/>
 							</View>
 
-							{/* EX 2: GROUPED SELECT */}
+							{/* EX 3: GROUPED SELECT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>2. Grouped Technologies Select:</Text>
+								<Text style={styles.sectionLabel}>3. Grouped Technologies Select:</Text>
 								<MotionSelect
 									label="Stack Target"
 									options={groupedTechOptions}
@@ -224,9 +257,9 @@ export default function ComponentSlugScreen() {
 								/>
 							</View>
 
-							{/* EX 3: ERROR STATE SELECT */}
+							{/* EX 4: ERROR STATE SELECT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>3. Invalid / Error State Select:</Text>
+								<Text style={styles.sectionLabel}>4. Invalid / Error State Select:</Text>
 								<MotionSelect
 									label="Required Selection"
 									options={roleOptions}
@@ -245,9 +278,9 @@ export default function ComponentSlugScreen() {
 								</View>
 							</View>
 
-							{/* EX 4: RTL SELECT */}
+							{/* EX 5: RTL SELECT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>4. RTL Support (Right-to-Left Layout):</Text>
+								<Text style={styles.sectionLabel}>5. RTL Support (Right-to-Left Layout):</Text>
 								<MotionSelect
 									label="اختر اللغة"
 									options={rtlOptions}
@@ -257,9 +290,9 @@ export default function ComponentSlugScreen() {
 								/>
 							</View>
 
-							{/* EX 5: UNANIMATED BASE SELECT */}
+							{/* EX 6: UNANIMATED BASE SELECT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>5. Base Un-animated Select Primitive:</Text>
+								<Text style={styles.sectionLabel}>6. Base Un-animated Select Primitive:</Text>
 								<Select options={roleOptions} value={roleSelect} onValueChange={setRoleSelect} />
 							</View>
 						</View>

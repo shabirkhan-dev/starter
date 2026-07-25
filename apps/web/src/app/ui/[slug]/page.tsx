@@ -24,11 +24,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Badge } from "@school-os/ui/components/badge";
 import { Button } from "@school-os/ui/components/button";
 import { Card, CardContent } from "@school-os/ui/components/card";
-import {
-	type ButtonState,
-	MotionButton,
-	StatefulButton,
-} from "@school-os/ui/components/motion/button";
+import { type ButtonState, StatefulButton } from "@school-os/ui/components/motion/button";
 import { MotionInput } from "@school-os/ui/components/motion/input";
 import {
 	MotionSelect,
@@ -99,24 +95,23 @@ const WEB_SELECT_CODE = `import {
 } from "@school-os/ui/components/motion/select";
 
 export function MotionSelectDemo() {
-  const [val, setVal] = useState("nextjs");
+  const [timezone, setTimezone] = useState("utc");
 
   return (
-    <MotionSelect value={val} onValueChange={setVal}>
+    <MotionSelect value={timezone} onValueChange={setTimezone}>
       <SelectTrigger>
-        <SelectValue placeholder="Select framework..." />
+        <SelectValue placeholder="Select world timezone..." />
       </SelectTrigger>
-      <SelectContent>
-        <SelectSearch placeholder="Filter frameworks..." />
-        <SelectGroup>
-          <SelectLabel font-mono font-bold>Frontend</SelectLabel>
-          <SelectItem value="nextjs">Next.js 16 (App Router)</SelectItem>
-          <SelectItem value="expo">Expo Router (React Native)</SelectItem>
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel font-mono font-bold>Backend</SelectLabel>
-          <SelectItem value="nestjs">NestJS API Spine</SelectItem>
-        </SelectGroup>
+      <SelectContent className="max-h-60 overflow-y-auto">
+        <SelectSearch placeholder="Search 15+ timezones..." />
+        <SelectItem value="utc">UTC (Coordinated Universal Time)</SelectItem>
+        <SelectItem value="est">US Eastern Time (EST / UTC-5)</SelectItem>
+        <SelectItem value="pst">US Pacific Time (PST / UTC-8)</SelectItem>
+        <SelectItem value="gmt">Europe London (GMT / UTC+0)</SelectItem>
+        <SelectItem value="cet">Europe Paris (CET / UTC+1)</SelectItem>
+        <SelectItem value="jst">Asia Tokyo (JST / UTC+9)</SelectItem>
+        <SelectItem value="gst">Asia Dubai (GST / UTC+4)</SelectItem>
+        <SelectItem value="sgt">Asia Singapore (SGT / UTC+8)</SelectItem>
       </SelectContent>
     </MotionSelect>
   );
@@ -131,14 +126,15 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 
 	const [emailValue, setEmailValue] = useState("shabir@school-os.dev");
 	const [errorInputVal, setErrorInputVal] = useState("invalid domain!");
-	const [inputErrorState, _setInputErrorState] = useState(true);
+	const [_inputErrorState, _setInputErrorState] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
 
 	const [groupedSelect, setGroupedSelect] = useState("nextjs");
 	const [searchableSelect, setSearchableSelect] = useState("us");
+	const [scrollableSelect, setScrollableSelect] = useState("utc");
 	const [errorSelect, setErrorSelect] = useState("");
 	const [selectErrorState, setSelectErrorState] = useState(true);
-	const [rtlSelect, setRtlSelect] = useState("ar");
+	const [_rtlSelect, _setRtlSelect] = useState("ar");
 
 	const [okState, setOkState] = useState<ButtonState>("idle");
 	const [errState, setErrState] = useState<ButtonState>("idle");
@@ -171,6 +167,24 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 		setCmdCopied(true);
 		setTimeout(() => setCmdCopied(false), 2000);
 	};
+
+	const timezones = [
+		{ value: "utc", label: "UTC (Coordinated Universal Time)" },
+		{ value: "est", label: "US Eastern Time (EST / UTC-5)" },
+		{ value: "cst", label: "US Central Time (CST / UTC-6)" },
+		{ value: "pst", label: "US Pacific Time (PST / UTC-8)" },
+		{ value: "gmt", label: "Europe London (GMT / UTC+0)" },
+		{ value: "cet", label: "Europe Paris (CET / UTC+1)" },
+		{ value: "eet", label: "Europe Athens (EET / UTC+2)" },
+		{ value: "gst", label: "Asia Dubai (GST / UTC+4)" },
+		{ value: "ist", label: "Asia India (IST / UTC+5:30)" },
+		{ value: "sgt", label: "Asia Singapore (SGT / UTC+8)" },
+		{ value: "jst", label: "Asia Tokyo (JST / UTC+9)" },
+		{ value: "kst", label: "Asia Seoul (KST / UTC+9)" },
+		{ value: "aest", label: "Australia Sydney (AEST / UTC+10)" },
+		{ value: "nzst", label: "New Zealand Auckland (NZST / UTC+12)" },
+		{ value: "brt", label: "America São Paulo (BRT / UTC-3)" },
+	];
 
 	return (
 		<div className="space-y-12 max-w-4xl mx-auto py-4 pb-16">
@@ -228,7 +242,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 					</h1>
 					<p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
 						{slug === "select"
-							? "Compositional motion select supporting grouped headers, searchable filter inputs, scrollable lists, invalid error shake, and RTL alignment."
+							? "Compositional motion select supporting scrollable long list containers (15+ items), grouped headers, searchable filter inputs, invalid error shake, and RTL alignment."
 							: slug === "input"
 								? "Shadcn motion input with error shake animations, animated checkmark path draw, left/right icon slots, and blur error messages."
 								: slug === "button"
@@ -246,7 +260,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 				</h2>
 				<p className="text-sm text-muted-foreground leading-relaxed">
 					{slug === "select"
-						? "Rabtx UI Motion Select delivers bouncy accordion corner flattening transitions with automatic viewport flip placement. Supports SelectGroup, SelectLabel, inline SelectSearch filtering, scrollable containers, error shakes, and RTL."
+						? "Rabtx UI Motion Select delivers bouncy accordion corner flattening transitions with automatic viewport flip placement. Supports SelectGroup, SelectLabel, inline SelectSearch filtering, scrollable 15+ long lists, error shakes, and RTL."
 						: slug === "input"
 							? "Rabtx UI Motion Input combines smooth focus border ring feedback with SVG checkmark path draw animations and automatic error shake physics. Includes full classNames customization and ARIA accessibility."
 							: slug === "button"
@@ -290,11 +304,32 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 									/* WEB PLATFORM SHOWCASE */
 									slug === "select" ? (
 										<div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
-											{/* 1. SEARCHABLE COMBOBOX SELECT */}
+											{/* 1. SCROLLABLE LONG LIST SELECT (15+ ITEMS) */}
 											<div className="space-y-1.5">
 												{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
 												<label className="text-xs font-medium text-foreground tracking-tight block">
-													1. Searchable Filter Combobox
+													1. Scrollable Long List (15+ World Timezones)
+												</label>
+												<MotionSelect value={scrollableSelect} onValueChange={setScrollableSelect}>
+													<SelectTrigger>
+														<SelectValue placeholder="Select timezone..." />
+													</SelectTrigger>
+													<SelectContent className="max-h-56">
+														<SelectSearch placeholder="Filter 15+ timezones..." />
+														{timezones.map((tz) => (
+															<SelectItem key={tz.value} value={tz.value}>
+																{tz.label}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</MotionSelect>
+											</div>
+
+											{/* 2. SEARCHABLE COMBOBOX SELECT */}
+											<div className="space-y-1.5">
+												{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
+												<label className="text-xs font-medium text-foreground tracking-tight block">
+													2. Searchable Filter Combobox
 												</label>
 												<MotionSelect value={searchableSelect} onValueChange={setSearchableSelect}>
 													<SelectTrigger>
@@ -311,11 +346,11 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 												</MotionSelect>
 											</div>
 
-											{/* 2. GROUPED SELECT */}
+											{/* 3. GROUPED SELECT */}
 											<div className="space-y-1.5">
 												{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
 												<label className="text-xs font-medium text-foreground tracking-tight block">
-													2. Grouped Categories Select
+													3. Grouped Categories Select
 												</label>
 												<MotionSelect value={groupedSelect} onValueChange={setGroupedSelect}>
 													<SelectTrigger>
@@ -336,11 +371,11 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 												</MotionSelect>
 											</div>
 
-											{/* 3. ERROR SHAKE SELECT */}
+											{/* 4. ERROR SHAKE SELECT */}
 											<div className="space-y-1.5">
 												{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
 												<label className="text-xs font-medium text-foreground tracking-tight block">
-													3. Invalid / Error State Select
+													4. Invalid / Error State Select
 												</label>
 												<MotionSelect
 													value={errorSelect}
@@ -364,24 +399,6 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 													{selectErrorState ? "Clear Select Error" : "Trigger Select Error"}
 												</Button>
 											</div>
-
-											{/* 4. RTL LAYOUT SELECT */}
-											<div className="space-y-1.5">
-												{/* biome-ignore lint/a11y/noLabelWithoutControl: section label */}
-												<label className="text-xs font-medium text-foreground tracking-tight block">
-													4. RTL Support (Right-to-Left Layout)
-												</label>
-												<MotionSelect value={rtlSelect} onValueChange={setRtlSelect} dir="rtl">
-													<SelectTrigger>
-														<SelectValue placeholder="اختر اللغة..." />
-													</SelectTrigger>
-													<SelectContent>
-														<SelectItem value="ar">العربية (Arabic RTL)</SelectItem>
-														<SelectItem value="fa">فارسی (Persian RTL)</SelectItem>
-														<SelectItem value="ur">اردو (Urdu RTL)</SelectItem>
-													</SelectContent>
-												</MotionSelect>
-											</div>
 										</div>
 									) : slug === "input" ? (
 										<div className="space-y-5 w-full max-w-md">
@@ -397,9 +414,7 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 												label="2. Workspace Domain (Error Shake & Blur)"
 												value={errorInputVal}
 												onChange={setErrorInputVal}
-												error={
-													inputErrorState ? "Domain contains invalid special characters" : undefined
-												}
+												error="Domain contains invalid special characters"
 												leftIcon={<HugeiconsIcon icon={UserIcon} size={16} strokeWidth={2} />}
 											/>
 
@@ -485,7 +500,29 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 												<>
 													<div className="space-y-1">
 														<span className="text-[11px] font-medium text-zinc-400">
-															1. Searchable Combobox Select
+															1. Scrollable 15+ Timezones
+														</span>
+														<MotionSelect
+															value={scrollableSelect}
+															onValueChange={setScrollableSelect}
+														>
+															<SelectTrigger className="h-9 text-xs">
+																<SelectValue placeholder="Timezone..." />
+															</SelectTrigger>
+															<SelectContent className="max-h-48">
+																<SelectSearch placeholder="Filter 15+ timezones..." />
+																{timezones.map((tz) => (
+																	<SelectItem key={tz.value} value={tz.value}>
+																		{tz.label}
+																	</SelectItem>
+																))}
+															</SelectContent>
+														</MotionSelect>
+													</div>
+
+													<div className="space-y-1">
+														<span className="text-[11px] font-medium text-zinc-400">
+															2. Searchable Combobox
 														</span>
 														<MotionSelect
 															value={searchableSelect}
@@ -502,73 +539,26 @@ export default function ComponentSlugPage({ params }: { params: Promise<{ slug: 
 															</SelectContent>
 														</MotionSelect>
 													</div>
-
-													<div className="space-y-1">
-														<span className="text-[11px] font-medium text-zinc-400">
-															2. Grouped Technologies
-														</span>
-														<MotionSelect value={groupedSelect} onValueChange={setGroupedSelect}>
-															<SelectTrigger className="h-9 text-xs">
-																<SelectValue placeholder="Select tech..." />
-															</SelectTrigger>
-															<SelectContent>
-																<SelectGroup>
-																	<SelectLabel>Frontend</SelectLabel>
-																	<SelectItem value="nextjs">Next.js 16</SelectItem>
-																	<SelectItem value="expo">Expo Router</SelectItem>
-																</SelectGroup>
-															</SelectContent>
-														</MotionSelect>
-													</div>
-
-													<div className="space-y-1">
-														<span className="text-[11px] font-medium text-zinc-400">
-															3. RTL Support
-														</span>
-														<MotionSelect value={rtlSelect} onValueChange={setRtlSelect} dir="rtl">
-															<SelectTrigger className="h-9 text-xs">
-																<SelectValue placeholder="اختر اللغة..." />
-															</SelectTrigger>
-															<SelectContent>
-																<SelectItem value="ar">العربية (RTL)</SelectItem>
-																<SelectItem value="fa">فارسی (RTL)</SelectItem>
-															</SelectContent>
-														</MotionSelect>
-													</div>
 												</>
 											) : slug === "input" ? (
-												<>
-													<MotionInput
-														label="Verified Account Email"
-														value={emailValue}
-														onChange={setEmailValue}
-														success
-														leftIcon={<HugeiconsIcon icon={Mail01Icon} size={15} />}
-													/>
-													<MotionInput
-														label="Workspace Domain"
-														value={errorInputVal}
-														onChange={setErrorInputVal}
-														error={inputErrorState ? "Invalid domain" : undefined}
-														leftIcon={<HugeiconsIcon icon={UserIcon} size={15} />}
-													/>
-												</>
+												<MotionInput
+													label="Verified Account Email"
+													value={emailValue}
+													onChange={setEmailValue}
+													success
+													leftIcon={<HugeiconsIcon icon={Mail01Icon} size={15} />}
+												/>
 											) : slug === "button" ? (
-												<>
-													<StatefulButton
-														state={okState}
-														variant="primary"
-														size="md"
-														onClick={() => runStatefulDemo("ok")}
-														loadingText="Saving"
-														successText="Saved"
-													>
-														Save changes
-													</StatefulButton>
-													<MotionButton variant="secondary" size="md">
-														Secondary
-													</MotionButton>
-												</>
+												<StatefulButton
+													state={okState}
+													variant="primary"
+													size="md"
+													onClick={() => runStatefulDemo("ok")}
+													loadingText="Saving"
+													successText="Saved"
+												>
+													Save changes
+												</StatefulButton>
 											) : (
 												<MotionTabs defaultValue="overview" variant="pill">
 													<MotionTabsList className="w-full justify-center">
