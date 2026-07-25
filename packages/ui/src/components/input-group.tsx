@@ -1,15 +1,15 @@
 "use client";
 
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+
+import { cn } from "@school-os/ui/lib/utils";
 import { Button } from "@school-os/ui/components/button";
 import { Input } from "@school-os/ui/components/input";
 import { Textarea } from "@school-os/ui/components/textarea";
-import { cn } from "@school-os/ui/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
-import type * as React from "react";
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
 	return (
-		// biome-ignore lint/a11y/useSemanticElements: shadcn InputGroup uses role=group; fieldset breaks layout
 		<div
 			data-slot="input-group"
 			role="group"
@@ -47,8 +47,6 @@ function InputGroupAddon({
 	...props
 }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
 	return (
-		// biome-ignore lint/a11y/useSemanticElements: shadcn addon uses role=group; fieldset breaks layout
-		// biome-ignore lint/a11y/useKeyWithClickEvents: click only focuses sibling input; not a custom control
 		<div
 			role="group"
 			data-slot="input-group-addon"
@@ -142,7 +140,7 @@ export {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupButton,
-	InputGroupInput,
 	InputGroupText,
+	InputGroupInput,
 	InputGroupTextarea,
 };
