@@ -1,8 +1,15 @@
-import { Cancel01Icon, EyeIcon, ViewOffIcon } from "@hugeicons/core-free-icons";
+import { Cancel01Icon, CheckIcon, EyeIcon, ViewOffIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
-import { useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, {
+	useAnimatedStyle,
+	useSharedValue,
+	withSequence,
+	withSpring,
+	withTiming,
+} from "react-native-reanimated";
 
 const SPRING_PRESS = {
 	stiffness: 500,
@@ -13,12 +20,15 @@ const SPRING_PRESS = {
 export interface MobileMotionInputProps {
 	label?: string;
 	error?: string | boolean;
+	success?: boolean;
 	placeholder?: string;
 	value?: string;
 	onChangeText?: (text: string) => void;
 	secureTextEntry?: boolean;
 	clearable?: boolean;
 	onClear?: () => void;
+	leftIcon?: React.ReactNode;
+	rightIcon?: React.ReactNode;
 	disabled?: boolean;
 	style?: object;
 }
@@ -26,12 +36,15 @@ export interface MobileMotionInputProps {
 export function MobileMotionInput({
 	label,
 	error,
+	success,
 	placeholder,
 	value,
 	onChangeText,
 	secureTextEntry = false,
 	clearable = false,
 	onClear,
+	leftIcon,
+	rightIcon,
 	disabled = false,
 	style,
 }: MobileMotionInputProps) {
@@ -39,19 +52,40 @@ export function MobileMotionInput({
 	const [showPassword, setShowPassword] = useState(false);
 
 	const scale = useSharedValue(1);
+	const shakeX = useSharedValue(0);
+	const borderProgress = useSharedValue(0);
+
+	const hasError = Boolean(error);
+
+	// Trigger error shake animation
+	// biome-ignore lint/correctness/useExhaustiveDependencies: trigger shake on error change
+	useEffect(() => {
+		if (hasError) {
+			shakeX.value = withSequence(
+				withTiming(-8, { duration: 60 }),
+				withTiming(8, { duration: 60 }),
+				withTiming(-6, { duration: 60 }),
+				withTiming(6, { duration: 60 }),
+				withTiming(-3, { duration: 60 }),
+				withTiming(0, { duration: 60 }),
+			);
+		}
+	}, [hasError]);
 
 	const handleFocus = () => {
 		setIsFocused(true);
-		scale.value = withSpring(1.01, SPRING_PRESS);
+		scale.value = withSpring(1.02, SPRING_PRESS);
+		borderProgress.value = withTiming(1, { duration: 200 });
 	};
 
 	const handleBlur = () => {
 		setIsFocused(false);
 		scale.value = withSpring(1, SPRING_PRESS);
+		borderProgress.value = withTiming(0, { duration: 200 });
 	};
 
-	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
+	const animatedWrapperStyle = useAnimatedStyle(() => ({
+		transform: [{ scale: scale.value }, { translateX: shakeX.value }],
 	}));
 
 	const isPassword = secureTextEntry;
@@ -63,16 +97,19 @@ export function MobileMotionInput({
 			<Animated.View
 				style={[
 					styles.inputWrapper,
-					isFocused && styles.focused,
-					error ? styles.errorBorder : undefined,
+					isFocused && styles.focusedBorder,
+					success && styles.successBorder,
+					hasError && styles.errorBorder,
 					disabled && styles.disabled,
-					animatedStyle,
+					animatedWrapperStyle,
 					style,
 				]}
 			>
+				{leftIcon && <View style={styles.leftSlot}>{leftIcon}</View>}
+
 				<TextInput
 					placeholder={placeholder}
-					placeholderTextColor="#a1a1aa"
+					placeholderTextColor="#71717a"
 					value={value}
 					onChangeText={onChangeText}
 					onFocus={handleFocus}
@@ -82,13 +119,15 @@ export function MobileMotionInput({
 					style={styles.input}
 				/>
 
-				{clearable && value && (
+				{success ? (
+					<View style={styles.iconButton}>
+						<HugeiconsIcon icon={CheckIcon} size={16} color="#10b981" />
+					</View>
+				) : clearable && value ? (
 					<Pressable onPress={onClear} hitSlop={8} style={styles.iconButton}>
 						<HugeiconsIcon icon={Cancel01Icon} size={15} color="#a1a1aa" />
 					</Pressable>
-				)}
-
-				{isPassword && (
+				) : isPassword ? (
 					<Pressable
 						onPress={() => setShowPassword(!showPassword)}
 						hitSlop={8}
@@ -96,7 +135,9 @@ export function MobileMotionInput({
 					>
 						<HugeiconsIcon icon={showPassword ? ViewOffIcon : EyeIcon} size={16} color="#a1a1aa" />
 					</Pressable>
-				)}
+				) : rightIcon ? (
+					<View style={styles.rightSlot}>{rightIcon}</View>
+				) : null}
 			</Animated.View>
 
 			{typeof error === "string" && <Text style={styles.errorText}>{error}</Text>}
@@ -124,14 +165,23 @@ const styles = StyleSheet.create({
 		backgroundColor: "#18181b",
 		paddingHorizontal: 12,
 	},
-	focused: {
+	focusedBorder: {
 		borderColor: "#ffffff",
+	},
+	successBorder: {
+		borderColor: "#10b981",
 	},
 	errorBorder: {
 		borderColor: "#ef4444",
 	},
 	disabled: {
 		opacity: 0.5,
+	},
+	leftSlot: {
+		marginRight: 8,
+	},
+	rightSlot: {
+		marginLeft: 8,
 	},
 	input: {
 		flex: 1,
@@ -145,5 +195,6 @@ const styles = StyleSheet.create({
 	errorText: {
 		fontSize: 11,
 		color: "#ef4444",
+		fontWeight: "500",
 	},
 });

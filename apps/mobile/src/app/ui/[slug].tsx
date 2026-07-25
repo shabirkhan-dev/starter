@@ -1,4 +1,10 @@
-import { ArrowRightIcon, SparklesIcon } from "@hugeicons/core-free-icons";
+import {
+	ArrowRightIcon,
+	Mail01Icon,
+	Search01Icon,
+	SparklesIcon,
+	UserIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -6,6 +12,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
 	Input,
+	MobileButton,
 	MobileMotionButton,
 	MotionInput,
 	MotionSelect,
@@ -19,50 +26,23 @@ import {
 
 const TABS_CODE_EXAMPLE = `import { MotionTabs } from "@school-os/ui/components/mobile";`;
 const BUTTON_CODE_EXAMPLE = `import { MobileMotionButton } from "@school-os/ui/components/mobile";`;
-
-const INPUT_CODE_EXAMPLE = `import { MotionInput } from "@school-os/ui/components/mobile";
-
-export function MobileInputDemo() {
-  const [val, setVal] = useState("john.doe@example.com");
-  return (
-    <MotionInput
-      label="Email Address"
-      placeholder="you@example.com"
-      value={val}
-      onChangeText={setVal}
-      clearable
-      onClear={() => setVal("")}
-    />
-  );
-}`;
-
-const SELECT_CODE_EXAMPLE = `import { MotionSelect } from "@school-os/ui/components/mobile";
-
-export function MobileSelectDemo() {
-  const [val, setVal] = useState("nextjs");
-  return (
-    <MotionSelect
-      label="Framework Target"
-      options={[
-        { value: "nextjs", label: "Next.js 16 (App Router)" },
-        { value: "expo", label: "Expo Router (React Native)" }
-      ]}
-      value={val}
-      onValueChange={setVal}
-    />
-  );
-}`;
+const INPUT_CODE_EXAMPLE = `import { MobileMotionInput } from "@school-os/ui/components/mobile";`;
+const SELECT_CODE_EXAMPLE = `import { MobileMotionSelect } from "@school-os/ui/components/mobile";`;
 
 export default function ComponentSlugScreen() {
 	const { slug = "tabs" } = useLocalSearchParams<{ slug: string }>();
 	const [activePlatformView, setActivePlatformView] = useState<"preview" | "code">("preview");
 
-	const [inputValue, setInputValue] = useState("john.doe@example.com");
-	const [passwordValue, setPasswordValue] = useState("secret123");
-	const [inputError, setInputError] = useState(false);
-	const [selectValue, setSelectValue] = useState("nextjs");
+	const [emailVal, setEmailVal] = useState("shabir@school-os.dev");
+	const [errorInputVal, setErrorInputVal] = useState("invalid domain!");
+	const [inputErrorState, setInputErrorState] = useState(true);
+	const [searchVal, setSearchVal] = useState("");
+	const [passwordVal, setPasswordVal] = useState("secret123");
 
-	const [_buttonLoading, _setButtonLoading] = useState(false);
+	const [roleSelect, setRoleSelect] = useState("admin");
+	const [envSelect, setEnvSelect] = useState("production");
+
+	const [buttonLoading, setButtonLoading] = useState(false);
 	const [okState, setOkState] = useState<"idle" | "loading" | "success" | "error">("idle");
 	const [errState, setErrState] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -75,11 +55,16 @@ export default function ComponentSlugScreen() {
 		}, 1400);
 	};
 
-	const frameworkOptions = [
-		{ value: "nextjs", label: "Next.js 16 (App Router)" },
-		{ value: "expo", label: "Expo Router (React Native)" },
-		{ value: "turborepo", label: "Turborepo + Bun Monorepo" },
-		{ value: "nestjs", label: "NestJS Backend Spine" },
+	const roleOptions = [
+		{ value: "admin", label: "Administrator (Full Access)" },
+		{ value: "developer", label: "Developer (API Keys & Logs)" },
+		{ value: "viewer", label: "Viewer (Read-Only)" },
+	];
+
+	const envOptions = [
+		{ value: "production", label: "Production Cluster (Neon DB)" },
+		{ value: "staging", label: "Staging Preview (Vercel)" },
+		{ value: "local", label: "Local Dev Container (Bun)" },
 	];
 
 	const isButtonSlug = slug === "button";
@@ -125,72 +110,114 @@ export default function ComponentSlugScreen() {
 
 				{activePlatformView === "preview" ? (
 					isInputSlug ? (
-						/* INPUT MOBILE PREVIEW */
+						/* INPUT MOBILE PREVIEW & EXTENSIVE EXAMPLES */
 						<View style={styles.previewSection}>
+							{/* EX 1: SUCCESS ANIMATED CHECKMARK */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Reanimated Focus Scale & Clear Input:</Text>
-								<View style={styles.buttonList}>
-									<MotionInput
-										label="Email Address"
-										placeholder="you@example.com"
-										value={inputValue}
-										onChangeText={setInputValue}
-										clearable
-										onClear={() => setInputValue("")}
-										error={inputError ? "Invalid email format" : undefined}
-									/>
+								<Text style={styles.sectionLabel}>
+									1. Verified Account Email (Success Checkmark):
+								</Text>
+								<MotionInput
+									label="Verified Email"
+									placeholder="you@example.com"
+									value={emailVal}
+									onChangeText={setEmailVal}
+									success
+									leftIcon={<HugeiconsIcon icon={Mail01Icon} size={16} color="#a1a1aa" />}
+								/>
+							</View>
 
-									<MotionInput
-										label="Account Password"
-										secureTextEntry
-										value={passwordValue}
-										onChangeText={setPasswordValue}
-									/>
-
+							{/* EX 2: ERROR REANIMATED SHAKE */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>2. Error Shake & Message:</Text>
+								<MotionInput
+									label="Workspace Domain"
+									value={errorInputVal}
+									onChangeText={setErrorInputVal}
+									error={inputErrorState ? "Domain contains invalid characters" : undefined}
+									leftIcon={<HugeiconsIcon icon={UserIcon} size={16} color="#a1a1aa" />}
+								/>
+								<View style={{ marginTop: 8 }}>
 									<MobileMotionButton
 										variant="outline"
 										size="sm"
-										onPress={() => setInputError(!inputError)}
+										onPress={() => setInputErrorState(!inputErrorState)}
 									>
-										{inputError ? "Clear Error" : "Toggle Shake Error"}
+										{inputErrorState ? "Clear Error State" : "Re-trigger Error Shake"}
 									</MobileMotionButton>
 								</View>
 							</View>
 
+							{/* EX 3: SEARCH WITH LEFT & RIGHT ICON */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Base Primitive Input:</Text>
-								<Input placeholder="Base un-animated TextInput..." />
+								<Text style={styles.sectionLabel}>3. Search Bar with Clear Button:</Text>
+								<MotionInput
+									label="Global Search"
+									placeholder="Search components or icons..."
+									value={searchVal}
+									onChangeText={setSearchVal}
+									clearable
+									onClear={() => setSearchVal("")}
+									leftIcon={<HugeiconsIcon icon={Search01Icon} size={16} color="#a1a1aa" />}
+								/>
+							</View>
+
+							{/* EX 4: PASSWORD VISIBILITY TOGGLE */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>
+									4. Password Input with Visibility Eye Toggle:
+								</Text>
+								<MotionInput
+									label="Account Security Password"
+									secureTextEntry
+									value={passwordVal}
+									onChangeText={setPasswordVal}
+								/>
+							</View>
+
+							{/* EX 5: UNANIMATED BASE PRIMITIVE */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>5. Un-animated Base Primitive Input:</Text>
+								<Input placeholder="Standard TextInput fallback..." />
 							</View>
 						</View>
 					) : isSelectSlug ? (
-						/* SELECT MOBILE PREVIEW */
+						/* SELECT MOBILE PREVIEW & EXTENSIVE EXAMPLES */
 						<View style={styles.previewSection}>
+							{/* EX 1: USER ROLE SELECT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Reanimated Bottom Sheet Select Picker:</Text>
-								<View style={styles.buttonList}>
-									<MotionSelect
-										label="Target Framework"
-										options={frameworkOptions}
-										value={selectValue}
-										onValueChange={setSelectValue}
-									/>
-								</View>
+								<Text style={styles.sectionLabel}>1. User Role & Permissions Select:</Text>
+								<MotionSelect
+									label="Select User Role"
+									options={roleOptions}
+									value={roleSelect}
+									onValueChange={setRoleSelect}
+								/>
 							</View>
 
+							{/* EX 2: DEPLOYMENT ENVIRONMENT SELECT */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Base Primitive Select:</Text>
-								<Select
-									options={frameworkOptions}
-									value={selectValue}
-									onValueChange={setSelectValue}
+								<Text style={styles.sectionLabel}>2. Target Deployment Environment:</Text>
+								<MotionSelect
+									label="Deployment Cluster"
+									options={envOptions}
+									value={envSelect}
+									onValueChange={setEnvSelect}
 								/>
+							</View>
+
+							{/* EX 3: UNANIMATED BASE SELECT */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>3. Base Un-animated Select Primitive:</Text>
+								<Select options={roleOptions} value={roleSelect} onValueChange={setRoleSelect} />
 							</View>
 						</View>
 					) : isButtonSlug ? (
-						/* BUTTON MOBILE PREVIEW */
+						/* BUTTON MOBILE PREVIEW & EXTENSIVE EXAMPLES */
 						<View style={styles.previewSection}>
+							{/* EX 1: STATEFUL BUTTON */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Cascading Text Stagger & Icon Slot Swap:</Text>
+								<Text style={styles.sectionLabel}>1. Cascading Stagger & Icon Slot Swap:</Text>
 								<View style={styles.buttonList}>
 									<StatefulButton
 										state={okState}
@@ -216,8 +243,9 @@ export default function ComponentSlugScreen() {
 								</View>
 							</View>
 
+							{/* EX 2: SIZES */}
 							<View style={styles.playgroundCard}>
-								<Text style={styles.sectionLabel}>Button Sizes:</Text>
+								<Text style={styles.sectionLabel}>2. Button Size Matrix:</Text>
 								<View style={styles.buttonRow}>
 									<MobileMotionButton variant="primary" size="sm">
 										Small Pill
@@ -230,6 +258,30 @@ export default function ComponentSlugScreen() {
 									</MobileMotionButton>
 								</View>
 							</View>
+
+							{/* EX 3: VARIANTS */}
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>3. Button Styling Variants:</Text>
+								<View style={styles.buttonList}>
+									<MobileMotionButton
+										loading={buttonLoading}
+										variant="primary"
+										size="md"
+										onPress={() => setButtonLoading(!buttonLoading)}
+									>
+										{buttonLoading ? "Processing State..." : "Click for Loader"}
+									</MobileMotionButton>
+									<MobileMotionButton variant="outline" size="md">
+										Outline Reflection
+									</MobileMotionButton>
+									<MobileMotionButton variant="destructive" size="md">
+										Destructive Action
+									</MobileMotionButton>
+									<MobileButton variant="outline" size="md">
+										Base Primitive
+									</MobileButton>
+								</View>
+							</View>
 						</View>
 					) : (
 						/* TABS MOBILE PREVIEW */
@@ -239,6 +291,7 @@ export default function ComponentSlugScreen() {
 									<MotionTabsList>
 										<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
 										<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
+										<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
 									</MotionTabsList>
 									<View style={styles.contentContainer}>
 										<MotionTabsContent value="overview" style={styles.cardInner}>
