@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft01Icon, Moon01Icon, SparklesIcon, Sun01Icon } from "@hugeicons/core-free-icons";
+import { ArrowLeft01Icon, Moon01Icon, Sun01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Badge } from "@school-os/ui/components/badge";
 import {
@@ -13,8 +13,6 @@ import {
 } from "@school-os/ui/components/breadcrumb";
 import { Button } from "@school-os/ui/components/button";
 import { SidebarTrigger } from "@school-os/ui/components/sidebar";
-import { cn } from "@school-os/ui/lib/utils";
-import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 
 interface RabtxTopbarProps {
@@ -23,7 +21,7 @@ interface RabtxTopbarProps {
 	onToggleDepth: () => void;
 }
 
-export function RabtxTopbar({ activeItemName, depthMode, onToggleDepth }: RabtxTopbarProps) {
+export function RabtxTopbar({ activeItemName }: RabtxTopbarProps) {
 	const [theme, setTheme] = useState<"light" | "dark">("dark");
 
 	useEffect(() => {
@@ -42,10 +40,10 @@ export function RabtxTopbar({ activeItemName, depthMode, onToggleDepth }: RabtxT
 	};
 
 	return (
-		<header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-border/40 bg-background/80 px-4 backdrop-blur-md transition-colors">
+		<header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-border bg-background px-4 transition-colors">
 			<div className="flex items-center gap-3">
 				<SidebarTrigger className="h-8 w-8 text-muted-foreground hover:text-foreground" />
-				<div className="h-4 w-px bg-border/60" />
+				<div className="h-4 w-px bg-border" />
 				<Breadcrumb>
 					<BreadcrumbList>
 						<BreadcrumbItem>
@@ -69,7 +67,7 @@ export function RabtxTopbar({ activeItemName, depthMode, onToggleDepth }: RabtxT
 						<BreadcrumbSeparator />
 						<BreadcrumbItem>
 							<BreadcrumbPage className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-								<span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+								<span className="w-1.5 h-1.5 rounded-full bg-foreground" />
 								{activeItemName}
 							</BreadcrumbPage>
 						</BreadcrumbItem>
@@ -78,32 +76,12 @@ export function RabtxTopbar({ activeItemName, depthMode, onToggleDepth }: RabtxT
 			</div>
 
 			<div className="flex items-center gap-2">
-				{/* Depth Toggle Indicator */}
-				<motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={onToggleDepth}
-						className={cn(
-							"h-8 text-xs font-medium gap-1.5 rounded-lg transition-all",
-							depthMode
-								? "border-teal-500/40 bg-teal-500/10 text-teal-600 dark:text-teal-300 shadow-sm"
-								: "border-border text-muted-foreground hover:text-foreground",
-						)}
-					>
-						<HugeiconsIcon icon={SparklesIcon} size={14} strokeWidth={2} />
-						<span className="hidden sm:inline">
-							{depthMode ? "Spatial Depth Active" : "Flat Design Mode"}
-						</span>
-					</Button>
-				</motion.div>
-
 				{/* Theme Switcher */}
 				<Button
 					variant="ghost"
 					size="icon"
 					onClick={toggleTheme}
-					className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+					className="h-8 w-8 rounded-md text-muted-foreground hover:text-foreground transition-colors"
 					title="Toggle theme"
 				>
 					<HugeiconsIcon
@@ -113,13 +91,12 @@ export function RabtxTopbar({ activeItemName, depthMode, onToggleDepth }: RabtxT
 					/>
 				</Button>
 
-				{/* Production Ready Pill */}
+				{/* Production Badge */}
 				<Badge
-					variant="outline"
-					className="hidden md:flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 border-teal-500/30 text-teal-600 dark:text-teal-400 bg-teal-500/10"
+					variant="secondary"
+					className="hidden md:flex items-center gap-1 text-[11px] font-mono px-2 py-0.5"
 				>
-					<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-					60+ shadcn Components
+					shadcn UI Catalog
 				</Badge>
 			</div>
 		</header>

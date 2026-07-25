@@ -68,58 +68,48 @@ export default function RabtxUIPage() {
 	};
 
 	return (
-		<div className="space-y-10 max-w-4xl mx-auto py-2">
+		<div className="space-y-8 max-w-4xl mx-auto py-2">
 			{/* HEADER SECTION */}
-			<div className="space-y-3">
+			<div className="space-y-2">
 				<div className="flex items-center gap-2">
-					<Badge
-						variant="outline"
-						className="px-2.5 py-0.5 font-mono text-xs border-teal-500/40 text-teal-600 dark:text-teal-400 bg-teal-500/10"
-					>
-						Motion Primitive
+					<Badge variant="secondary" className="px-2.5 py-0.5 font-mono text-xs">
+						Motion Component
 					</Badge>
 					<Badge
 						variant="outline"
-						className="px-2.5 py-0.5 font-mono text-xs border-border text-muted-foreground"
+						className="px-2.5 py-0.5 font-mono text-xs text-muted-foreground"
 					>
 						@school-os/ui/components/motion/tabs
 					</Badge>
 				</div>
 
-				<div className="flex items-center justify-between">
-					<div>
-						<h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-2.5">
-							<HugeiconsIcon
-								icon={Grid02Icon}
-								size={28}
-								strokeWidth={2}
-								className="text-teal-500"
-							/>
-							Motion Tabs
-						</h1>
-						<p className="text-sm text-muted-foreground mt-1">
-							Spring animated tab indicator with exclusion text inversion, reduced motion fallback,
-							and animated content cards.
-						</p>
-					</div>
+				<div>
+					<h1 className="text-2xl font-semibold tracking-tight text-foreground flex items-center gap-2">
+						<HugeiconsIcon icon={Grid02Icon} size={22} strokeWidth={2} />
+						Motion Tabs
+					</h1>
+					<p className="text-xs text-muted-foreground mt-1">
+						Spring-animated tab indicator with text exclusion blending, reduced motion support, and
+						animated content panels.
+					</p>
 				</div>
 			</div>
 
 			{/* INTERACTIVE DEMO 1: MAIN VARIANT SWITCHER */}
-			<Card className="overflow-hidden border-border/80 bg-card/95 backdrop-blur-sm shadow-md">
-				<CardHeader className="flex flex-row items-center justify-between border-b border-border/40 pb-4">
+			<Card className="overflow-hidden border border-border bg-card shadow-sm">
+				<CardHeader className="flex flex-row items-center justify-between border-b border-border p-4">
 					<div className="flex items-center gap-2">
 						<span className="text-xs font-mono font-medium text-muted-foreground mr-1">
 							Variant:
 						</span>
-						<div className="inline-flex rounded-lg bg-muted p-1 gap-1 border border-border/50">
+						<div className="inline-flex rounded-lg bg-muted p-1 gap-1 border border-border">
 							<button
 								type="button"
 								onClick={() => setActiveVariant("pill")}
 								className={cn(
-									"px-2.5 py-1 text-xs font-medium rounded-md transition-all",
+									"px-2.5 py-1 text-xs font-medium rounded-md transition-colors",
 									activeVariant === "pill"
-										? "bg-background text-foreground shadow-sm font-semibold"
+										? "bg-background text-foreground shadow-xs font-semibold"
 										: "text-muted-foreground hover:text-foreground",
 								)}
 							>
@@ -129,9 +119,9 @@ export default function RabtxUIPage() {
 								type="button"
 								onClick={() => setActiveVariant("underline")}
 								className={cn(
-									"px-2.5 py-1 text-xs font-medium rounded-md transition-all",
+									"px-2.5 py-1 text-xs font-medium rounded-md transition-colors",
 									activeVariant === "underline"
-										? "bg-background text-foreground shadow-sm font-semibold"
+										? "bg-background text-foreground shadow-xs font-semibold"
 										: "text-muted-foreground hover:text-foreground",
 								)}
 							>
@@ -141,9 +131,9 @@ export default function RabtxUIPage() {
 								type="button"
 								onClick={() => setActiveVariant("segment")}
 								className={cn(
-									"px-2.5 py-1 text-xs font-medium rounded-md transition-all",
+									"px-2.5 py-1 text-xs font-medium rounded-md transition-colors",
 									activeVariant === "segment"
-										? "bg-background text-foreground shadow-sm font-semibold"
+										? "bg-background text-foreground shadow-xs font-semibold"
 										: "text-muted-foreground hover:text-foreground",
 								)}
 							>
@@ -152,14 +142,14 @@ export default function RabtxUIPage() {
 						</div>
 					</div>
 
-					<div className="inline-flex rounded-lg bg-muted/60 p-0.5 border border-border/40">
+					<div className="inline-flex rounded-lg bg-muted p-0.5 border border-border">
 						<button
 							type="button"
 							onClick={() => setActiveViewTab("preview")}
 							className={cn(
-								"h-7 text-xs px-3 gap-1.5 inline-flex items-center font-medium rounded-md transition-all",
+								"h-7 text-xs px-3 gap-1.5 inline-flex items-center font-medium rounded-md transition-colors",
 								activeViewTab === "preview"
-									? "bg-background text-foreground shadow-sm font-semibold"
+									? "bg-background text-foreground shadow-xs font-semibold"
 									: "text-muted-foreground hover:text-foreground",
 							)}
 						>
@@ -170,9 +160,9 @@ export default function RabtxUIPage() {
 							type="button"
 							onClick={() => setActiveViewTab("code")}
 							className={cn(
-								"h-7 text-xs px-3 gap-1.5 inline-flex items-center font-medium rounded-md transition-all",
+								"h-7 text-xs px-3 gap-1.5 inline-flex items-center font-medium rounded-md transition-colors",
 								activeViewTab === "code"
-									? "bg-background text-foreground shadow-sm font-semibold"
+									? "bg-background text-foreground shadow-xs font-semibold"
 									: "text-muted-foreground hover:text-foreground",
 							)}
 						>
@@ -184,12 +174,9 @@ export default function RabtxUIPage() {
 
 				<CardContent className="p-0">
 					{activeViewTab === "preview" && (
-						<div className="relative min-h-[340px] w-full flex flex-col items-center justify-start p-8 md:p-12 pt-10 md:pt-12 bg-gradient-to-b from-muted/30 via-background to-muted/20 border-b border-border/30 overflow-hidden">
-							<div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-							<div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_50%,color-mix(in_oklab,var(--dashboard-accent,#0f766e)_8%,transparent),transparent)] pointer-events-none" />
-
-							{/* Fit content width TabsList */}
-							<div className="relative z-10 w-full max-w-lg flex flex-col items-center">
+						<div className="relative min-h-[300px] w-full flex flex-col items-center justify-start p-8 pt-10 bg-background border-b border-border">
+							{/* Clean shadcn canvas layout */}
+							<div className="relative z-10 w-full max-w-md flex flex-col items-center">
 								<MotionTabs defaultValue="overview" variant={activeVariant} className="w-full">
 									<div className="flex justify-center w-full">
 										<MotionTabsList>
@@ -200,38 +187,31 @@ export default function RabtxUIPage() {
 										</MotionTabsList>
 									</div>
 
-									<div className="mt-5 w-full">
+									<div className="mt-4 w-full">
 										<MotionTabsContent value="overview">
 											<motion.div
-												initial={{ opacity: 0, y: 8, scale: 0.98 }}
+												initial={{ opacity: 0, y: 6, scale: 0.99 }}
 												animate={{ opacity: 1, y: 0, scale: 1 }}
 												transition={{ type: "spring", stiffness: 350, damping: 25 }}
 											>
-												<Card className="p-5 border-teal-500/30 bg-background/90 backdrop-blur-md shadow-md space-y-3 min-h-[140px]">
+												<Card className="p-5 border border-border bg-card shadow-xs space-y-2 min-h-[120px]">
 													<div className="flex items-center justify-between">
-														<div className="font-bold text-sm text-foreground flex items-center gap-2">
-															<HugeiconsIcon
-																icon={SparklesIcon}
-																size={17}
-																strokeWidth={2}
-																className="text-teal-500"
-															/>
+														<div className="font-semibold text-sm text-foreground flex items-center gap-2">
+															<HugeiconsIcon icon={SparklesIcon} size={16} strokeWidth={2} />
 															System Overview
 														</div>
-														<Badge
-															variant="outline"
-															className="text-[10px] border-teal-500/30 text-teal-600 dark:text-teal-400 bg-teal-500/10"
-														>
-															Live Telemetry
+														<Badge variant="outline" className="text-[10px] font-mono">
+															Operational
 														</Badge>
 													</div>
 													<p className="text-xs text-muted-foreground leading-relaxed">
-														Active spring indicator with exclusion text inversion. Top-aligned
-														layout ensures zero vertical shifting.
+														Spring layout active indicator with exclusion text inversion.
+														Top-aligned layout ensures zero vertical shifting.
 													</p>
 													<div className="pt-1 flex items-center gap-3 text-[11px] text-muted-foreground font-mono">
 														<span>
-															Status: <strong className="text-emerald-500">Operational</strong>
+															Status:{" "}
+															<strong className="text-foreground font-semibold">Ready</strong>
 														</span>
 														<span>•</span>
 														<span>
@@ -244,25 +224,17 @@ export default function RabtxUIPage() {
 
 										<MotionTabsContent value="analytics">
 											<motion.div
-												initial={{ opacity: 0, y: 8, scale: 0.98 }}
+												initial={{ opacity: 0, y: 6, scale: 0.99 }}
 												animate={{ opacity: 1, y: 0, scale: 1 }}
 												transition={{ type: "spring", stiffness: 350, damping: 25 }}
 											>
-												<Card className="p-5 border-emerald-500/30 bg-background/90 backdrop-blur-md shadow-md space-y-3 min-h-[140px]">
+												<Card className="p-5 border border-border bg-card shadow-xs space-y-2 min-h-[120px]">
 													<div className="flex items-center justify-between">
-														<div className="font-bold text-sm text-foreground flex items-center gap-2">
-															<HugeiconsIcon
-																icon={ActivityIcon}
-																size={17}
-																strokeWidth={2}
-																className="text-emerald-500"
-															/>
+														<div className="font-semibold text-sm text-foreground flex items-center gap-2">
+															<HugeiconsIcon icon={ActivityIcon} size={16} strokeWidth={2} />
 															Performance Analytics
 														</div>
-														<Badge
-															variant="outline"
-															className="text-[10px] border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10"
-														>
+														<Badge variant="outline" className="text-[10px] font-mono">
 															60 FPS
 														</Badge>
 													</div>
@@ -272,7 +244,7 @@ export default function RabtxUIPage() {
 													</p>
 													<div className="pt-1 flex items-center gap-3 text-[11px] text-muted-foreground font-mono">
 														<span>
-															FPS: <strong className="text-emerald-500">60.0</strong>
+															FPS: <strong className="text-foreground font-semibold">60.0</strong>
 														</span>
 														<span>•</span>
 														<span>
@@ -285,25 +257,17 @@ export default function RabtxUIPage() {
 
 										<MotionTabsContent value="settings">
 											<motion.div
-												initial={{ opacity: 0, y: 8, scale: 0.98 }}
+												initial={{ opacity: 0, y: 6, scale: 0.99 }}
 												animate={{ opacity: 1, y: 0, scale: 1 }}
 												transition={{ type: "spring", stiffness: 350, damping: 25 }}
 											>
-												<Card className="p-5 border-cyan-500/30 bg-background/90 backdrop-blur-md shadow-md space-y-3 min-h-[140px]">
+												<Card className="p-5 border border-border bg-card shadow-xs space-y-2 min-h-[120px]">
 													<div className="flex items-center justify-between">
-														<div className="font-bold text-sm text-foreground flex items-center gap-2">
-															<HugeiconsIcon
-																icon={Settings02Icon}
-																size={17}
-																strokeWidth={2}
-																className="text-cyan-500"
-															/>
+														<div className="font-semibold text-sm text-foreground flex items-center gap-2">
+															<HugeiconsIcon icon={Settings02Icon} size={16} strokeWidth={2} />
 															Workspace Preferences
 														</div>
-														<Badge
-															variant="outline"
-															className="text-[10px] border-cyan-500/30 text-cyan-600 dark:text-cyan-400 bg-cyan-500/10"
-														>
+														<Badge variant="outline" className="text-[10px] font-mono">
 															Configured
 														</Badge>
 													</div>
@@ -326,25 +290,17 @@ export default function RabtxUIPage() {
 
 										<MotionTabsContent value="security">
 											<motion.div
-												initial={{ opacity: 0, y: 8, scale: 0.98 }}
+												initial={{ opacity: 0, y: 6, scale: 0.99 }}
 												animate={{ opacity: 1, y: 0, scale: 1 }}
 												transition={{ type: "spring", stiffness: 350, damping: 25 }}
 											>
-												<Card className="p-5 border-amber-500/30 bg-background/90 backdrop-blur-md shadow-md space-y-3 min-h-[140px]">
+												<Card className="p-5 border border-border bg-card shadow-xs space-y-2 min-h-[120px]">
 													<div className="flex items-center justify-between">
-														<div className="font-bold text-sm text-foreground flex items-center gap-2">
-															<HugeiconsIcon
-																icon={SecurityIcon}
-																size={17}
-																strokeWidth={2}
-																className="text-amber-500"
-															/>
+														<div className="font-semibold text-sm text-foreground flex items-center gap-2">
+															<HugeiconsIcon icon={SecurityIcon} size={16} strokeWidth={2} />
 															Security & Access
 														</div>
-														<Badge
-															variant="outline"
-															className="text-[10px] border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/10"
-														>
+														<Badge variant="outline" className="text-[10px] font-mono">
 															Protected
 														</Badge>
 													</div>
@@ -353,7 +309,8 @@ export default function RabtxUIPage() {
 													</p>
 													<div className="pt-1 flex items-center gap-3 text-[11px] text-muted-foreground font-mono">
 														<span>
-															Access: <strong className="text-amber-500">Admin</strong>
+															Access:{" "}
+															<strong className="text-foreground font-semibold">Admin</strong>
 														</span>
 														<span>•</span>
 														<span>
@@ -370,12 +327,12 @@ export default function RabtxUIPage() {
 					)}
 
 					{activeViewTab === "code" && (
-						<div className="relative bg-zinc-950 text-zinc-100 p-6 font-mono text-xs overflow-x-auto min-h-[320px] scrollbar-thin">
+						<div className="relative bg-zinc-950 text-zinc-100 p-6 font-mono text-xs overflow-x-auto min-h-[300px] scrollbar-thin">
 							<Button
 								variant="ghost"
 								size="sm"
 								onClick={handleCopy}
-								className="absolute right-4 top-4 h-8 px-3 text-xs bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 gap-1.5 border border-zinc-700/60"
+								className="absolute right-4 top-4 h-8 px-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 gap-1.5 border border-zinc-700"
 							>
 								<HugeiconsIcon
 									icon={copied ? Tick02Icon : Copy01Icon}
@@ -393,34 +350,26 @@ export default function RabtxUIPage() {
 				</CardContent>
 			</Card>
 
-			{/* ADDITIONAL REAL-WORLD EXAMPLES */}
-			<div className="space-y-6">
+			{/* ADDITIONAL PRODUCTION PATTERNS */}
+			<div className="space-y-4">
 				<div className="space-y-1">
-					<h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-						<HugeiconsIcon
-							icon={Layers01Icon}
-							size={20}
-							strokeWidth={2}
-							className="text-teal-500"
-						/>
-						Production UI Patterns
+					<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+						<HugeiconsIcon icon={Layers01Icon} size={18} strokeWidth={2} />
+						Component Variants
 					</h2>
 					<p className="text-xs text-muted-foreground">
-						Real-world application patterns built using Motion Tabs.
+						Native clean layout patterns for tabs inside cards and panels.
 					</p>
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					{/* Example 2: Segmented Media Switcher */}
-					<Card className="p-6 border-border/80 space-y-4">
+					<Card className="p-5 border border-border bg-card space-y-4">
 						<div className="space-y-1">
-							<Badge
-								variant="outline"
-								className="text-[10px] font-mono border-teal-500/30 text-teal-600 dark:text-teal-400 bg-teal-500/10"
-							>
-								Segmented Variant
+							<Badge variant="secondary" className="text-[10px] font-mono">
+								Segment Variant
 							</Badge>
-							<CardTitle className="text-base font-bold">Tech Stack Filter</CardTitle>
+							<CardTitle className="text-sm font-semibold">Tech Stack Filter</CardTitle>
 						</div>
 
 						<MotionTabs defaultValue="react" variant="segment" className="w-full">
@@ -432,10 +381,10 @@ export default function RabtxUIPage() {
 
 							<MotionTabsContent value="react">
 								<motion.div
-									initial={{ opacity: 0, y: 6 }}
+									initial={{ opacity: 0, y: 4 }}
 									animate={{ opacity: 1, y: 0 }}
 									transition={{ type: "spring", stiffness: 400, damping: 28 }}
-									className="p-4 rounded-xl bg-muted/40 border border-border/50 text-xs space-y-1"
+									className="p-3.5 rounded-lg bg-muted/50 border border-border text-xs space-y-1"
 								>
 									<span className="font-semibold text-foreground">React 19 Server Components</span>
 									<p className="text-muted-foreground">
@@ -445,10 +394,10 @@ export default function RabtxUIPage() {
 							</MotionTabsContent>
 							<MotionTabsContent value="vue">
 								<motion.div
-									initial={{ opacity: 0, y: 6 }}
+									initial={{ opacity: 0, y: 4 }}
 									animate={{ opacity: 1, y: 0 }}
 									transition={{ type: "spring", stiffness: 400, damping: 28 }}
-									className="p-4 rounded-xl bg-muted/40 border border-border/50 text-xs space-y-1"
+									className="p-3.5 rounded-lg bg-muted/50 border border-border text-xs space-y-1"
 								>
 									<span className="font-semibold text-foreground">Next.js App Router</span>
 									<p className="text-muted-foreground">
@@ -458,10 +407,10 @@ export default function RabtxUIPage() {
 							</MotionTabsContent>
 							<MotionTabsContent value="svelte">
 								<motion.div
-									initial={{ opacity: 0, y: 6 }}
+									initial={{ opacity: 0, y: 4 }}
 									animate={{ opacity: 1, y: 0 }}
 									transition={{ type: "spring", stiffness: 400, damping: 28 }}
-									className="p-4 rounded-xl bg-muted/40 border border-border/50 text-xs space-y-1"
+									className="p-3.5 rounded-lg bg-muted/50 border border-border text-xs space-y-1"
 								>
 									<span className="font-semibold text-foreground">TypeScript Strict Mode</span>
 									<p className="text-muted-foreground">100% typed props and state interfaces.</p>
@@ -471,31 +420,28 @@ export default function RabtxUIPage() {
 					</Card>
 
 					{/* Example 3: Underline Navigation Bar */}
-					<Card className="p-6 border-border/80 space-y-4">
+					<Card className="p-5 border border-border bg-card space-y-4">
 						<div className="space-y-1">
-							<Badge
-								variant="outline"
-								className="text-[10px] font-mono border-teal-500/30 text-teal-600 dark:text-teal-400 bg-teal-500/10"
-							>
+							<Badge variant="secondary" className="text-[10px] font-mono">
 								Underline Variant
 							</Badge>
-							<CardTitle className="text-base font-bold">Team Activity Deck</CardTitle>
+							<CardTitle className="text-sm font-semibold">Team Activity Deck</CardTitle>
 						</div>
 
 						<MotionTabs defaultValue="members" variant="underline" className="w-full">
-							<MotionTabsList className="w-full justify-start border-b border-border/60">
+							<MotionTabsList className="w-full justify-start border-b border-border">
 								<MotionTabsTrigger value="members">Members</MotionTabsTrigger>
 								<MotionTabsTrigger value="activity">Activity</MotionTabsTrigger>
 							</MotionTabsList>
 
 							<MotionTabsContent value="members">
 								<motion.div
-									initial={{ opacity: 0, y: 6 }}
+									initial={{ opacity: 0, y: 4 }}
 									animate={{ opacity: 1, y: 0 }}
 									transition={{ type: "spring", stiffness: 400, damping: 28 }}
 									className="space-y-2 pt-1"
 								>
-									<div className="flex items-center gap-3 p-2 rounded-lg bg-muted/30 border border-border/40 text-xs">
+									<div className="flex items-center gap-3 p-2 rounded-lg bg-muted/50 border border-border text-xs">
 										<Avatar className="w-7 h-7">
 											<AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" />
 											<AvatarFallback>SK</AvatarFallback>
@@ -511,10 +457,10 @@ export default function RabtxUIPage() {
 							</MotionTabsContent>
 							<MotionTabsContent value="activity">
 								<motion.div
-									initial={{ opacity: 0, y: 6 }}
+									initial={{ opacity: 0, y: 4 }}
 									animate={{ opacity: 1, y: 0 }}
 									transition={{ type: "spring", stiffness: 400, damping: 28 }}
-									className="p-3 rounded-lg bg-muted/30 border border-border/40 text-xs space-y-1"
+									className="p-3 rounded-lg bg-muted/50 border border-border text-xs space-y-1"
 								>
 									<span className="font-semibold text-foreground">Updated Motion Physics</span>
 									<span className="text-[10px] text-muted-foreground block">2 minutes ago</span>
