@@ -2,14 +2,21 @@ import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MotionTabs, MotionTabsContent, MotionTabsList, MotionTabsTrigger } from "../../modules/ui";
+import {
+	MobileButton,
+	MobileMotionButton,
+	MotionTabs,
+	MotionTabsContent,
+	MotionTabsList,
+	MotionTabsTrigger,
+} from "../../modules/ui";
 
-const RN_CODE_EXAMPLE = `import {
+const TABS_CODE_EXAMPLE = `import {
   MotionTabs,
   MotionTabsList,
   MotionTabsTrigger,
   MotionTabsContent,
-} from "@/modules/ui";
+} from "@school-os/ui/components/mobile";
 
 export function MobileTabsDemo() {
   return (
@@ -17,23 +24,35 @@ export function MobileTabsDemo() {
       <MotionTabsList>
         <MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
         <MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-        <MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
       </MotionTabsList>
-
       <MotionTabsContent value="overview">
-        <Text>Mobile Overview</Text>
+        <Text>Overview Panel</Text>
       </MotionTabsContent>
     </MotionTabs>
   );
 }`;
 
+const BUTTON_CODE_EXAMPLE = `import { MobileMotionButton, MobileButton } from "@school-os/ui/components/mobile";
+
+export function MobileButtonDemo() {
+  return (
+    <View style={{ gap: 10 }}>
+      <MobileMotionButton variant="default">Primary Spring Button</MobileMotionButton>
+      <MobileMotionButton variant="destructive">Destructive</MobileMotionButton>
+      <MobileMotionButton variant="outline">Outline</MobileMotionButton>
+      <MobileMotionButton loading variant="secondary">Loading...</MobileMotionButton>
+    </View>
+  );
+}`;
+
 export default function ComponentSlugScreen() {
-	const { slug } = useLocalSearchParams<{ slug: string }>();
+	const { slug = "tabs" } = useLocalSearchParams<{ slug: string }>();
 	const [activePlatformView, setActivePlatformView] = useState<"preview" | "code">("preview");
 	const [activeVariant, setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
-	const [_copied, _setCopied] = useState(false);
+	const [buttonLoading, setButtonLoading] = useState(false);
 
-	const componentTitle = slug === "tabs" ? "Motion Tabs" : `${slug} Component`;
+	const isButtonSlug = slug === "button";
+	const componentTitle = isButtonSlug ? "Motion Button" : "Motion Tabs";
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -42,11 +61,13 @@ export default function ComponentSlugScreen() {
 				<View style={styles.header}>
 					<View style={styles.badgeRow}>
 						<Text style={styles.badgeText}>Mobile Component</Text>
-						<Text style={styles.slugBadge}>slug: {slug || "tabs"}</Text>
+						<Text style={styles.slugBadge}>slug: /ui/{slug}</Text>
 					</View>
 					<Text style={styles.title}>{componentTitle}</Text>
 					<Text style={styles.subtitle}>
-						React Native Reanimated spring physics for Expo Router applications.
+						{isButtonSlug
+							? "React Native Reanimated press scale spring physics with loading states."
+							: "React Native Reanimated spring physics for Expo Router applications."}
 					</Text>
 				</View>
 
@@ -65,95 +86,102 @@ export default function ComponentSlugScreen() {
 				</View>
 
 				{activePlatformView === "preview" ? (
-					<View style={styles.previewSection}>
-						{/* VARIANT SELECTOR */}
-						<View style={styles.variantCard}>
-							<Text style={styles.sectionLabel}>Variant Switcher:</Text>
-							<MotionTabs
-								value={activeVariant}
-								onValueChange={(v) => setActiveVariant(v as "pill" | "underline" | "segment")}
-								variant="pill"
-							>
-								<MotionTabsList>
-									<MotionTabsTrigger value="pill">Pill</MotionTabsTrigger>
-									<MotionTabsTrigger value="underline">Underline</MotionTabsTrigger>
-									<MotionTabsTrigger value="segment">Segment</MotionTabsTrigger>
-								</MotionTabsList>
-							</MotionTabs>
-						</View>
-
-						{/* MAIN INTERACTIVE PLAYGROUND */}
-						<View style={styles.playgroundCard}>
-							<MotionTabs defaultValue="overview" variant={activeVariant}>
-								<MotionTabsList>
-									<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
-									<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-									<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
-									<MotionTabsTrigger value="security">Security</MotionTabsTrigger>
-								</MotionTabsList>
-
-								<View style={styles.contentContainer}>
-									<MotionTabsContent value="overview" style={styles.cardInner}>
-										<Text style={styles.cardHeader}>System Overview</Text>
-										<Text style={styles.cardText}>
-											React Native Reanimated spring physics running on UI thread.
-										</Text>
-									</MotionTabsContent>
-
-									<MotionTabsContent value="analytics" style={styles.cardInner}>
-										<Text style={styles.cardHeader}>Performance Analytics</Text>
-										<Text style={styles.cardText}>
-											60/120Hz gesture & animation telemetry metrics.
-										</Text>
-									</MotionTabsContent>
-
-									<MotionTabsContent value="settings" style={styles.cardInner}>
-										<Text style={styles.cardHeader}>Workspace Preferences</Text>
-										<Text style={styles.cardText}>
-											Configure haptic feedback and native layout bounds.
-										</Text>
-									</MotionTabsContent>
-
-									<MotionTabsContent value="security" style={styles.cardInner}>
-										<Text style={styles.cardHeader}>Security & Access</Text>
-										<Text style={styles.cardText}>
-											Session authentication tokens and audit log permissions.
-										</Text>
-									</MotionTabsContent>
+					isButtonSlug ? (
+						/* BUTTON MOBILE PREVIEW */
+						<View style={styles.previewSection}>
+							<View style={styles.playgroundCard}>
+								<Text style={styles.sectionLabel}>Reanimated Spring Motion Buttons:</Text>
+								<View style={styles.buttonList}>
+									<MobileMotionButton
+										variant="default"
+										onPress={() => setButtonLoading(!buttonLoading)}
+									>
+										Primary Motion Button
+									</MobileMotionButton>
+									<MobileMotionButton variant="secondary">Secondary Motion</MobileMotionButton>
+									<MobileMotionButton variant="outline">Outline Variant</MobileMotionButton>
+									<MobileMotionButton variant="destructive">Destructive Action</MobileMotionButton>
+									<MobileMotionButton loading={buttonLoading} variant="default">
+										{buttonLoading ? "Processing..." : "Tap to test loading"}
+									</MobileMotionButton>
 								</View>
-							</MotionTabs>
+							</View>
+
+							<Text style={styles.groupTitle}>Base Un-animated Mobile Buttons</Text>
+							<View style={styles.playgroundCard}>
+								<View style={styles.buttonList}>
+									<MobileButton variant="default">Base Primitive Button</MobileButton>
+									<MobileButton variant="outline">Base Outline</MobileButton>
+								</View>
+							</View>
 						</View>
+					) : (
+						/* TABS MOBILE PREVIEW */
+						<View style={styles.previewSection}>
+							<View style={styles.variantCard}>
+								<Text style={styles.sectionLabel}>Variant Switcher:</Text>
+								<MotionTabs
+									value={activeVariant}
+									onValueChange={(v) => setActiveVariant(v as "pill" | "underline" | "segment")}
+									variant="pill"
+								>
+									<MotionTabsList>
+										<MotionTabsTrigger value="pill">Pill</MotionTabsTrigger>
+										<MotionTabsTrigger value="underline">Underline</MotionTabsTrigger>
+										<MotionTabsTrigger value="segment">Segment</MotionTabsTrigger>
+									</MotionTabsList>
+								</MotionTabs>
+							</View>
 
-						{/* ADDITIONAL PATTERN EXAMPLES */}
-						<Text style={styles.groupTitle}>More Mobile UI Patterns</Text>
+							<View style={styles.playgroundCard}>
+								<MotionTabs defaultValue="overview" variant={activeVariant}>
+									<MotionTabsList>
+										<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
+										<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
+										<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
+										<MotionTabsTrigger value="security">Security</MotionTabsTrigger>
+									</MotionTabsList>
 
-						{/* Example 2: Segmented Stack */}
-						<View style={styles.patternCard}>
-							<Text style={styles.patternTitle}>Tech Stack Filter (Segment)</Text>
-							<MotionTabs defaultValue="rn" variant="segment">
-								<MotionTabsList>
-									<MotionTabsTrigger value="rn">React Native</MotionTabsTrigger>
-									<MotionTabsTrigger value="expo">Expo Router</MotionTabsTrigger>
-									<MotionTabsTrigger value="ts">TypeScript</MotionTabsTrigger>
-								</MotionTabsList>
+									<View style={styles.contentContainer}>
+										<MotionTabsContent value="overview" style={styles.cardInner}>
+											<Text style={styles.cardHeader}>System Overview</Text>
+											<Text style={styles.cardText}>
+												React Native Reanimated spring physics running on UI thread.
+											</Text>
+										</MotionTabsContent>
 
-								<MotionTabsContent value="rn" style={styles.patternContent}>
-									<Text style={styles.patternText}>Native iOS & Android Components</Text>
-								</MotionTabsContent>
-								<MotionTabsContent value="expo" style={styles.patternContent}>
-									<Text style={styles.patternText}>File-based routing & universal builds</Text>
-								</MotionTabsContent>
-								<MotionTabsContent value="ts" style={styles.patternContent}>
-									<Text style={styles.patternText}>100% type-safe props and state</Text>
-								</MotionTabsContent>
-							</MotionTabs>
+										<MotionTabsContent value="analytics" style={styles.cardInner}>
+											<Text style={styles.cardHeader}>Performance Analytics</Text>
+											<Text style={styles.cardText}>
+												60/120Hz gesture & animation telemetry metrics.
+											</Text>
+										</MotionTabsContent>
+
+										<MotionTabsContent value="settings" style={styles.cardInner}>
+											<Text style={styles.cardHeader}>Workspace Preferences</Text>
+											<Text style={styles.cardText}>
+												Configure haptic feedback and native layout bounds.
+											</Text>
+										</MotionTabsContent>
+
+										<MotionTabsContent value="security" style={styles.cardInner}>
+											<Text style={styles.cardHeader}>Security & Access</Text>
+											<Text style={styles.cardText}>
+												Session authentication tokens and audit log permissions.
+											</Text>
+										</MotionTabsContent>
+									</View>
+								</MotionTabs>
+							</View>
 						</View>
-					</View>
+					)
 				) : (
 					/* CODE VIEW */
 					<View style={styles.codeCard}>
 						<Text style={styles.codeHeader}>React Native Code Snippet:</Text>
-						<Text style={styles.codeText}>{RN_CODE_EXAMPLE}</Text>
+						<Text style={styles.codeText}>
+							{isButtonSlug ? BUTTON_CODE_EXAMPLE : TABS_CODE_EXAMPLE}
+						</Text>
 					</View>
 				)}
 			</ScrollView>
@@ -219,7 +247,7 @@ const styles = StyleSheet.create({
 	variantCard: {
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "between",
+		justifyContent: "space-between",
 		backgroundColor: "#18181b",
 		padding: 12,
 		borderRadius: 12,
@@ -229,7 +257,7 @@ const styles = StyleSheet.create({
 	sectionLabel: {
 		fontSize: 12,
 		color: "#a1a1aa",
-		marginRight: 10,
+		marginBottom: 8,
 	},
 	playgroundCard: {
 		backgroundColor: "#18181b",
@@ -237,7 +265,11 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		borderWidth: 1,
 		borderColor: "#27272a",
-		alignItems: "center",
+		alignItems: "stretch",
+	},
+	buttonList: {
+		gap: 10,
+		marginTop: 8,
 	},
 	contentContainer: {
 		width: "100%",
@@ -267,29 +299,6 @@ const styles = StyleSheet.create({
 		fontWeight: "600",
 		color: "#ffffff",
 		marginTop: 8,
-	},
-	patternCard: {
-		backgroundColor: "#18181b",
-		padding: 16,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#27272a",
-		gap: 12,
-	},
-	patternTitle: {
-		fontSize: 13,
-		fontWeight: "600",
-		color: "#ffffff",
-	},
-	patternContent: {
-		marginTop: 12,
-		padding: 12,
-		backgroundColor: "#09090b",
-		borderRadius: 8,
-	},
-	patternText: {
-		fontSize: 12,
-		color: "#a1a1aa",
 	},
 	codeCard: {
 		backgroundColor: "#18181b",

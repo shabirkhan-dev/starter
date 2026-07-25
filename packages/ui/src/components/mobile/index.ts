@@ -1,3 +1,5 @@
+export { MobileButton } from "./button";
+export { MobileMotionButton } from "./motion-button";
 export {
 	MotionTabs as MobileMotionTabs,
 	MotionTabsContent as MobileMotionTabsContent,

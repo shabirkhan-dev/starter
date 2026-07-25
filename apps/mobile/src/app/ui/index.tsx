@@ -10,6 +10,13 @@ export const MOBILE_COMPONENT_SLUGS = [
 		category: "Motion Components",
 		status: "Ready",
 	},
+	{
+		slug: "button",
+		name: "Motion Button",
+		description: "React Native Reanimated press scale button with loading state",
+		category: "Motion Components",
+		status: "Ready",
+	},
 ];
 
 export default function MobileUICatalogScreen() {

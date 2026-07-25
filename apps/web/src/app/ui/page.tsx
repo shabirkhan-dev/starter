@@ -16,7 +16,8 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Badge } from "@school-os/ui/components/badge";
 import { Button } from "@school-os/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@school-os/ui/components/card";
+import { Card, CardContent, CardHeader } from "@school-os/ui/components/card";
+import { MotionButton } from "@school-os/ui/components/motion/button";
 import {
 	Tabs as MotionTabs,
 	TabsContent as MotionTabsContent,
@@ -26,7 +27,7 @@ import {
 import { motion } from "motion/react";
 import { useState } from "react";
 
-const WEB_CODE_EXAMPLE = `import {
+const WEB_TABS_CODE = `import {
   Tabs,
   TabsList,
   TabsTrigger,
@@ -39,9 +40,7 @@ export function MotionTabsExample() {
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        <TabsTrigger value="settings">Settings</TabsTrigger>
       </TabsList>
-
       <TabsContent value="overview">
         <div className="p-4 rounded-xl border bg-card">Overview Content</div>
       </TabsContent>
@@ -49,36 +48,50 @@ export function MotionTabsExample() {
   );
 }`;
 
-const MOBILE_CODE_EXAMPLE = `import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Animated, { withSpring, useAnimatedStyle } from "react-native-reanimated";
-import { MotionTabs, MotionTabsList, MotionTabsTrigger, MotionTabsContent } from "./modules/ui";
+const WEB_BUTTON_CODE = `import { MotionButton } from "@school-os/ui/components/motion/button";
+import { Button } from "@school-os/ui/components/button";
 
-export default function MobileScreen() {
+export function MotionButtonExample() {
   return (
-    <MotionTabs defaultValue="overview" variant="pill">
-      <MotionTabsList>
-        <MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
-        <MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-        <MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
-      </MotionTabsList>
+    <div className="flex flex-wrap gap-3">
+      <MotionButton variant="default">Primary Spring Motion</MotionButton>
+      <MotionButton variant="secondary">Secondary</MotionButton>
+      <MotionButton variant="outline">Outline</MotionButton>
+      <MotionButton variant="destructive">Destructive</MotionButton>
+      <MotionButton loading variant="default">Loading</MotionButton>
+    </div>
+  );
+}`;
 
-      <MotionTabsContent value="overview">
-        <Text style={styles.text}>Mobile Overview Content</Text>
-      </MotionTabsContent>
-    </MotionTabs>
+const MOBILE_BUTTON_CODE = `import { MobileMotionButton, MobileButton } from "@school-os/ui/components/mobile";
+
+export function MobileButtonDemo() {
+  return (
+    <View style={{ gap: 10 }}>
+      <MobileMotionButton variant="default">Primary Motion Button</MobileMotionButton>
+      <MobileMotionButton variant="destructive">Destructive</MobileMotionButton>
+      <MobileMotionButton loading variant="outline">Loading...</MobileMotionButton>
+    </View>
   );
 }`;
 
 export default function RabtxUIPage() {
+	const [activeComponent, setActiveComponent] = useState<"tabs" | "button">("tabs");
 	const [activePlatform, setActivePlatform] = useState<"web" | "mobile">("web");
 	const [activeVariant, setActiveVariant] = useState<"pill" | "underline" | "segment">("pill");
 	const [activeSize, setActiveSize] = useState<"sm" | "md" | "lg">("md");
 	const [activeViewTab, setActiveViewTab] = useState<"preview" | "code">("preview");
+	const [buttonLoading, setButtonLoading] = useState(false);
 	const [copied, setCopied] = useState(false);
 
+	const isButtonComponent = activeComponent === "button";
+
 	const handleCopy = () => {
-		const codeToCopy = activePlatform === "web" ? WEB_CODE_EXAMPLE : MOBILE_CODE_EXAMPLE;
+		const codeToCopy = isButtonComponent
+			? activePlatform === "web"
+				? WEB_BUTTON_CODE
+				: MOBILE_BUTTON_CODE
+			: WEB_TABS_CODE;
 		navigator.clipboard.writeText(codeToCopy);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2000);
@@ -90,16 +103,24 @@ export default function RabtxUIPage() {
 			<div className="space-y-3">
 				<div className="flex flex-wrap items-center justify-between gap-4">
 					<div className="flex items-center gap-2">
-						<Badge variant="secondary" className="px-2.5 py-0.5 font-mono text-xs">
-							{activePlatform === "web" ? "Next.js Web UI" : "Expo Mobile UI"}
-						</Badge>
+						{/* Component Switcher */}
+						<MotionTabs
+							value={activeComponent}
+							onValueChange={(c) => setActiveComponent(c as "tabs" | "button")}
+							variant="pill"
+							size="sm"
+						>
+							<MotionTabsList>
+								<MotionTabsTrigger value="tabs">Motion Tabs</MotionTabsTrigger>
+								<MotionTabsTrigger value="button">Motion Button</MotionTabsTrigger>
+							</MotionTabsList>
+						</MotionTabs>
+
 						<Badge
 							variant="outline"
 							className="px-2.5 py-0.5 font-mono text-xs text-muted-foreground"
 						>
-							{activePlatform === "web"
-								? "@school-os/ui/components/motion/tabs"
-								: "apps/mobile/src/modules/ui"}
+							{activePlatform === "web" ? "@school-os/ui" : "@school-os/ui/components/mobile"}
 						</Badge>
 					</div>
 
@@ -126,16 +147,23 @@ export default function RabtxUIPage() {
 				<div>
 					<h1 className="text-2xl font-semibold tracking-tight text-foreground flex items-center gap-2">
 						<HugeiconsIcon
-							icon={activePlatform === "web" ? Grid02Icon : SmartPhone01Icon}
+							icon={
+								isButtonComponent
+									? Layers01Icon
+									: activePlatform === "web"
+										? Grid02Icon
+										: SmartPhone01Icon
+							}
 							size={22}
 							strokeWidth={2}
 						/>
-						Motion Tabs ({activePlatform === "web" ? "Web Edition" : "Mobile Expo Edition"})
+						{isButtonComponent ? "Motion Button Component" : "Motion Tabs Component"} (
+						{activePlatform === "web" ? "Web Edition" : "Mobile Expo Edition"})
 					</h1>
 					<p className="text-xs text-muted-foreground mt-1">
-						{activePlatform === "web"
-							? "Framer Motion layout projection with text exclusion blending for Next.js web applications."
-							: "React Native Reanimated spring physics for Expo Router iOS & Android mobile applications."}
+						{isButtonComponent
+							? "Spring press scaling with loading spinner state for both React Web & React Native Mobile."
+							: "Spring-animated layout projection for both React Web & React Native Mobile."}
 					</p>
 				</div>
 			</div>
@@ -143,25 +171,26 @@ export default function RabtxUIPage() {
 			{/* INTERACTIVE DEMO CARD */}
 			<Card className="overflow-hidden border border-border bg-card shadow-sm">
 				<CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-border p-4 gap-4">
-					{/* Controls for Variant and Size */}
-					<div className="flex flex-wrap items-center gap-4">
-						<div className="flex items-center gap-2">
-							<span className="text-xs font-mono font-medium text-muted-foreground">Variant:</span>
-							<MotionTabs
-								value={activeVariant}
-								onValueChange={(v) => setActiveVariant(v as "pill" | "underline" | "segment")}
-								variant="pill"
-								size="sm"
-							>
-								<MotionTabsList>
-									<MotionTabsTrigger value="pill">Pill</MotionTabsTrigger>
-									<MotionTabsTrigger value="underline">Underline</MotionTabsTrigger>
-									<MotionTabsTrigger value="segment">Segment</MotionTabsTrigger>
-								</MotionTabsList>
-							</MotionTabs>
-						</div>
+					{!isButtonComponent && activePlatform === "web" ? (
+						<div className="flex flex-wrap items-center gap-4">
+							<div className="flex items-center gap-2">
+								<span className="text-xs font-mono font-medium text-muted-foreground">
+									Variant:
+								</span>
+								<MotionTabs
+									value={activeVariant}
+									onValueChange={(v) => setActiveVariant(v as "pill" | "underline" | "segment")}
+									variant="pill"
+									size="sm"
+								>
+									<MotionTabsList>
+										<MotionTabsTrigger value="pill">Pill</MotionTabsTrigger>
+										<MotionTabsTrigger value="underline">Underline</MotionTabsTrigger>
+										<MotionTabsTrigger value="segment">Segment</MotionTabsTrigger>
+									</MotionTabsList>
+								</MotionTabs>
+							</div>
 
-						{activePlatform === "web" && (
 							<div className="flex items-center gap-2">
 								<span className="text-xs font-mono font-medium text-muted-foreground">Size:</span>
 								<MotionTabs
@@ -177,8 +206,12 @@ export default function RabtxUIPage() {
 									</MotionTabsList>
 								</MotionTabs>
 							</div>
-						)}
-					</div>
+						</div>
+					) : (
+						<span className="text-xs font-mono font-medium text-muted-foreground">
+							{isButtonComponent ? "Motion Button Showcase" : "Motion Tabs Showcase"}
+						</span>
+					)}
 
 					{/* View Switcher: Preview / Code */}
 					<MotionTabs
@@ -202,9 +235,59 @@ export default function RabtxUIPage() {
 
 				<CardContent className="p-0">
 					{activeViewTab === "preview" && (
-						<div className="relative min-h-[360px] w-full flex flex-col items-center justify-start p-8 pt-10 bg-background border-b border-border">
-							{activePlatform === "web" ? (
-								/* WEB PREVIEW */
+						<div className="relative min-h-[320px] w-full flex flex-col items-center justify-start p-8 pt-10 bg-background border-b border-border">
+							{isButtonComponent ? (
+								activePlatform === "web" ? (
+									/* WEB MOTION BUTTON SHOWCASE */
+									<div className="space-y-6 w-full max-w-md flex flex-col items-center justify-center pt-4">
+										<div className="flex flex-wrap items-center justify-center gap-3">
+											<MotionButton
+												variant="default"
+												onClick={() => setButtonLoading(!buttonLoading)}
+											>
+												Primary Motion Button
+											</MotionButton>
+											<MotionButton variant="secondary">Secondary</MotionButton>
+											<MotionButton variant="outline">Outline</MotionButton>
+											<MotionButton variant="destructive">Destructive</MotionButton>
+										</div>
+
+										<div className="flex items-center gap-3 pt-2">
+											<MotionButton loading={buttonLoading} variant="default">
+												{buttonLoading ? "Loading State..." : "Click to test loading"}
+											</MotionButton>
+											<Button variant="outline">Standard Primitive Button</Button>
+										</div>
+									</div>
+								) : (
+									/* MOBILE MOTION BUTTON SHOWCASE */
+									<div className="w-[300px] rounded-[36px] border-[6px] border-zinc-800 bg-zinc-950 p-4 pt-3 shadow-2xl space-y-4">
+										<div className="flex items-center justify-between text-[11px] text-zinc-400 px-2 font-mono">
+											<span>9:41</span>
+											<div className="w-16 h-3.5 bg-zinc-900 rounded-full mx-auto" />
+											<span>100%</span>
+										</div>
+
+										<div className="space-y-3 py-4 flex flex-col items-stretch">
+											<MotionButton
+												variant="default"
+												onClick={() => setButtonLoading(!buttonLoading)}
+											>
+												Mobile Motion Button
+											</MotionButton>
+											<MotionButton variant="secondary">Mobile Secondary</MotionButton>
+											<MotionButton variant="outline">Mobile Outline</MotionButton>
+											<MotionButton variant="destructive">Mobile Destructive</MotionButton>
+											<MotionButton loading={buttonLoading} variant="default">
+												{buttonLoading ? "Processing..." : "Tap to test loading"}
+											</MotionButton>
+										</div>
+
+										<div className="w-24 h-1 bg-zinc-700 rounded-full mx-auto" />
+									</div>
+								)
+							) : activePlatform === "web" ? (
+								/* WEB MOTION TABS SHOWCASE */
 								<div className="relative z-10 w-full max-w-md flex flex-col items-center">
 									<MotionTabs
 										defaultValue="overview"
@@ -322,31 +405,28 @@ export default function RabtxUIPage() {
 									</MotionTabs>
 								</div>
 							) : (
-								/* MOBILE IPHONE FRAME PREVIEW */
-								<div className="w-[300px] sm:w-[320px] rounded-[36px] border-[6px] border-zinc-800 bg-zinc-950 p-4 pt-3 shadow-2xl space-y-4">
-									{/* Mobile Status Bar */}
+								/* MOBILE MOTION TABS SHOWCASE */
+								<div className="w-[300px] rounded-[36px] border-[6px] border-zinc-800 bg-zinc-950 p-4 pt-3 shadow-2xl space-y-4">
 									<div className="flex items-center justify-between text-[11px] text-zinc-400 px-2 font-mono">
 										<span>9:41</span>
 										<div className="w-16 h-3.5 bg-zinc-900 rounded-full mx-auto" />
 										<span>100%</span>
 									</div>
 
-									{/* Mobile Motion Tabs inside Phone Frame */}
 									<div className="py-2">
-										<MotionTabs defaultValue="overview" variant={activeVariant} className="w-full">
+										<MotionTabs defaultValue="overview" variant="pill" className="w-full">
 											<div className="flex justify-center w-full">
 												<MotionTabsList>
 													<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
 													<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-													<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
 												</MotionTabsList>
 											</div>
 
 											<div className="mt-4">
 												<MotionTabsContent value="overview">
-													<div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 space-y-1 min-h-[110px]">
+													<div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 space-y-1 min-h-[100px]">
 														<span className="font-semibold text-white block">
-															Mobile App Overview
+															Mobile Motion Tabs
 														</span>
 														<p className="text-zinc-400 text-[11px]">
 															Expo Router screen with React Native Reanimated spring physics.
@@ -355,19 +435,10 @@ export default function RabtxUIPage() {
 												</MotionTabsContent>
 
 												<MotionTabsContent value="analytics">
-													<div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 space-y-1 min-h-[110px]">
+													<div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 space-y-1 min-h-[100px]">
 														<span className="font-semibold text-white block">Mobile Telemetry</span>
 														<p className="text-zinc-400 text-[11px]">
 															60 FPS touch gestures & screen transition metrics.
-														</p>
-													</div>
-												</MotionTabsContent>
-
-												<MotionTabsContent value="settings">
-													<div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 space-y-1 min-h-[110px]">
-														<span className="font-semibold text-white block">Mobile Config</span>
-														<p className="text-zinc-400 text-[11px]">
-															Haptic feedback and native screen bounds.
 														</p>
 													</div>
 												</MotionTabsContent>
@@ -375,7 +446,6 @@ export default function RabtxUIPage() {
 										</MotionTabs>
 									</div>
 
-									{/* Mobile Home Indicator */}
 									<div className="w-24 h-1 bg-zinc-700 rounded-full mx-auto mt-4" />
 								</div>
 							)}
@@ -399,54 +469,18 @@ export default function RabtxUIPage() {
 								{copied ? "Copied!" : "Copy Code"}
 							</Button>
 							<pre className="pr-16 leading-relaxed">
-								<code>{activePlatform === "web" ? WEB_CODE_EXAMPLE : MOBILE_CODE_EXAMPLE}</code>
+								<code>
+									{isButtonComponent
+										? activePlatform === "web"
+											? WEB_BUTTON_CODE
+											: MOBILE_BUTTON_CODE
+										: WEB_TABS_CODE}
+								</code>
 							</pre>
 						</div>
 					)}
 				</CardContent>
 			</Card>
-
-			{/* ADDITIONAL VARIANT EXAMPLES */}
-			<div className="space-y-4">
-				<div className="space-y-1">
-					<h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
-						<HugeiconsIcon icon={Layers01Icon} size={18} strokeWidth={2} />
-						Platform Compatibility
-					</h2>
-					<p className="text-xs text-muted-foreground">
-						Unified API surface across web (Next.js) and mobile (Expo Router).
-					</p>
-				</div>
-
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<Card className="p-5 border border-border bg-card space-y-3">
-						<div className="flex items-center justify-between">
-							<Badge variant="secondary" className="text-[10px] font-mono">
-								Web Package
-							</Badge>
-							<span className="text-[11px] text-muted-foreground font-mono">@school-os/ui</span>
-						</div>
-						<CardTitle className="text-sm font-semibold">Next.js & Tailwind</CardTitle>
-						<p className="text-xs text-muted-foreground leading-relaxed">
-							Framer Motion spring physics with max-contrast exclusion text blending for web
-							browsers.
-						</p>
-					</Card>
-
-					<Card className="p-5 border border-border bg-card space-y-3">
-						<div className="flex items-center justify-between">
-							<Badge variant="secondary" className="text-[10px] font-mono">
-								Mobile App
-							</Badge>
-							<span className="text-[11px] text-muted-foreground font-mono">apps/mobile</span>
-						</div>
-						<CardTitle className="text-sm font-semibold">Expo & Reanimated</CardTitle>
-						<p className="text-xs text-muted-foreground leading-relaxed">
-							Native 60/120Hz gestures and Reanimated spring physics for iOS and Android devices.
-						</p>
-					</Card>
-				</div>
-			</div>
 		</div>
 	);
 }

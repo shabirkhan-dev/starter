@@ -83,6 +83,7 @@ export {
 } from "./components/input-group";
 export { Label } from "./components/label";
 export * from "./components/mobile";
+export { MotionButton } from "./components/motion/button";
 export {
 	Tabs as MotionTabs,
 	TabsContent as MotionTabsContent,
