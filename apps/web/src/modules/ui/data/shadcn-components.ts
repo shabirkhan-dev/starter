@@ -3,6 +3,7 @@ import {
 	Grid02Icon,
 	InputTextIcon,
 	Layers01Icon,
+	SmartPhone01Icon,
 	TextFontIcon,
 } from "@hugeicons/core-free-icons";
 import type { HugeiconsIcon } from "@hugeicons/react";
@@ -28,6 +29,15 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 		id: "motion-components",
 		title: "Motion Components",
 		items: [
+			{
+				id: "bottom-bar",
+				name: "Liquid Glass Bottom Bar",
+				description:
+					"Cross-browser SVG feDisplacementMap light-refracting dock with spring physics & Safari cache rotation",
+				category: "Motion",
+				icon: SmartPhone01Icon,
+				badge: "New",
+			},
 			{
 				id: "tabs",
 				name: "Motion Tabs",

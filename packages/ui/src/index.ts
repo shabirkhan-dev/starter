@@ -8,6 +8,7 @@ export {
 	AvatarImage,
 } from "./components/avatar";
 export { Badge, badgeVariants } from "./components/badge";
+export { BottomBar, BottomBarItem } from "./components/bottom-bar";
 export {
 	Breadcrumb,
 	BreadcrumbEllipsis,
@@ -82,17 +83,17 @@ export {
 	InputGroupTextarea,
 } from "./components/input-group";
 export { Label } from "./components/label";
-export { MotionButton, MotionButton, StatefulButton } from "./components/motion/button";
+export { MotionButton, StatefulButton } from "./components/motion/button";
 export { MotionInput } from "./components/motion/input";
 export {
 	MotionSelect,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectSearch,
-	SelectTrigger,
-	SelectValue,
+	SelectContent as MotionSelectContent,
+	SelectGroup as MotionSelectGroup,
+	SelectItem as MotionSelectItem,
+	SelectLabel as MotionSelectLabel,
+	SelectSearch as MotionSelectSearch,
+	SelectTrigger as MotionSelectTrigger,
+	SelectValue as MotionSelectValue,
 } from "./components/motion/select";
 export {
 	Tabs as MotionTabs,
@@ -157,7 +158,6 @@ export {
 	TableCaption,
 	TableCell,
 	TableFooter,
-	TableHead,
 	TableHeader,
 	TableRow,
 } from "./components/table";
