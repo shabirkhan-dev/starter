@@ -7,6 +7,7 @@ interface NeonCardProps {
 	style?: ViewStyle;
 	className?: string;
 	glowPosition?: "top-right" | "bottom-left" | "both-diagonal" | "none";
+	accentColor?: string;
 }
 
 export function NeonCard({ children, style, className = "" }: NeonCardProps) {

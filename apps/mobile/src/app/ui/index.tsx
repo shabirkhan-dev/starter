@@ -4,6 +4,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export const MOBILE_COMPONENT_SLUGS = [
 	{
+		slug: "bottom-bar",
+		name: "Liquid Glass Bottom Bar",
+		description:
+			"Aave Glass style light-refracting navigation dock with Reanimated spring lens indicator",
+		category: "Motion Components",
+		status: "New",
+	},
+	{
 		slug: "tabs",
 		name: "Motion Tabs",
 		description: "React Native Reanimated spring sliding tabs (Pill, Underline, Segment)",

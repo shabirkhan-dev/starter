@@ -1,7 +1,6 @@
 import { Link, router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text } from "react-native";
-import { NeonColors } from "@/constants/design-system";
+import { Text } from "react-native";
 import { devCodeRouteParams, readDevCodeParam } from "@/modules/auth/lib/dev-auth-code";
 import { authService } from "@/modules/auth/services/auth.service";
 import { AuthAlert } from "./auth-alert";
@@ -86,22 +85,11 @@ export function VerifyEmailForm() {
 				pending={resending}
 				disabled={!email}
 			/>
-			<Text style={styles.footerText}>
-				<Link href="/login" style={styles.link}>
+			<Text className="text-center text-sm mt-2 text-zinc-400">
+				<Link href="/login" className="text-emerald-400 underline font-medium">
 					Back to sign in
 				</Link>
 			</Text>
 		</AuthScreen>
 	);
 }
-
-const styles = StyleSheet.create({
-	footerText: {
-		textAlign: "center",
-		fontSize: 14,
-	},
-	link: {
-		color: NeonColors.accent.green,
-		textDecorationLine: "underline",
-	},
-});

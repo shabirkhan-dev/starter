@@ -18,28 +18,25 @@ export function AuthButton({
 	style,
 }: AuthButtonProps) {
 	const isDisabled = disabled || pending;
-	const variantClass =
-		variant === "primary"
-			? "bg-emerald-400"
-			: variant === "outline"
-				? "border border-zinc-800 bg-transparent"
-				: "bg-transparent";
-
 	return (
 		<Pressable
 			onPress={onPress}
 			disabled={isDisabled}
-			className={`min-h-[48px] rounded-xl items-center justify-center px-4 ${variantClass} ${
-				isDisabled ? "opacity-50" : "active:opacity-85"
-			}`}
 			style={style}
+			className={`min-h-[48px] rounded-2xl items-center justify-center px-4 active:opacity-85 ${
+				variant === "primary"
+					? "bg-teal-500"
+					: variant === "outline"
+						? "border border-zinc-800 bg-transparent"
+						: "bg-transparent"
+			} ${isDisabled ? "opacity-50" : ""}`}
 		>
 			{pending ? (
-				<ActivityIndicator color={variant === "primary" ? "#09090b" : "#34d399"} />
+				<ActivityIndicator color={variant === "primary" ? "#000" : "#14b8a6"} />
 			) : (
 				<Text
 					className={`text-base font-bold ${
-						variant === "primary" ? "text-zinc-950" : "text-white"
+						variant === "primary" ? "text-zinc-950" : "text-zinc-100"
 					}`}
 				>
 					{label}

@@ -31,7 +31,7 @@ export function AuthScreen({
 		return (
 			<SafeAreaView className="flex-1 bg-zinc-950" edges={["top", "bottom"]}>
 				<View className="flex-1 items-center justify-center">
-					<ActivityIndicator color="#34d399" size="large" />
+					<ActivityIndicator color="#14b8a6" size="large" />
 				</View>
 			</SafeAreaView>
 		);
@@ -44,15 +44,18 @@ export function AuthScreen({
 				behavior={Platform.OS === "ios" ? "padding" : undefined}
 			>
 				<ScrollView
-					contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
-					className="px-5 py-8"
+					contentContainerClassName="flex-grow justify-center px-5 py-8"
 					keyboardShouldPersistTaps="handled"
 					showsVerticalScrollIndicator={false}
 				>
 					<NeonCard className="w-full max-w-[420px] self-center">
-						<Text className="text-zinc-400 text-xs font-semibold text-center mb-2">{brand}</Text>
-						<Text className="text-white text-3xl font-bold text-center mb-2">{title}</Text>
-						<Text className="text-zinc-400 text-sm text-center mb-6 leading-5">{description}</Text>
+						<Text className="text-zinc-400 text-[13px] font-semibold text-center mb-2">
+							{brand}
+						</Text>
+						<Text className="text-zinc-100 text-2xl font-bold text-center mb-2">{title}</Text>
+						<Text className="text-zinc-400 text-[15px] text-center mb-6 leading-relaxed">
+							{description}
+						</Text>
 						<View className="gap-4">{children}</View>
 					</NeonCard>
 					{footer ? <View className="mt-5 items-center">{footer}</View> : null}

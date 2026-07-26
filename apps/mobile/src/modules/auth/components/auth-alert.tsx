@@ -10,16 +10,16 @@ export function AuthAlert({ title, message, variant = "info" }: AuthAlertProps) 
 	const destructive = variant === "destructive";
 	return (
 		<View
-			className={`rounded-xl border p-3 gap-1 ${
-				destructive ? "border-red-500/40 bg-red-500/10" : "border-emerald-500/35 bg-emerald-500/8"
-			}`}
+			className={`rounded-xl border p-3 gap-1 ${destructive ? "border-red-500/40 bg-red-500/10" : "border-teal-500/35 bg-teal-500/10"}`}
 		>
 			{title ? (
-				<Text className={`text-sm font-bold ${destructive ? "text-red-400" : "text-white"}`}>
+				<Text className={`font-bold text-sm ${destructive ? "text-red-400" : "text-zinc-100"}`}>
 					{title}
 				</Text>
 			) : null}
-			<Text className={`text-xs leading-[18px] ${destructive ? "text-red-300" : "text-zinc-400"}`}>
+			<Text
+				className={`text-[13px] leading-relaxed ${destructive ? "text-red-400" : "text-zinc-400"}`}
+			>
 				{message}
 			</Text>
 		</View>

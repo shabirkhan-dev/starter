@@ -1,14 +1,18 @@
 import {
 	ArrowRightIcon,
+	Grid02Icon,
+	Home01Icon,
 	Mail01Icon,
 	Search01Icon,
 	SparklesIcon,
 	UserIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
+import { MobileBottomBar, MobileBottomBarItem } from "@school-os/ui/components/mobile";
+import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
 	Input,
@@ -31,6 +35,28 @@ import {
 	StatefulButton,
 } from "../../modules/ui";
 
+const BOTTOM_BAR_CODE_EXAMPLE = `import { MobileBottomBar, MobileBottomBarItem } from "@school-os/ui/components/mobile";
+
+export function GlassBottomBarDemo() {
+  const [active, setActive] = useState("home");
+  return (
+    <MobileBottomBar
+      value={active}
+      onValueChange={setActive}
+      switchScaleY={1.30}
+      switchScaleX={1.15}
+      stiffness={190}
+      damping={18}
+      glassOpacity={10}
+      borderOpacity={40}
+    >
+      <MobileBottomBarItem value="home">Home</MobileBottomBarItem>
+      <MobileBottomBarItem value="explore">Explore</MobileBottomBarItem>
+      <MobileBottomBarItem value="profile">Profile</MobileBottomBarItem>
+    </MobileBottomBar>
+  );
+}`;
+
 const TABS_CODE_EXAMPLE = `import { MotionTabs } from "@school-os/ui/components/mobile";`;
 const BUTTON_CODE_EXAMPLE = `import { MobileMotionButton } from "@school-os/ui/components/mobile";`;
 const INPUT_CODE_EXAMPLE = `import { MobileMotionInput } from "@school-os/ui/components/mobile";`;
@@ -41,458 +67,371 @@ export default function ComponentSlugScreen() {
 	const { slug = "tabs" } = useLocalSearchParams<{ slug: string }>();
 	const [activePlatformView, setActivePlatformView] = useState<"preview" | "code">("preview");
 
+	const [bottomBarTab, setBottomBarTab] = useState("home");
 	const [emailVal, setEmailVal] = useState("shabir@school-os.dev");
-	const [errorInputVal, setErrorInputVal] = useState("invalid domain!");
-	const [inputErrorState, setInputErrorState] = useState(true);
-	const [searchVal, setSearchVal] = useState("");
-	const [passwordVal, setPasswordVal] = useState("secret123");
-
 	const [roleSelect, setRoleSelect] = useState("admin");
-	const [searchableSelect, setSearchableSelect] = useState("us");
-	const [scrollableSelect, setScrollableSelect] = useState("utc");
-	const [groupedSelect, setGroupedSelect] = useState("nextjs");
-	const [errorSelectVal, setErrorSelectVal] = useState("");
-	const [selectErrorState, setSelectErrorState] = useState(true);
-	const [rtlSelectVal, setRtlSelectVal] = useState("ar");
+
+	// MOBILE STUDIO CONTROL PARAMETERS
+	const [switchScaleY, setSwitchScaleY] = useState(1.3);
+	const [switchScaleX, setSwitchScaleX] = useState(1.15);
+	const [stiffness, setStiffness] = useState(190);
+	const [damping, setDamping] = useState(18);
+	const [glassOpacity, setGlassOpacity] = useState(10);
+	const [borderOpacity, setBorderOpacity] = useState(40);
 
 	const [mobileTypesetPreset, setMobileTypesetPreset] = useState<"docs" | "chat" | "reading">(
 		"docs",
 	);
 
-	const [buttonLoading, setButtonLoading] = useState(false);
-	const [okState, setOkState] = useState<"idle" | "loading" | "success" | "error">("idle");
-	const [errState, setErrState] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-	const runStatefulDemo = (target: "ok" | "err") => {
-		const setter = target === "ok" ? setOkState : setErrState;
-		setter("loading");
-		setTimeout(() => {
-			setter(target === "ok" ? "success" : "error");
-			setTimeout(() => setter("idle"), 1800);
-		}, 1400);
-	};
-
-	const countryOptions = [
-		{ value: "us", label: "United States 🇺🇸" },
-		{ value: "ca", label: "Canada 🇨🇦" },
-		{ value: "uk", label: "United Kingdom 🇬🇧" },
-		{ value: "de", label: "Germany 🇩🇪" },
-		{ value: "jp", label: "Japan 🇯🇵" },
-	];
-
-	const timezoneOptions = [
-		{ value: "utc", label: "UTC (Coordinated Universal Time)" },
-		{ value: "est", label: "US Eastern Time (EST / UTC-5)" },
-		{ value: "cst", label: "US Central Time (CST / UTC-6)" },
-		{ value: "mst", label: "US Mountain Time (MST / UTC-7)" },
-		{ value: "pst", label: "US Pacific Time (PST / UTC-8)" },
-		{ value: "gmt", label: "Europe London (GMT / UTC+0)" },
-		{ value: "cet", label: "Europe Paris (CET / UTC+1)" },
-		{ value: "eet", label: "Europe Athens (EET / UTC+2)" },
-		{ value: "gst", label: "Asia Dubai (GST / UTC+4)" },
-		{ value: "ist", label: "Asia India (IST / UTC+5:30)" },
-		{ value: "sgt", label: "Asia Singapore (SGT / UTC+8)" },
-		{ value: "jst", label: "Asia Tokyo (JST / UTC+9)" },
-		{ value: "kst", label: "Asia Seoul (KST / UTC+9)" },
-		{ value: "aest", label: "Australia Sydney (AEST / UTC+10)" },
-		{ value: "nzst", label: "New Zealand (NZST / UTC+12)" },
-	];
-
-	const groupedTechOptions = [
-		{ value: "nextjs", label: "Next.js 16 (App Router)", group: "Frontend" },
-		{ value: "expo", label: "Expo Router (Mobile)", group: "Frontend" },
-		{ value: "nestjs", label: "NestJS Production API", group: "Backend" },
-		{ value: "postgres", label: "PostgreSQL DB", group: "Backend" },
-	];
-
-	const rtlOptions = [
-		{ value: "ar", label: "العربية (Arabic RTL)" },
-		{ value: "fa", label: "فارسی (Persian RTL)" },
-		{ value: "ur", label: "اردو (Urdu RTL)" },
-	];
-
-	const roleOptions = [
-		{ value: "admin", label: "Administrator (Full Access)" },
-		{ value: "developer", label: "Developer (API Keys & Logs)" },
-		{ value: "viewer", label: "Viewer (Read-Only)" },
-	];
-
-	const isButtonSlug = slug === "button";
-	const isInputSlug = slug === "input";
-	const isSelectSlug = slug === "select";
-	const isTypesetSlug = slug === "typeset";
-
-	const componentTitle = isInputSlug
-		? "Motion Input"
-		: isSelectSlug
-			? "Motion Select"
-			: isButtonSlug
-				? "Motion Button"
-				: isTypesetSlug
-					? "Typeset System"
-					: "Motion Tabs";
+	const title =
+		slug === "bottom-bar"
+			? "Liquid Glass Bottom Bar"
+			: slug === "typeset"
+				? "Typeset"
+				: slug === "select"
+					? "Motion Select"
+					: slug === "input"
+						? "Motion Input"
+						: slug === "button"
+							? "Motion Button"
+							: "Motion Tabs";
 
 	return (
 		<SafeAreaView className="flex-1 bg-zinc-950">
-			<ScrollView className="p-5 pb-10">
-				{/* 1. HEADER SECTION */}
+			<ScrollView className="p-5">
 				<View className="mb-4">
-					<View className="flex-row items-center gap-2 mb-2">
-						<Text className="text-[11px] text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded font-mono overflow-hidden">
-							Mobile Component
-						</Text>
-						<Text className="text-[11px] text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded font-mono overflow-hidden">
-							slug: /ui/{slug}
-						</Text>
-					</View>
-					<Text className="text-[22px] font-bold text-white">{componentTitle}</Text>
-					<Text className="text-xs text-zinc-400 mt-1">
-						React Native Reanimated component running on UI thread for Expo apps.
+					<Text className="text-xs font-bold text-teal-400 font-mono uppercase tracking-widest mb-1">
+						{slug === "typeset" ? "TYPOGRAPHY SYSTEM" : "MOTION COMPONENT"}
+					</Text>
+					<Text className="text-2xl font-bold text-white">{title}</Text>
+				</View>
+
+				{/* TAB PICKER: PREVIEW VS CODE */}
+				<View className="flex-row border-b border-zinc-800 mb-5">
+					<Text
+						onPress={() => setActivePlatformView("preview")}
+						className={`pb-2.5 px-4 text-xs font-semibold ${
+							activePlatformView === "preview"
+								? "text-white border-b-2 border-teal-500"
+								: "text-zinc-500"
+						}`}
+					>
+						Interactive Preview
+					</Text>
+					<Text
+						onPress={() => setActivePlatformView("code")}
+						className={`pb-2.5 px-4 text-xs font-semibold ${
+							activePlatformView === "code"
+								? "text-white border-b-2 border-teal-500"
+								: "text-zinc-500"
+						}`}
+					>
+						Source Code
 					</Text>
 				</View>
 
-				{/* PREVIEW / CODE SWITCHER */}
-				<View className="items-center mb-5">
-					<MotionTabs
-						value={activePlatformView}
-						onValueChange={(v) => setActivePlatformView(v as "preview" | "code")}
-						variant="pill"
-					>
-						<MotionTabsList>
-							<MotionTabsTrigger value="preview">Preview</MotionTabsTrigger>
-							<MotionTabsTrigger value="code">Code</MotionTabsTrigger>
-						</MotionTabsList>
-					</MotionTabs>
-				</View>
-
 				{activePlatformView === "preview" ? (
-					isTypesetSlug ? (
-						/* TYPESET MOBILE PREVIEW & EXTENSIVE EXAMPLES */
-						<View className="gap-4">
-							<View className="items-center mb-2">
-								<MotionTabs
-									value={mobileTypesetPreset}
-									onValueChange={(v) => setMobileTypesetPreset(v as "docs" | "chat" | "reading")}
-									variant="pill"
-								>
-									<MotionTabsList>
-										<MotionTabsTrigger value="docs">Docs</MotionTabsTrigger>
-										<MotionTabsTrigger value="chat">Chat</MotionTabsTrigger>
-										<MotionTabsTrigger value="reading">Reading</MotionTabsTrigger>
-									</MotionTabsList>
-								</MotionTabs>
+					<View className="gap-6 pb-12">
+						{slug === "bottom-bar" ? (
+							<View className="gap-6">
+								<View className="gap-6 rounded-3xl overflow-hidden relative border border-white/20 p-6 items-center min-h-[240px] justify-center">
+									<LinearGradient
+										colors={["#2e1065", "#09090b", "#042f2e"]}
+										start={{ x: 0, y: 0 }}
+										end={{ x: 1, y: 1 }}
+										style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }}
+									/>
+									<View className="absolute top-2 left-4 w-32 h-32 rounded-full bg-purple-500/30 blur-2xl" />
+									<View className="absolute bottom-2 right-4 w-32 h-32 rounded-full bg-teal-500/30 blur-2xl" />
+
+									<Text className="text-sm font-semibold text-white text-center z-10">
+										Aave Glass Metamorphic Lens
+									</Text>
+
+									<MobileBottomBar
+										value={bottomBarTab}
+										onValueChange={setBottomBarTab}
+										switchScaleY={switchScaleY}
+										switchScaleX={switchScaleX}
+										stiffness={stiffness}
+										damping={damping}
+										glassOpacity={glassOpacity}
+										borderOpacity={borderOpacity}
+										className="z-10"
+									>
+										<MobileBottomBarItem
+											value="home"
+											icon={
+												<HugeiconsIcon
+													icon={Home01Icon}
+													size={16}
+													color={bottomBarTab === "home" ? "#ffffff" : "#a1a1aa"}
+												/>
+											}
+										>
+											Home
+										</MobileBottomBarItem>
+										<MobileBottomBarItem
+											value="explore"
+											icon={
+												<HugeiconsIcon
+													icon={Search01Icon}
+													size={16}
+													color={bottomBarTab === "explore" ? "#ffffff" : "#a1a1aa"}
+												/>
+											}
+										>
+											Explore
+										</MobileBottomBarItem>
+										<MobileBottomBarItem
+											value="profile"
+											icon={
+												<HugeiconsIcon
+													icon={UserIcon}
+													size={16}
+													color={bottomBarTab === "profile" ? "#ffffff" : "#a1a1aa"}
+												/>
+											}
+										>
+											Profile
+										</MobileBottomBarItem>
+									</MobileBottomBar>
+								</View>
+
+								{/* CATEGORY 1: PHYSICS ANIMATION CONTROLS */}
+								<View className="bg-zinc-900/90 border border-zinc-800 p-4 rounded-2xl gap-3">
+									<Text className="text-xs font-bold text-teal-400 font-mono uppercase tracking-wider">
+										1. Physics Animation Controls
+									</Text>
+
+									<View className="gap-1.5">
+										<View className="flex-row justify-between">
+											<Text className="text-xs text-zinc-300">Height Expansion (scaleY)</Text>
+											<Text className="text-xs font-mono text-teal-400">
+												{switchScaleY.toFixed(2)}x
+											</Text>
+										</View>
+										<View className="flex-row gap-2">
+											{[1.1, 1.25, 1.35, 1.5].map((v) => (
+												<Pressable
+													key={v}
+													onPress={() => setSwitchScaleY(v)}
+													className={`px-3 py-1 rounded-lg border ${
+														switchScaleY === v
+															? "bg-teal-500/20 border-teal-500 text-teal-300"
+															: "bg-zinc-800 border-zinc-700 text-zinc-400"
+													}`}
+												>
+													<Text className="text-xs font-mono text-white">{v}x</Text>
+												</Pressable>
+											))}
+										</View>
+									</View>
+
+									<View className="gap-1.5">
+										<View className="flex-row justify-between">
+											<Text className="text-xs text-zinc-300">Width Expansion (scaleX)</Text>
+											<Text className="text-xs font-mono text-teal-400">
+												{switchScaleX.toFixed(2)}x
+											</Text>
+										</View>
+										<View className="flex-row gap-2">
+											{[1.05, 1.15, 1.25, 1.35].map((v) => (
+												<Pressable
+													key={v}
+													onPress={() => setSwitchScaleX(v)}
+													className={`px-3 py-1 rounded-lg border ${
+														switchScaleX === v
+															? "bg-teal-500/20 border-teal-500 text-teal-300"
+															: "bg-zinc-800 border-zinc-700 text-zinc-400"
+													}`}
+												>
+													<Text className="text-xs font-mono text-white">{v}x</Text>
+												</Pressable>
+											))}
+										</View>
+									</View>
+
+									<View className="gap-1.5">
+										<View className="flex-row justify-between">
+											<Text className="text-xs text-zinc-300">Spring Stiffness / Damping</Text>
+											<Text className="text-xs font-mono text-teal-400">
+												{stiffness} / {damping}
+											</Text>
+										</View>
+										<View className="flex-row gap-2">
+											{[
+												{ s: 120, d: 12, label: "Fluid" },
+												{ s: 190, d: 18, label: "Medium" },
+												{ s: 300, d: 24, label: "Snappy" },
+											].map((p) => (
+												<Pressable
+													key={p.label}
+													onPress={() => {
+														setStiffness(p.s);
+														setDamping(p.d);
+													}}
+													className={`px-3 py-1 rounded-lg border ${
+														stiffness === p.s
+															? "bg-teal-500/20 border-teal-500 text-teal-300"
+															: "bg-zinc-800 border-zinc-700 text-zinc-400"
+													}`}
+												>
+													<Text className="text-xs text-white">{p.label}</Text>
+												</Pressable>
+											))}
+										</View>
+									</View>
+								</View>
+
+								{/* CATEGORY 2: GLASS OPTICS CONTROLS */}
+								<View className="bg-zinc-900/90 border border-zinc-800 p-4 rounded-2xl gap-3">
+									<Text className="text-xs font-bold text-teal-400 font-mono uppercase tracking-wider">
+										2. Glass Optics & Sheen Controls
+									</Text>
+
+									<View className="gap-1.5">
+										<View className="flex-row justify-between">
+											<Text className="text-xs text-zinc-300">Glass Lens Opacity</Text>
+											<Text className="text-xs font-mono text-teal-400">{glassOpacity}%</Text>
+										</View>
+										<View className="flex-row gap-2">
+											{[5, 10, 20, 30].map((v) => (
+												<Pressable
+													key={v}
+													onPress={() => setGlassOpacity(v)}
+													className={`px-3 py-1 rounded-lg border ${
+														glassOpacity === v
+															? "bg-teal-500/20 border-teal-500 text-teal-300"
+															: "bg-zinc-800 border-zinc-700 text-zinc-400"
+													}`}
+												>
+													<Text className="text-xs font-mono text-white">{v}%</Text>
+												</Pressable>
+											))}
+										</View>
+									</View>
+
+									<View className="gap-1.5">
+										<View className="flex-row justify-between">
+											<Text className="text-xs text-zinc-300">Lens Border Rim Highlight</Text>
+											<Text className="text-xs font-mono text-teal-400">{borderOpacity}%</Text>
+										</View>
+										<View className="flex-row gap-2">
+											{[20, 40, 60, 80].map((v) => (
+												<Pressable
+													key={v}
+													onPress={() => setBorderOpacity(v)}
+													className={`px-3 py-1 rounded-lg border ${
+														borderOpacity === v
+															? "bg-teal-500/20 border-teal-500 text-teal-300"
+															: "bg-zinc-800 border-zinc-700 text-zinc-400"
+													}`}
+												>
+													<Text className="text-xs font-mono text-white">{v}%</Text>
+												</Pressable>
+											))}
+										</View>
+									</View>
+								</View>
 							</View>
+						) : slug === "typeset" ? (
+							<View className="gap-4">
+								<View className="flex-row gap-2 mb-2">
+									{(["docs", "chat", "reading"] as const).map((p) => (
+										<Text
+											key={p}
+											onPress={() => setMobileTypesetPreset(p)}
+											className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase font-mono ${
+												mobileTypesetPreset === p
+													? "bg-teal-500/20 text-teal-400 border border-teal-500/40"
+													: "bg-zinc-900 text-zinc-400 border border-zinc-800"
+											}`}
+										>
+											{p}
+										</Text>
+									))}
+								</View>
 
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
 								<MobileTypeset preset={mobileTypesetPreset}>
-									<MobileTypesetHeading level={1}>Typeset Mobile</MobileTypesetHeading>
+									<MobileTypesetHeading level={1}>Typeset Mobile System</MobileTypesetHeading>
 									<MobileTypesetParagraph>
-										Typeset is a single typography rhythm system for HTML and rendered Markdown
-										across Web and React Native Expo.
+										Typeset delivers container rhythm controls with append stability.
 									</MobileTypesetParagraph>
-
-									<MobileTypesetHeading level={2}>Rhythm Controls</MobileTypesetHeading>
-									<MobileTypesetParagraph>
-										Three core controls derive all sizes: size, leading, and flow.
-									</MobileTypesetParagraph>
-
 									<MobileTypesetBlockquote>
-										"Three controls: size, leading, and flow. Everything else derives from them."
+										"Three controls: size, leading, and flow."
 									</MobileTypesetBlockquote>
-
-									<MobileTypesetCode block>bun add @school-os/ui</MobileTypesetCode>
-
 									<MobileTypesetScroll>
-										<View className="flex-row items-center gap-6 p-2">
-											<Text className="text-xs font-mono text-zinc-300">Metric</Text>
-											<Text className="text-xs font-mono text-zinc-300">Web CSS</Text>
-											<Text className="text-xs font-mono text-zinc-300">Mobile UniWind</Text>
+										<View className="p-3 bg-zinc-900 rounded-xl border border-zinc-800 my-2">
+											<Text className="text-xs text-teal-400 font-mono">
+												Horizontal Scroll Table
+											</Text>
 										</View>
 									</MobileTypesetScroll>
-
-									<MobileNotTypeset className="mt-4 p-3 bg-zinc-950 rounded-lg border border-zinc-800">
+									<MobileNotTypeset className="p-4 bg-zinc-900 rounded-xl border border-zinc-800 mt-4">
 										<Text className="text-xs font-semibold text-white">
-											Opted Out Component (NotTypeset)
+											Opted out interactive container
 										</Text>
 									</MobileNotTypeset>
 								</MobileTypeset>
 							</View>
-						</View>
-					) : isInputSlug ? (
-						/* INPUT MOBILE PREVIEW & EXTENSIVE EXAMPLES */
-						<View className="gap-4">
-							{/* EX 1: SUCCESS ANIMATED CHECKMARK */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">
-									1. Verified Account Email (Success Checkmark):
-								</Text>
+						) : slug === "select" ? (
+							<View className="gap-4">
+								<MotionSelect
+									label="Role Selector"
+									value={roleSelect}
+									onValueChange={setRoleSelect}
+									options={[
+										{ label: "Admin", value: "admin" },
+										{ label: "Developer", value: "dev" },
+										{ label: "Viewer", value: "viewer" },
+									]}
+								/>
+							</View>
+						) : slug === "input" ? (
+							<View className="gap-4">
 								<MotionInput
 									label="Verified Email"
-									placeholder="you@example.com"
 									value={emailVal}
 									onChangeText={setEmailVal}
 									success
-									leftIcon={<HugeiconsIcon icon={Mail01Icon} size={16} color="#a1a1aa" />}
+									leftIcon={<HugeiconsIcon icon={Mail01Icon} size={18} />}
 								/>
 							</View>
-
-							{/* EX 2: ERROR REANIMATED SHAKE */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">2. Error Shake & Message:</Text>
-								<MotionInput
-									label="Workspace Domain"
-									value={errorInputVal}
-									onChangeText={setErrorInputVal}
-									error={inputErrorState ? "Domain contains invalid characters" : undefined}
-									leftIcon={<HugeiconsIcon icon={UserIcon} size={16} color="#a1a1aa" />}
-								/>
-								<View className="mt-2">
-									<MobileMotionButton
-										variant="outline"
-										size="sm"
-										onPress={() => setInputErrorState(!inputErrorState)}
-									>
-										{inputErrorState ? "Clear Error State" : "Re-trigger Error Shake"}
-									</MobileMotionButton>
-								</View>
+						) : slug === "button" ? (
+							<View className="gap-4 items-center">
+								<MobileMotionButton variant="primary">Primary Button</MobileMotionButton>
 							</View>
-
-							{/* EX 3: SEARCH WITH LEFT & RIGHT ICON */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">3. Search Bar with Clear Button:</Text>
-								<MotionInput
-									label="Global Search"
-									placeholder="Search components or icons..."
-									value={searchVal}
-									onChangeText={setSearchVal}
-									clearable
-									onClear={() => setSearchVal("")}
-									leftIcon={<HugeiconsIcon icon={Search01Icon} size={16} color="#a1a1aa" />}
-								/>
-							</View>
-
-							{/* EX 4: PASSWORD VISIBILITY TOGGLE */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">
-									4. Password Input with Eye Toggle:
-								</Text>
-								<MotionInput
-									label="Account Security Password"
-									secureTextEntry
-									value={passwordVal}
-									onChangeText={setPasswordVal}
-								/>
-							</View>
-
-							{/* EX 5: UNANIMATED BASE PRIMITIVE */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">
-									5. Un-animated Base Primitive Input:
-								</Text>
-								<Input placeholder="Standard TextInput fallback..." />
-							</View>
-						</View>
-					) : isSelectSlug ? (
-						/* SELECT MOBILE PREVIEW & EXTENSIVE EXAMPLES */
-						<View className="gap-4">
-							{/* EX 1: SCROLLABLE LONG LIST (15+ TIMEZONES) */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">
-									1. Scrollable Long List (15+ World Timezones):
-								</Text>
-								<MotionSelect
-									label="Select World Timezone"
-									options={timezoneOptions}
-									value={scrollableSelect}
-									onValueChange={setScrollableSelect}
-									searchable
-								/>
-							</View>
-
-							{/* EX 2: SEARCHABLE COMBOBOX SELECT */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">
-									2. Searchable Filter Combobox Select:
-								</Text>
-								<MotionSelect
-									label="Select Country"
-									options={countryOptions}
-									value={searchableSelect}
-									onValueChange={setSearchableSelect}
-									searchable
-								/>
-							</View>
-
-							{/* EX 3: GROUPED SELECT */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">3. Grouped Technologies Select:</Text>
-								<MotionSelect
-									label="Stack Target"
-									options={groupedTechOptions}
-									value={groupedSelect}
-									onValueChange={setGroupedSelect}
-								/>
-							</View>
-
-							{/* EX 4: ERROR STATE SELECT */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">4. Invalid / Error State Select:</Text>
-								<MotionSelect
-									label="Required Selection"
-									options={roleOptions}
-									value={errorSelectVal}
-									onValueChange={setErrorSelectVal}
-									error={selectErrorState}
-								/>
-								<View className="mt-2">
-									<MobileMotionButton
-										variant="outline"
-										size="sm"
-										onPress={() => setSelectErrorState(!selectErrorState)}
-									>
-										{selectErrorState ? "Clear Select Error" : "Trigger Select Error"}
-									</MobileMotionButton>
-								</View>
-							</View>
-
-							{/* EX 5: RTL SELECT */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">
-									5. RTL Support (Right-to-Left Layout):
-								</Text>
-								<MotionSelect
-									label="اختر اللغة"
-									options={rtlOptions}
-									value={rtlSelectVal}
-									onValueChange={setRtlSelectVal}
-									dir="rtl"
-								/>
-							</View>
-
-							{/* EX 6: UNANIMATED BASE SELECT */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">
-									6. Base Un-animated Select Primitive:
-								</Text>
-								<Select options={roleOptions} value={roleSelect} onValueChange={setRoleSelect} />
-							</View>
-						</View>
-					) : isButtonSlug ? (
-						/* BUTTON MOBILE PREVIEW & EXTENSIVE EXAMPLES */
-						<View className="gap-4">
-							{/* EX 1: STATEFUL BUTTON */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">
-									1. Cascading Stagger & Icon Slot Swap:
-								</Text>
-								<View className="gap-2.5 mt-2">
-									<StatefulButton
-										state={okState}
-										variant="primary"
-										size="md"
-										onPress={() => runStatefulDemo("ok")}
-										loadingText="Saving changes"
-										successText="Saved successfully"
-										icon={<HugeiconsIcon icon={ArrowRightIcon} size={16} color="#000000" />}
-									>
-										Save changes
-									</StatefulButton>
-									<StatefulButton
-										state={errState}
-										variant="secondary"
-										size="md"
-										onPress={() => runStatefulDemo("err")}
-										loadingText="Submitting form"
-										errorText="Failed to save"
-									>
-										Submit form
-									</StatefulButton>
-								</View>
-							</View>
-
-							{/* EX 2: SIZES */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">2. Button Size Matrix:</Text>
-								<View className="flex-row flex-wrap items-center gap-2 mt-2">
-									<MobileMotionButton variant="primary" size="sm">
-										Small Pill
-									</MobileMotionButton>
-									<MobileMotionButton variant="primary" size="md">
-										Medium Primary
-									</MobileMotionButton>
-									<MobileMotionButton variant="primary" size="icon">
-										<HugeiconsIcon icon={SparklesIcon} size={16} color="#000000" />
-									</MobileMotionButton>
-								</View>
-							</View>
-
-							{/* EX 3: VARIANTS */}
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-								<Text className="text-xs text-zinc-400 mb-2">3. Button Styling Variants:</Text>
-								<View className="gap-2.5 mt-2">
-									<MobileMotionButton
-										loading={buttonLoading}
-										variant="primary"
-										size="md"
-										onPress={() => setButtonLoading(!buttonLoading)}
-									>
-										{buttonLoading ? "Processing State..." : "Click for Loader"}
-									</MobileMotionButton>
-									<MobileMotionButton variant="outline" size="md">
-										Outline Reflection
-									</MobileMotionButton>
-									<MobileMotionButton variant="destructive" size="md">
-										Destructive Action
-									</MobileMotionButton>
-									<MobileButton variant="outline" size="md">
-										Base Primitive
-									</MobileButton>
-								</View>
-							</View>
-						</View>
-					) : (
-						/* TABS MOBILE PREVIEW */
-						<View className="gap-4">
-							<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+						) : (
+							<View className="gap-4">
 								<MotionTabs defaultValue="overview" variant="pill">
 									<MotionTabsList>
 										<MotionTabsTrigger value="overview">Overview</MotionTabsTrigger>
 										<MotionTabsTrigger value="analytics">Analytics</MotionTabsTrigger>
-										<MotionTabsTrigger value="settings">Settings</MotionTabsTrigger>
 									</MotionTabsList>
-									<View className="w-full mt-4">
-										<MotionTabsContent
-											value="overview"
-											className="bg-zinc-950 p-4 rounded-[10px] border border-zinc-800 min-h-[100px]"
-										>
-											<Text className="text-sm font-semibold text-white mb-1.5">
-												System Overview
-											</Text>
-											<Text className="text-xs text-zinc-400 leading-[18px]">
-												React Native Reanimated spring physics running on UI thread.
-											</Text>
-										</MotionTabsContent>
-									</View>
+									<MotionTabsContent value="overview">
+										<View className="p-4 bg-zinc-900 rounded-xl border border-zinc-800 mt-3">
+											<Text className="text-xs text-white">Overview Content</Text>
+										</View>
+									</MotionTabsContent>
 								</MotionTabs>
 							</View>
-						</View>
-					)
+						)}
+					</View>
 				) : (
-					/* CODE VIEW */
-					<View className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-						<Text className="text-xs font-semibold text-zinc-400 mb-3">
-							React Native Code Snippet:
-						</Text>
-						<Text className="font-mono text-[11px] text-teal-400 leading-[18px]">
-							{isInputSlug
-								? INPUT_CODE_EXAMPLE
-								: isSelectSlug
-									? SELECT_CODE_EXAMPLE
-									: isButtonSlug
-										? BUTTON_CODE_EXAMPLE
-										: isTypesetSlug
-											? TYPESET_CODE_EXAMPLE
-											: TABS_CODE_EXAMPLE}
+					<View className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
+						<Text className="text-xs font-mono text-teal-400 leading-relaxed">
+							{slug === "bottom-bar"
+								? BOTTOM_BAR_CODE_EXAMPLE
+								: slug === "typeset"
+									? TYPESET_CODE_EXAMPLE
+									: slug === "select"
+										? SELECT_CODE_EXAMPLE
+										: slug === "input"
+											? INPUT_CODE_EXAMPLE
+											: slug === "button"
+												? BUTTON_CODE_EXAMPLE
+												: TABS_CODE_EXAMPLE}
 						</Text>
 					</View>
 				)}

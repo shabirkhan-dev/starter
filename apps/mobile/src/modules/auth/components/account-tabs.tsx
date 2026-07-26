@@ -5,7 +5,7 @@ type AccountTab = "profile" | "security" | "billing";
 
 export function AccountTabs({ active }: { active: AccountTab }) {
 	return (
-		<View className="flex-row gap-1.5 p-1 rounded-xl border border-zinc-800 bg-white/5">
+		<View className="flex-row gap-1.5 p-1 rounded-2xl border border-zinc-800 bg-white/5">
 			<Tab
 				label="Profile"
 				active={active === "profile"}
@@ -29,11 +29,9 @@ function Tab({ label, active, onPress }: { label: string; active: boolean; onPre
 	return (
 		<Pressable
 			onPress={onPress}
-			className={`flex-1 min-h-[40px] rounded-lg items-center justify-center px-1 active:opacity-85 ${
-				active ? "bg-emerald-500/10 border border-emerald-500/35" : ""
-			}`}
+			className={`flex-1 min-h-[40px] rounded-xl items-center justify-center px-1 active:opacity-85 ${active ? "bg-teal-500/10 border border-teal-500/35" : ""}`}
 		>
-			<Text className={`text-xs font-semibold ${active ? "text-emerald-400" : "text-zinc-400"}`}>
+			<Text className={`text-[13px] font-semibold ${active ? "text-teal-400" : "text-zinc-400"}`}>
 				{label}
 			</Text>
 		</Pressable>
