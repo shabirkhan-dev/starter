@@ -135,11 +135,11 @@ export function BottomBar({
 	glow = 1.0,
 	edgeHighlight = 0.25,
 	specularAngle = 180,
-	switchScaleY = 1.35,
-	switchScaleX = 1.18,
-	stiffness = 220,
-	damping = 15,
-	mass = 0.8,
+	switchScaleY = 1.45,
+	switchScaleX = 1.35,
+	stiffness = 260,
+	damping = 14,
+	mass = 0.7,
 	children,
 	className,
 }: AaveGlassConfig & {
@@ -228,7 +228,6 @@ export function BottomBar({
 
 	const isLight = themeMode === "light";
 
-	// Live Displacement Normal Map
 	const normalMapDataUrl = useMemo(
 		() =>
 			generateAaveLensNormalMap({
@@ -438,42 +437,44 @@ export function BottomBarItem({
 				</span>
 			</span>
 
-			{/* DYNAMIC LIQUID DROPLET SURFACE TENSION LENS */}
+			{/* OUTER LAYOUT CONTAINER FOR POSITIONING */}
 			{active ? (
-				<motion.div
-					layoutId={layoutId}
-					className={cn(
-						"absolute inset-0 rounded-full overflow-hidden z-0 border transition-all duration-200",
-					)}
-					style={{
-						borderColor: isLight
-							? `rgba(0, 0, 0, ${config.edgeHighlight})`
-							: `rgba(255, 255, 255, ${config.edgeHighlight})`,
-						backgroundColor: isLight ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.08)",
-						backdropFilter: `blur(${config.blur * 8}px) saturate(180%)`,
-						WebkitBackdropFilter: `blur(${config.blur * 8}px) saturate(180%)`,
-						boxShadow: isLight
-							? `inset 0 1.5px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.12)`
-							: `inset 0 1.5px 2px rgba(255,255,255,0.6), inset 0 -1.5px 2px rgba(0,0,0,0.6), 0 8px 25px rgba(0,0,0,0.6)`,
-					}}
-					initial={{ scaleX: 1, scaleY: 1 }}
-					animate={{
-						scaleY: [1, config.switchScaleY, 0.9, 1.05, 0.98, 1],
-						scaleX: [1, config.switchScaleX, 0.93, 1.03, 0.99, 1],
-					}}
-					transition={{
-						type: "spring",
-						stiffness: config.stiffness,
-						damping: config.damping,
-						mass: config.mass,
-					}}
-				>
-					<div
-						className={cn("absolute inset-0 rounded-full pointer-events-none opacity-90")}
+				<motion.div layoutId={layoutId} className="absolute inset-0 z-0 pointer-events-none">
+					{/* INNER DECOUPLED LIQUID DROPLET CORE - REACTS DRAMATICALLY TO SWITCHING */}
+					<motion.div
+						key={current}
+						className={cn("w-full h-full rounded-full overflow-hidden border")}
 						style={{
-							background: `linear-gradient(${config.specularAngle}deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.08) 45%, transparent 100%)`,
+							borderColor: isLight
+								? `rgba(0, 0, 0, ${config.edgeHighlight})`
+								: `rgba(255, 255, 255, ${config.edgeHighlight})`,
+							backgroundColor: isLight ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.08)",
+							backdropFilter: `blur(${config.blur * 8}px) saturate(180%)`,
+							WebkitBackdropFilter: `blur(${config.blur * 8}px) saturate(180%)`,
+							boxShadow: isLight
+								? `inset 0 1.5px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.12)`
+								: `inset 0 1.5px 2px rgba(255,255,255,0.6), inset 0 -1.5px 2px rgba(0,0,0,0.6), 0 8px 25px rgba(0,0,0,0.6)`,
 						}}
-					/>
+						initial={{ scaleX: 1, scaleY: 1 }}
+						animate={{
+							scaleX: [1, config.switchScaleX, 0.78, 1.15, 0.94, 1],
+							scaleY: [1, config.switchScaleY, 1.25, 0.85, 1.05, 1],
+							rotate: [0, -3, 3, -1, 0],
+						}}
+						transition={{
+							type: "spring",
+							stiffness: config.stiffness,
+							damping: config.damping,
+							mass: config.mass,
+						}}
+					>
+						<div
+							className={cn("absolute inset-0 rounded-full pointer-events-none opacity-90")}
+							style={{
+								background: `linear-gradient(${config.specularAngle}deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.08) 45%, transparent 100%)`,
+							}}
+						/>
+					</motion.div>
 				</motion.div>
 			) : null}
 		</button>
