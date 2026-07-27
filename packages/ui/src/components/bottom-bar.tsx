@@ -135,11 +135,11 @@ export function BottomBar({
 	glow = 1.0,
 	edgeHighlight = 0.25,
 	specularAngle = 180,
-	switchScaleY = 1.45,
-	switchScaleX = 1.35,
-	stiffness = 260,
-	damping = 14,
-	mass = 0.7,
+	switchScaleY = 1.35,
+	switchScaleX = 1.25,
+	stiffness = 240,
+	damping = 18,
+	mass = 0.8,
 	children,
 	className,
 }: AaveGlassConfig & {
@@ -352,8 +352,7 @@ export function BottomBar({
 						</defs>
 					</svg>
 
-					<motion.nav
-						layoutRoot
+					<div
 						aria-label="Aave Glass Dock Navigation"
 						className={cn(
 							"inline-flex items-center gap-1.5 p-1.5 px-2 rounded-full border select-none relative transition-all duration-300",
@@ -364,7 +363,7 @@ export function BottomBar({
 						)}
 					>
 						{children}
-					</motion.nav>
+					</div>
 				</LayoutGroup>
 			</BottomBarContext.Provider>
 		</MotionConfig>
@@ -393,7 +392,7 @@ export function BottomBarItem({
 			aria-selected={active}
 			onClick={() => setValue(value)}
 			className={cn(
-				"relative z-10 flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 outline-none select-none min-h-[44px]",
+				"relative z-10 flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-medium transition-colors duration-200 outline-none select-none min-h-[44px]",
 				active
 					? isLight
 						? "text-zinc-950 font-bold"
@@ -437,44 +436,42 @@ export function BottomBarItem({
 				</span>
 			</span>
 
-			{/* OUTER LAYOUT CONTAINER FOR POSITIONING */}
+			{/* SMOOTH FLUID GLIDING SELECTION INDICATOR LENS */}
 			{active ? (
-				<motion.div layoutId={layoutId} className="absolute inset-0 z-0 pointer-events-none">
-					{/* INNER DECOUPLED LIQUID DROPLET CORE - REACTS DRAMATICALLY TO SWITCHING */}
-					<motion.div
-						key={current}
-						className={cn("w-full h-full rounded-full overflow-hidden border")}
+				<motion.div
+					layoutId={layoutId}
+					className={cn(
+						"absolute inset-0 rounded-full overflow-hidden z-0 border pointer-events-none",
+					)}
+					style={{
+						borderColor: isLight
+							? `rgba(0, 0, 0, ${config.edgeHighlight})`
+							: `rgba(255, 255, 255, ${config.edgeHighlight})`,
+						backgroundColor: isLight ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.08)",
+						backdropFilter: `blur(${config.blur * 8}px) saturate(180%)`,
+						WebkitBackdropFilter: `blur(${config.blur * 8}px) saturate(180%)`,
+						boxShadow: isLight
+							? `inset 0 1.5px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.12)`
+							: `inset 0 1.5px 2px rgba(255,255,255,0.6), inset 0 -1.5px 2px rgba(0,0,0,0.6), 0 8px 25px rgba(0,0,0,0.6)`,
+					}}
+					transition={{
+						type: "spring",
+						stiffness: config.stiffness,
+						damping: config.damping,
+						mass: config.mass,
+					}}
+					initial={{ scaleX: 1, scaleY: 1 }}
+					animate={{
+						scaleX: [1, config.switchScaleX, 0.92, 1.05, 1],
+						scaleY: [1, config.switchScaleY, 1.12, 0.96, 1],
+					}}
+				>
+					<div
+						className={cn("absolute inset-0 rounded-full pointer-events-none opacity-90")}
 						style={{
-							borderColor: isLight
-								? `rgba(0, 0, 0, ${config.edgeHighlight})`
-								: `rgba(255, 255, 255, ${config.edgeHighlight})`,
-							backgroundColor: isLight ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.08)",
-							backdropFilter: `blur(${config.blur * 8}px) saturate(180%)`,
-							WebkitBackdropFilter: `blur(${config.blur * 8}px) saturate(180%)`,
-							boxShadow: isLight
-								? `inset 0 1.5px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.12)`
-								: `inset 0 1.5px 2px rgba(255,255,255,0.6), inset 0 -1.5px 2px rgba(0,0,0,0.6), 0 8px 25px rgba(0,0,0,0.6)`,
+							background: `linear-gradient(${config.specularAngle}deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.08) 45%, transparent 100%)`,
 						}}
-						initial={{ scaleX: 1, scaleY: 1 }}
-						animate={{
-							scaleX: [1, config.switchScaleX, 0.78, 1.15, 0.94, 1],
-							scaleY: [1, config.switchScaleY, 1.25, 0.85, 1.05, 1],
-							rotate: [0, -3, 3, -1, 0],
-						}}
-						transition={{
-							type: "spring",
-							stiffness: config.stiffness,
-							damping: config.damping,
-							mass: config.mass,
-						}}
-					>
-						<div
-							className={cn("absolute inset-0 rounded-full pointer-events-none opacity-90")}
-							style={{
-								background: `linear-gradient(${config.specularAngle}deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.08) 45%, transparent 100%)`,
-							}}
-						/>
-					</motion.div>
+					/>
 				</motion.div>
 			) : null}
 		</button>
