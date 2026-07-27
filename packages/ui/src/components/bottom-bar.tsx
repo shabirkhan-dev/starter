@@ -352,7 +352,9 @@ export function BottomBar({
 						</defs>
 					</svg>
 
-					<div
+					<motion.nav
+						layout
+						layoutRoot
 						aria-label="Aave Glass Dock Navigation"
 						className={cn(
 							"inline-flex items-center gap-1.5 p-1.5 px-2 rounded-full border select-none relative transition-all duration-300",
@@ -363,7 +365,7 @@ export function BottomBar({
 						)}
 					>
 						{children}
-					</div>
+					</motion.nav>
 				</LayoutGroup>
 			</BottomBarContext.Provider>
 		</MotionConfig>
@@ -386,7 +388,8 @@ export function BottomBarItem({
 	const isLight = config.themeMode === "light";
 
 	return (
-		<button
+		<motion.button
+			layout
 			type="button"
 			role="tab"
 			aria-selected={active}
@@ -439,9 +442,8 @@ export function BottomBarItem({
 			{/* ACTIVE SELECTION INDICATOR LENS WITH SHARED LAYOUT ANIMATION */}
 			{active ? (
 				<motion.div
-					layoutId="active-glass-pill"
+					layoutId="active-glass-indicator"
 					layout
-					key={current}
 					className={cn(
 						"absolute inset-0 rounded-full overflow-hidden z-0 border pointer-events-none",
 					)}
@@ -462,10 +464,9 @@ export function BottomBarItem({
 						damping: config.damping,
 						mass: config.mass,
 					}}
-					initial={{ scaleX: 1, scaleY: 1 }}
 					animate={{
-						scaleX: [1, config.switchScaleX, 0.88, 1.08, 0.98, 1],
-						scaleY: [1, config.switchScaleY, 1.18, 0.92, 1.02, 1],
+						scaleX: [1, config.switchScaleX, 0.9, 1.04, 1],
+						scaleY: [1, config.switchScaleY, 1.15, 0.95, 1],
 					}}
 				>
 					<div
@@ -476,6 +477,6 @@ export function BottomBarItem({
 					/>
 				</motion.div>
 			) : null}
-		</button>
+		</motion.button>
 	);
 }
