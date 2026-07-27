@@ -36,7 +36,7 @@ export type AaveGlassConfig = {
 type BottomBarContextType = {
 	value: string;
 	setValue: (v: string) => void;
-	layoutId: string;
+	groupId: string;
 	filterId: string;
 	config: Required<AaveGlassConfig>;
 };
@@ -149,13 +149,13 @@ export function BottomBar({
 	children: ReactNode;
 	className?: string;
 }) {
-	const [internal, setInternal] = useState(defaultValue ?? "");
+	const [internal, setInternal] = useState(defaultValue ?? "home");
 	const rawId = useId();
 	const [filterCounter, setFilterCounter] = useState(0);
 	const reduce = useReducedMotion();
 
 	const controlled = value !== undefined;
-	const current = controlled ? value : internal;
+	const current = controlled ? value || "home" : internal || "home";
 
 	const setValue = useCallback(
 		(v: string) => {
@@ -220,7 +220,7 @@ export function BottomBar({
 		[config.stiffness, config.damping, config.mass],
 	);
 
-	const layoutId = useMemo(() => `aave-lens-${rawId.replace(/:/g, "")}`, [rawId]);
+	const groupId = useMemo(() => `glass-group-${rawId.replace(/:/g, "")}`, [rawId]);
 	const filterId = useMemo(
 		() => `aave-refract-map-${rawId.replace(/:/g, "")}-${filterCounter}`,
 		[rawId, filterCounter],
@@ -249,8 +249,8 @@ export function BottomBar({
 
 	return (
 		<MotionConfig transition={reduce ? { duration: 0 } : springTransition}>
-			<BottomBarContext.Provider value={{ value: current, setValue, layoutId, filterId, config }}>
-				<LayoutGroup id={layoutId}>
+			<BottomBarContext.Provider value={{ value: current, setValue, groupId, filterId, config }}>
+				<LayoutGroup id={groupId}>
 					{/* SVG PIPELINE */}
 					<svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
 						<defs>
@@ -381,7 +381,7 @@ export function BottomBarItem({
 	children: ReactNode;
 	className?: string;
 }) {
-	const { value: current, setValue, layoutId, filterId, config } = useBottomBar();
+	const { value: current, setValue, filterId, config } = useBottomBar();
 	const active = current === value;
 	const isLight = config.themeMode === "light";
 
@@ -436,10 +436,12 @@ export function BottomBarItem({
 				</span>
 			</span>
 
-			{/* SMOOTH FLUID GLIDING SELECTION INDICATOR LENS */}
+			{/* ACTIVE SELECTION INDICATOR LENS WITH SHARED LAYOUT ANIMATION */}
 			{active ? (
 				<motion.div
-					layoutId={layoutId}
+					layoutId="active-glass-pill"
+					layout
+					key={current}
 					className={cn(
 						"absolute inset-0 rounded-full overflow-hidden z-0 border pointer-events-none",
 					)}
@@ -462,8 +464,8 @@ export function BottomBarItem({
 					}}
 					initial={{ scaleX: 1, scaleY: 1 }}
 					animate={{
-						scaleX: [1, config.switchScaleX, 0.92, 1.05, 1],
-						scaleY: [1, config.switchScaleY, 1.12, 0.96, 1],
+						scaleX: [1, config.switchScaleX, 0.88, 1.08, 0.98, 1],
+						scaleY: [1, config.switchScaleY, 1.18, 0.92, 1.02, 1],
 					}}
 				>
 					<div
