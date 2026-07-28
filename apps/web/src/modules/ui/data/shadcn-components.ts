@@ -4,6 +4,7 @@ import {
 	InputTextIcon,
 	Layers01Icon,
 	Layout01Icon,
+	Settings02Icon,
 	SmartPhone01Icon,
 	TextFontIcon,
 	ToggleOnIcon,
@@ -31,6 +32,15 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 		id: "motion-components",
 		title: "Motion Components",
 		items: [
+			{
+				id: "slider",
+				name: "Motion Slider",
+				description:
+					"Tactile spring range slider with floating value tooltip badge, step ticks, and color variants",
+				category: "Motion",
+				icon: Settings02Icon,
+				badge: "New",
+			},
 			{
 				id: "switch",
 				name: "Motion Switch",
