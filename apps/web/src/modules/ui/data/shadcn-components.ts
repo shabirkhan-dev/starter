@@ -6,6 +6,7 @@ import {
 	Layout01Icon,
 	SmartPhone01Icon,
 	TextFontIcon,
+	ToggleOnIcon,
 } from "@hugeicons/core-free-icons";
 import type { HugeiconsIcon } from "@hugeicons/react";
 import type { ComponentProps } from "react";
@@ -30,6 +31,15 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 		id: "motion-components",
 		title: "Motion Components",
 		items: [
+			{
+				id: "switch",
+				name: "Motion Switch",
+				description:
+					"Spring-animated toggle switch with thumb icon swap, async loading state, and color variants",
+				category: "Motion",
+				icon: ToggleOnIcon,
+				badge: "New",
+			},
 			{
 				id: "glass-card",
 				name: "Liquid Glass Card",

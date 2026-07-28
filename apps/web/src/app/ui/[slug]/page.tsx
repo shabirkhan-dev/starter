@@ -71,6 +71,26 @@ import {
 	GlassCardHeader,
 	GlassCardTitle,
 } from "@school-os/ui/components/glass-card";
+import { MotionSwitch, StatefulSwitch } from "@school-os/ui/components/motion/switch";
+
+const WEB_SWITCH_CODE = `import { MotionSwitch, StatefulSwitch } from "@school-os/ui/components/motion/switch";
+
+export function MotionSwitchDemo() {
+  return (
+    <div className="flex flex-wrap items-center gap-6">
+      <MotionSwitch defaultChecked size="sm" />
+      <MotionSwitch defaultChecked size="default" variant="success" />
+      <MotionSwitch defaultChecked size="lg" variant="indigo" />
+      <StatefulSwitch
+        variant="destructive"
+        onToggle={async (next) => {
+          await new Promise((res) => setTimeout(res, 1200));
+          return true;
+        }}
+      />
+    </div>
+  );
+}`;
 
 const WEB_GLASS_CARD_CODE = `import {
   GlassCard,
@@ -221,19 +241,21 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 	}, [slug, lensWidth, lensHeight, borderRadius, depth, curvature, splay, glow, activeTheme]);
 
 	const codeSnippet =
-		slug === "glass-card"
-			? WEB_GLASS_CARD_CODE
-			: slug === "bottom-bar"
-				? WEB_BOTTOM_BAR_CODE
-				: slug === "select"
-					? WEB_SELECT_CODE
-					: slug === "input"
-						? WEB_INPUT_CODE
-						: slug === "button"
-							? WEB_BUTTON_CODE
-							: slug === "typeset"
-								? WEB_TYPESET_CODE
-								: WEB_TABS_CODE;
+		slug === "switch"
+			? WEB_SWITCH_CODE
+			: slug === "glass-card"
+				? WEB_GLASS_CARD_CODE
+				: slug === "bottom-bar"
+					? WEB_BOTTOM_BAR_CODE
+					: slug === "select"
+						? WEB_SELECT_CODE
+						: slug === "input"
+							? WEB_INPUT_CODE
+							: slug === "button"
+								? WEB_BUTTON_CODE
+								: slug === "typeset"
+									? WEB_TYPESET_CODE
+									: WEB_TABS_CODE;
 
 	const handleCopy = () => {
 		navigator.clipboard.writeText(codeSnippet);
@@ -248,34 +270,38 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 	};
 
 	const title =
-		slug === "glass-card"
-			? "Liquid Glass Card"
-			: slug === "bottom-bar"
-				? "Liquid Glass Bottom Bar"
-				: slug === "typeset"
-					? "Typeset"
-					: slug === "select"
-						? "Motion Select"
-						: slug === "input"
-							? "Motion Input"
-							: slug === "button"
-								? "Motion Button"
-								: "Motion Tabs";
+		slug === "switch"
+			? "Motion Switch"
+			: slug === "glass-card"
+				? "Liquid Glass Card"
+				: slug === "bottom-bar"
+					? "Liquid Glass Bottom Bar"
+					: slug === "typeset"
+						? "Typeset"
+						: slug === "select"
+							? "Motion Select"
+							: slug === "input"
+								? "Motion Input"
+								: slug === "button"
+									? "Motion Button"
+									: "Motion Tabs";
 
 	const description =
-		slug === "glass-card"
-			? "Tactile glass surface container with SVG feDisplacementMap light refraction, chromatic aberration, & 3D tilt hover"
-			: slug === "bottom-bar"
-				? "Official Aave Glass Lens Generator & Fluid Dynamics Studio"
-				: slug === "typeset"
-					? "A styling system for HTML and rendered markdown with 3 rhythm controls: size, leading, and flow."
-					: slug === "select"
-						? "Animated combobox dropdown with search filtering, spring scale physics, and keyboard navigation."
-						: slug === "input"
-							? "Interactive input field with focus ring animations, error shake, and password toggling."
-							: slug === "button"
-								? "Spring interactive button with multi-state loading, success, and error feedback."
-								: "Spring animated layout indicator with exclusion pill and underline tab variants.";
+		slug === "switch"
+			? "Spring-animated toggle switch with thumb icon swap, async loading state, and color variants"
+			: slug === "glass-card"
+				? "Tactile glass surface container with SVG feDisplacementMap light refraction, chromatic aberration, & 3D tilt hover"
+				: slug === "bottom-bar"
+					? "Official Aave Glass Lens Generator & Fluid Dynamics Studio"
+					: slug === "typeset"
+						? "A styling system for HTML and rendered markdown with 3 rhythm controls: size, leading, and flow."
+						: slug === "select"
+							? "Animated combobox dropdown with search filtering, spring scale physics, and keyboard navigation."
+							: slug === "input"
+								? "Interactive input field with focus ring animations, error shake, and password toggling."
+								: slug === "button"
+									? "Spring interactive button with multi-state loading, success, and error feedback."
+									: "Spring animated layout indicator with exclusion pill and underline tab variants.";
 
 	return (
 		<div className="space-y-8 max-w-5xl pb-16">
@@ -365,7 +391,54 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 							<div
 								className={`p-6 space-y-6 transition-colors duration-300 ${activeTheme === "light" ? "bg-zinc-100" : "bg-[#09090b]"}`}
 							>
-								{slug === "glass-card" ? (
+								{slug === "switch" ? (
+									<div className="flex flex-col items-center justify-center py-12 px-6 space-y-10">
+										<div className="space-y-3 text-center">
+											<h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground">
+												Sizes & Color Variants
+											</h4>
+											<div className="flex flex-wrap items-center justify-center gap-8 p-6 rounded-2xl border border-border bg-card/50 backdrop-blur-md">
+												<div className="flex items-center gap-3">
+													<MotionSwitch defaultChecked size="sm" variant="default" />
+													<span className="text-xs font-mono text-muted-foreground">
+														Small (Default)
+													</span>
+												</div>
+												<div className="flex items-center gap-3">
+													<MotionSwitch defaultChecked size="default" variant="success" />
+													<span className="text-xs font-mono text-muted-foreground">
+														Default (Success)
+													</span>
+												</div>
+												<div className="flex items-center gap-3">
+													<MotionSwitch defaultChecked size="lg" variant="indigo" />
+													<span className="text-xs font-mono text-muted-foreground">
+														Large (Indigo)
+													</span>
+												</div>
+											</div>
+										</div>
+
+										<div className="space-y-3 text-center">
+											<h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground">
+												Async Stateful Switch (1.2s Toggle Delay)
+											</h4>
+											<div className="flex items-center justify-center gap-4 p-6 rounded-2xl border border-border bg-card/50 backdrop-blur-md">
+												<StatefulSwitch
+													size="lg"
+													variant="destructive"
+													onToggle={async (next) => {
+														await new Promise((res) => setTimeout(res, 1200));
+														return true;
+													}}
+												/>
+												<span className="text-xs font-mono text-muted-foreground">
+													Click to test loading state & spring swap
+												</span>
+											</div>
+										</div>
+									</div>
+								) : slug === "glass-card" ? (
 									<div className="flex flex-col items-center justify-center py-12 px-4 space-y-6">
 										<GlassCard
 											themeMode={activeTheme}
