@@ -3,6 +3,7 @@ import {
 	Grid02Icon,
 	InputTextIcon,
 	Layers01Icon,
+	Layout01Icon,
 	SmartPhone01Icon,
 	TextFontIcon,
 } from "@hugeicons/core-free-icons";
@@ -29,6 +30,15 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 		id: "motion-components",
 		title: "Motion Components",
 		items: [
+			{
+				id: "glass-card",
+				name: "Liquid Glass Card",
+				description:
+					"Tactile glass surface container with SVG feDisplacementMap light refraction, chromatic aberration, & 3D tilt hover",
+				category: "Motion",
+				icon: Layout01Icon,
+				badge: "New",
+			},
 			{
 				id: "bottom-bar",
 				name: "Liquid Glass Bottom Bar",

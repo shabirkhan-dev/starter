@@ -62,6 +62,50 @@ import {
 } from "@school-os/ui/components/typeset";
 import { use, useEffect, useRef, useState } from "react";
 
+import {
+	GlassCard,
+	GlassCardBadge,
+	GlassCardContent,
+	GlassCardDescription,
+	GlassCardFooter,
+	GlassCardHeader,
+	GlassCardTitle,
+} from "@school-os/ui/components/glass-card";
+
+const WEB_GLASS_CARD_CODE = `import {
+  GlassCard,
+  GlassCardHeader,
+  GlassCardTitle,
+  GlassCardDescription,
+  GlassCardContent,
+  GlassCardFooter,
+  GlassCardBadge,
+} from "@school-os/ui/components/glass-card";
+
+export function LiquidGlassCardDemo() {
+  return (
+    <GlassCard themeMode="auto" depth={48} curvature={75} chroma={0.85} blur={2.5}>
+      <GlassCardHeader>
+        <GlassCardBadge>Aave Lens Engine</GlassCardBadge>
+        <GlassCardTitle>Liquid Glass Surface</GlassCardTitle>
+        <GlassCardDescription>
+          Real-time SVG light bending over DOM content with chromatic dispersion.
+        </GlassCardDescription>
+      </GlassCardHeader>
+      <GlassCardContent>
+        <p className="text-sm text-zinc-300">
+          Refracting live DOM nodes with zero canvas screenshots or WebGL flags.
+        </p>
+      </GlassCardContent>
+      <GlassCardFooter>
+        <button className="px-4 py-2 rounded-xl bg-teal-500 text-black font-medium text-xs">
+          Explore Optics
+        </button>
+      </GlassCardFooter>
+    </GlassCard>
+  );
+}`;
+
 const WEB_BOTTOM_BAR_CODE = `import { BottomBar, BottomBarItem } from "@school-os/ui/components/bottom-bar";
 
 export function OfficialAaveGlassStudioDemo() {
@@ -177,17 +221,19 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 	}, [slug, lensWidth, lensHeight, borderRadius, depth, curvature, splay, glow, activeTheme]);
 
 	const codeSnippet =
-		slug === "bottom-bar"
-			? WEB_BOTTOM_BAR_CODE
-			: slug === "input"
-				? WEB_INPUT_CODE
+		slug === "glass-card"
+			? WEB_GLASS_CARD_CODE
+			: slug === "bottom-bar"
+				? WEB_BOTTOM_BAR_CODE
 				: slug === "select"
 					? WEB_SELECT_CODE
-					: slug === "button"
-						? WEB_BUTTON_CODE
-						: slug === "typeset"
-							? WEB_TYPESET_CODE
-							: WEB_TABS_CODE;
+					: slug === "input"
+						? WEB_INPUT_CODE
+						: slug === "button"
+							? WEB_BUTTON_CODE
+							: slug === "typeset"
+								? WEB_TYPESET_CODE
+								: WEB_TABS_CODE;
 
 	const handleCopy = () => {
 		navigator.clipboard.writeText(codeSnippet);
@@ -202,30 +248,34 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 	};
 
 	const title =
-		slug === "bottom-bar"
-			? "Liquid Glass Bottom Bar"
-			: slug === "typeset"
-				? "Typeset"
-				: slug === "select"
-					? "Motion Select"
-					: slug === "input"
-						? "Motion Input"
-						: slug === "button"
-							? "Motion Button"
-							: "Motion Tabs";
+		slug === "glass-card"
+			? "Liquid Glass Card"
+			: slug === "bottom-bar"
+				? "Liquid Glass Bottom Bar"
+				: slug === "typeset"
+					? "Typeset"
+					: slug === "select"
+						? "Motion Select"
+						: slug === "input"
+							? "Motion Input"
+							: slug === "button"
+								? "Motion Button"
+								: "Motion Tabs";
 
 	const description =
-		slug === "bottom-bar"
-			? "Official Aave Glass Lens Generator & Fluid Dynamics Studio"
-			: slug === "typeset"
-				? "A styling system for HTML and rendered markdown with 3 rhythm controls: size, leading, and flow."
-				: slug === "select"
-					? "Animated combobox dropdown with search filtering, spring scale physics, and keyboard navigation."
-					: slug === "input"
-						? "Interactive input field with focus ring animations, error shake, and password toggling."
-						: slug === "button"
-							? "Spring interactive button with multi-state loading, success, and error feedback."
-							: "Spring animated layout indicator with exclusion pill and underline tab variants.";
+		slug === "glass-card"
+			? "Tactile glass surface container with SVG feDisplacementMap light refraction, chromatic aberration, & 3D tilt hover"
+			: slug === "bottom-bar"
+				? "Official Aave Glass Lens Generator & Fluid Dynamics Studio"
+				: slug === "typeset"
+					? "A styling system for HTML and rendered markdown with 3 rhythm controls: size, leading, and flow."
+					: slug === "select"
+						? "Animated combobox dropdown with search filtering, spring scale physics, and keyboard navigation."
+						: slug === "input"
+							? "Interactive input field with focus ring animations, error shake, and password toggling."
+							: slug === "button"
+								? "Spring interactive button with multi-state loading, success, and error feedback."
+								: "Spring animated layout indicator with exclusion pill and underline tab variants.";
 
 	return (
 		<div className="space-y-8 max-w-5xl pb-16">
@@ -315,7 +365,59 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 							<div
 								className={`p-6 space-y-6 transition-colors duration-300 ${activeTheme === "light" ? "bg-zinc-100" : "bg-[#09090b]"}`}
 							>
-								{slug === "bottom-bar" ? (
+								{slug === "glass-card" ? (
+									<div className="flex flex-col items-center justify-center py-12 px-4 space-y-6">
+										<GlassCard
+											themeMode={activeTheme}
+											depth={depth}
+											curvature={curvature}
+											splay={splay}
+											chroma={chroma}
+											blur={blur}
+											glow={glow}
+											edgeHighlight={edgeHighlight}
+											specularAngle={specularAngle}
+											className="max-w-md w-full"
+										>
+											<GlassCardHeader>
+												<div className="flex items-center justify-between">
+													<GlassCardBadge>Aave Lens Engine</GlassCardBadge>
+													<span className="text-xs font-mono text-muted-foreground">v2.4</span>
+												</div>
+												<GlassCardTitle className="pt-2">Liquid Glass Card Surface</GlassCardTitle>
+												<GlassCardDescription>
+													Interactive glass surface refracting real live DOM elements with
+													multi-channel RGB chromatic dispersion.
+												</GlassCardDescription>
+											</GlassCardHeader>
+											<GlassCardContent className="space-y-3">
+												<div className="flex items-center justify-between p-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs font-mono">
+													<span>Refraction Scale</span>
+													<span className="text-teal-400 font-bold">
+														{(scale * 160).toFixed(1)}px
+													</span>
+												</div>
+												<div className="flex items-center justify-between p-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs font-mono">
+													<span>Chromatic Fringe</span>
+													<span className="text-purple-400 font-bold">
+														{(chroma * 100).toFixed(0)}%
+													</span>
+												</div>
+											</GlassCardContent>
+											<GlassCardFooter>
+												<button
+													type="button"
+													className="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-500 text-black font-semibold text-xs shadow-lg hover:brightness-110 transition-all"
+												>
+													Interactive Tilt Lens
+												</button>
+												<span className="text-[11px] font-mono text-muted-foreground">
+													Hover to swell
+												</span>
+											</GlassCardFooter>
+										</GlassCard>
+									</div>
+								) : slug === "bottom-bar" ? (
 									<>
 										{/* DUAL VIEWPORTS MATCHING SCREENSHOT */}
 										<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
