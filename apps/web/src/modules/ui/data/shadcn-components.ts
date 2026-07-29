@@ -7,6 +7,7 @@ import {
 	Settings02Icon,
 	SmartPhone01Icon,
 	TextFontIcon,
+	Tick02Icon,
 	ToggleOnIcon,
 } from "@hugeicons/core-free-icons";
 import type { HugeiconsIcon } from "@hugeicons/react";
@@ -32,6 +33,15 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 		id: "motion-components",
 		title: "Motion Components",
 		items: [
+			{
+				id: "checkbox",
+				name: "Motion Checkbox",
+				description:
+					"Spring-animated checkbox with path draw checkmarks, indeterminate dash states, & color variants",
+				category: "Motion",
+				icon: Tick02Icon,
+				badge: "New",
+			},
 			{
 				id: "slider",
 				name: "Motion Slider",
