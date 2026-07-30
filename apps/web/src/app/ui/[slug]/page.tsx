@@ -71,9 +71,35 @@ import {
 	GlassCardHeader,
 	GlassCardTitle,
 } from "@school-os/ui/components/glass-card";
+import {
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+	MotionAccordion,
+} from "@school-os/ui/components/motion/accordion";
 import { MotionCheckbox, StatefulCheckbox } from "@school-os/ui/components/motion/checkbox";
 import { MotionSlider } from "@school-os/ui/components/motion/slider";
 import { MotionSwitch, StatefulSwitch } from "@school-os/ui/components/motion/switch";
+
+const WEB_ACCORDION_CODE = `import {
+  MotionAccordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@school-os/ui/components/motion/accordion";
+
+export function MotionAccordionDemo() {
+  return (
+    <MotionAccordion variant="contained" defaultValue={["item-1"]}>
+      <AccordionItem value="item-1">
+        <AccordionTrigger>What is Motion Accordion?</AccordionTrigger>
+        <AccordionContent>
+          A spring-animated layout accordion component with zero layout jitter.
+        </AccordionContent>
+      </AccordionItem>
+    </MotionAccordion>
+  );
+}`;
 
 const WEB_CHECKBOX_CODE = `import { MotionCheckbox, StatefulCheckbox } from "@school-os/ui/components/motion/checkbox";
 
@@ -275,25 +301,27 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 	}, [slug, lensWidth, lensHeight, borderRadius, depth, curvature, splay, glow, activeTheme]);
 
 	const codeSnippet =
-		slug === "checkbox"
-			? WEB_CHECKBOX_CODE
-			: slug === "slider"
-				? WEB_SLIDER_CODE
-				: slug === "switch"
-					? WEB_SWITCH_CODE
-					: slug === "glass-card"
-						? WEB_GLASS_CARD_CODE
-						: slug === "bottom-bar"
-							? WEB_BOTTOM_BAR_CODE
-							: slug === "select"
-								? WEB_SELECT_CODE
-								: slug === "input"
-									? WEB_INPUT_CODE
-									: slug === "button"
-										? WEB_BUTTON_CODE
-										: slug === "typeset"
-											? WEB_TYPESET_CODE
-											: WEB_TABS_CODE;
+		slug === "accordion"
+			? WEB_ACCORDION_CODE
+			: slug === "checkbox"
+				? WEB_CHECKBOX_CODE
+				: slug === "slider"
+					? WEB_SLIDER_CODE
+					: slug === "switch"
+						? WEB_SWITCH_CODE
+						: slug === "glass-card"
+							? WEB_GLASS_CARD_CODE
+							: slug === "bottom-bar"
+								? WEB_BOTTOM_BAR_CODE
+								: slug === "select"
+									? WEB_SELECT_CODE
+									: slug === "input"
+										? WEB_INPUT_CODE
+										: slug === "button"
+											? WEB_BUTTON_CODE
+											: slug === "typeset"
+												? WEB_TYPESET_CODE
+												: WEB_TABS_CODE;
 
 	const handleCopy = () => {
 		navigator.clipboard.writeText(codeSnippet);
@@ -308,46 +336,50 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 	};
 
 	const title =
-		slug === "checkbox"
-			? "Motion Checkbox"
-			: slug === "slider"
-				? "Motion Slider"
-				: slug === "switch"
-					? "Motion Switch"
-					: slug === "glass-card"
-						? "Liquid Glass Card"
-						: slug === "bottom-bar"
-							? "Liquid Glass Bottom Bar"
-							: slug === "typeset"
-								? "Typeset"
-								: slug === "select"
-									? "Motion Select"
-									: slug === "input"
-										? "Motion Input"
-										: slug === "button"
-											? "Motion Button"
-											: "Motion Tabs";
+		slug === "accordion"
+			? "Motion Accordion"
+			: slug === "checkbox"
+				? "Motion Checkbox"
+				: slug === "slider"
+					? "Motion Slider"
+					: slug === "switch"
+						? "Motion Switch"
+						: slug === "glass-card"
+							? "Liquid Glass Card"
+							: slug === "bottom-bar"
+								? "Liquid Glass Bottom Bar"
+								: slug === "typeset"
+									? "Typeset"
+									: slug === "select"
+										? "Motion Select"
+										: slug === "input"
+											? "Motion Input"
+											: slug === "button"
+												? "Motion Button"
+												: "Motion Tabs";
 
 	const description =
-		slug === "checkbox"
-			? "Spring-animated checkbox with path draw checkmarks, indeterminate dash states, & color variants"
-			: slug === "slider"
-				? "Tactile spring range slider with floating value tooltip badge, step ticks, and color variants"
-				: slug === "switch"
-					? "Spring-animated toggle switch with thumb icon swap, async loading state, and color variants"
-					: slug === "glass-card"
-						? "Tactile glass surface container with SVG feDisplacementMap light refraction, chromatic aberration, & 3D tilt hover"
-						: slug === "bottom-bar"
-							? "Official Aave Glass Lens Generator & Fluid Dynamics Studio"
-							: slug === "typeset"
-								? "A styling system for HTML and rendered markdown with 3 rhythm controls: size, leading, and flow."
-								: slug === "select"
-									? "Animated combobox dropdown with search filtering, spring scale physics, and keyboard navigation."
-									: slug === "input"
-										? "Interactive input field with focus ring animations, error shake, and password toggling."
-										: slug === "button"
-											? "Spring interactive button with multi-state loading, success, and error feedback."
-											: "Spring animated layout indicator with exclusion pill and underline tab variants.";
+		slug === "accordion"
+			? "Bouncy spring-height animated accordion with rotating chevrons, layout variants, & single/multi selection"
+			: slug === "checkbox"
+				? "Spring-animated checkbox with path draw checkmarks, indeterminate dash states, & color variants"
+				: slug === "slider"
+					? "Tactile spring range slider with floating value tooltip badge, step ticks, and color variants"
+					: slug === "switch"
+						? "Spring-animated toggle switch with thumb icon swap, async loading state, and color variants"
+						: slug === "glass-card"
+							? "Tactile glass surface container with SVG feDisplacementMap light refraction, chromatic aberration, & 3D tilt hover"
+							: slug === "bottom-bar"
+								? "Official Aave Glass Lens Generator & Fluid Dynamics Studio"
+								: slug === "typeset"
+									? "A styling system for HTML and rendered markdown with 3 rhythm controls: size, leading, and flow."
+									: slug === "select"
+										? "Animated combobox dropdown with search filtering, spring scale physics, and keyboard navigation."
+										: slug === "input"
+											? "Interactive input field with focus ring animations, error shake, and password toggling."
+											: slug === "button"
+												? "Spring interactive button with multi-state loading, success, and error feedback."
+												: "Spring animated layout indicator with exclusion pill and underline tab variants.";
 
 	return (
 		<div className="space-y-8 max-w-5xl pb-16">
@@ -437,7 +469,60 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 							<div
 								className={`p-6 space-y-6 transition-colors duration-300 ${activeTheme === "light" ? "bg-zinc-100" : "bg-[#09090b]"}`}
 							>
-								{slug === "checkbox" ? (
+								{slug === "accordion" ? (
+									<div className="flex flex-col items-center justify-center py-12 px-6 max-w-xl mx-auto space-y-10">
+										<div className="space-y-3 text-center w-full">
+											<h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground">
+												Contained Cards Variant
+											</h4>
+											<MotionAccordion
+												variant="contained"
+												defaultValue={["item-1"]}
+												className="w-full"
+											>
+												<AccordionItem value="item-1">
+													<AccordionTrigger>What is Motion Accordion?</AccordionTrigger>
+													<AccordionContent>
+														A spring-height animated accordion component with smooth layout
+														measurement, rotating chevrons, & zero layout jitter.
+													</AccordionContent>
+												</AccordionItem>
+												<AccordionItem value="item-2">
+													<AccordionTrigger>How are physics configured?</AccordionTrigger>
+													<AccordionContent>
+														Height transitions use Framer Motion spring physics with reduced motion
+														fallbacks for accessibility.
+													</AccordionContent>
+												</AccordionItem>
+											</MotionAccordion>
+										</div>
+
+										<div className="space-y-3 text-center w-full">
+											<h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground">
+												Default Bordered Divider Variant
+											</h4>
+											<MotionAccordion
+												variant="default"
+												defaultValue={["item-a"]}
+												className="w-full"
+											>
+												<AccordionItem value="item-a">
+													<AccordionTrigger>Is it fully accessible?</AccordionTrigger>
+													<AccordionContent>
+														Yes, built on Base UI Accordion primitive with complete ARIA keyboard
+														navigation.
+													</AccordionContent>
+												</AccordionItem>
+												<AccordionItem value="item-b">
+													<AccordionTrigger>Can I expand multiple items?</AccordionTrigger>
+													<AccordionContent>
+														Simply set <code>type="multiple"</code> on the Root component.
+													</AccordionContent>
+												</AccordionItem>
+											</MotionAccordion>
+										</div>
+									</div>
+								) : slug === "checkbox" ? (
 									<div className="flex flex-col items-center justify-center py-12 px-6 space-y-10">
 										<div className="space-y-3 text-center">
 											<h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground">

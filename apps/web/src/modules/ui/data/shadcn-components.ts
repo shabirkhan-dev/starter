@@ -4,6 +4,7 @@ import {
 	InputTextIcon,
 	Layers01Icon,
 	Layout01Icon,
+	Menu01Icon,
 	Settings02Icon,
 	SmartPhone01Icon,
 	TextFontIcon,
@@ -33,6 +34,15 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 		id: "motion-components",
 		title: "Motion Components",
 		items: [
+			{
+				id: "accordion",
+				name: "Motion Accordion",
+				description:
+					"Bouncy spring-height animated accordion with rotating chevrons, layout variants, & single/multi selection",
+				category: "Motion",
+				icon: Menu01Icon,
+				badge: "New",
+			},
 			{
 				id: "checkbox",
 				name: "Motion Checkbox",
