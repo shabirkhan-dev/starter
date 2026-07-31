@@ -18,6 +18,8 @@ import { cn } from "@school-os/ui/lib/utils";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import React, { type ComponentPropsWithoutRef, type ReactNode, forwardRef } from "react";
 
+import type { HTMLMotionProps } from "motion/react";
+
 export interface MotionTableProps extends ComponentPropsWithoutRef<typeof Table> {
 	className?: string;
 }
@@ -30,7 +32,7 @@ export const MotionTable = forwardRef<HTMLTableElement, MotionTableProps>(
 
 MotionTable.displayName = "MotionTable";
 
-export interface MotionTableRowProps extends ComponentPropsWithoutRef<"tr"> {
+export interface MotionTableRowProps extends Omit<HTMLMotionProps<"tr">, "children" | "className"> {
 	index?: number;
 	selected?: boolean;
 	interactive?: boolean;
@@ -53,7 +55,9 @@ export const MotionTableRow = forwardRef<HTMLTableRowElement, MotionTableRowProp
 					delay: Math.min(index * 0.03, 0.3),
 					ease: "easeOut",
 				}}
-				whileHover={interactive && !reduce ? { backgroundColor: "rgba(255,255,255,0.03)" } : undefined}
+				whileHover={
+					interactive && !reduce ? { backgroundColor: "rgba(255,255,255,0.03)" } : undefined
+				}
 				className={cn(
 					"border-b border-border/60 transition-colors select-none",
 					selected && "bg-primary/10 border-primary/30",

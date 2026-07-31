@@ -80,6 +80,41 @@ import {
 import { MotionCheckbox, StatefulCheckbox } from "@school-os/ui/components/motion/checkbox";
 import { MotionSlider } from "@school-os/ui/components/motion/slider";
 import { MotionSwitch, StatefulSwitch } from "@school-os/ui/components/motion/switch";
+import {
+	MotionTable,
+	MotionTableRow,
+	MotionTableSkeleton,
+	TableSortHead,
+} from "@school-os/ui/components/motion/table";
+import { TableBody, TableCell, TableHead, TableHeader } from "@school-os/ui/components/table";
+
+const WEB_TABLE_CODE = `import {
+  MotionTable,
+  MotionTableRow,
+  TableSortHead,
+} from "@school-os/ui/components/motion/table";
+import { TableHeader, TableBody, TableHead, TableCell } from "@school-os/ui/components/table";
+
+export function MotionTableDemo() {
+  return (
+    <MotionTable>
+      <TableHeader>
+        <MotionTableRow interactive={false}>
+          <TableSortHead sortDirection="asc">Student Name</TableSortHead>
+          <TableHead>Grade</TableHead>
+          <TableHead>Status</TableHead>
+        </MotionTableRow>
+      </TableHeader>
+      <TableBody>
+        <MotionTableRow index={0}>
+          <TableCell className="font-semibold">Alex Rivera</TableCell>
+          <TableCell>Grade 10</TableCell>
+          <TableCell className="text-emerald-400">Active</TableCell>
+        </MotionTableRow>
+      </TableBody>
+    </MotionTable>
+  );
+}`;
 
 const WEB_ACCORDION_CODE = `import {
   MotionAccordion,
@@ -301,27 +336,29 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 	}, [slug, lensWidth, lensHeight, borderRadius, depth, curvature, splay, glow, activeTheme]);
 
 	const codeSnippet =
-		slug === "accordion"
-			? WEB_ACCORDION_CODE
-			: slug === "checkbox"
-				? WEB_CHECKBOX_CODE
-				: slug === "slider"
-					? WEB_SLIDER_CODE
-					: slug === "switch"
-						? WEB_SWITCH_CODE
-						: slug === "glass-card"
-							? WEB_GLASS_CARD_CODE
-							: slug === "bottom-bar"
-								? WEB_BOTTOM_BAR_CODE
-								: slug === "select"
-									? WEB_SELECT_CODE
-									: slug === "input"
-										? WEB_INPUT_CODE
-										: slug === "button"
-											? WEB_BUTTON_CODE
-											: slug === "typeset"
-												? WEB_TYPESET_CODE
-												: WEB_TABS_CODE;
+		slug === "table"
+			? WEB_TABLE_CODE
+			: slug === "accordion"
+				? WEB_ACCORDION_CODE
+				: slug === "checkbox"
+					? WEB_CHECKBOX_CODE
+					: slug === "slider"
+						? WEB_SLIDER_CODE
+						: slug === "switch"
+							? WEB_SWITCH_CODE
+							: slug === "glass-card"
+								? WEB_GLASS_CARD_CODE
+								: slug === "bottom-bar"
+									? WEB_BOTTOM_BAR_CODE
+									: slug === "select"
+										? WEB_SELECT_CODE
+										: slug === "input"
+											? WEB_INPUT_CODE
+											: slug === "button"
+												? WEB_BUTTON_CODE
+												: slug === "typeset"
+													? WEB_TYPESET_CODE
+													: WEB_TABS_CODE;
 
 	const handleCopy = () => {
 		navigator.clipboard.writeText(codeSnippet);
@@ -336,50 +373,54 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 	};
 
 	const title =
-		slug === "accordion"
-			? "Motion Accordion"
-			: slug === "checkbox"
-				? "Motion Checkbox"
-				: slug === "slider"
-					? "Motion Slider"
-					: slug === "switch"
-						? "Motion Switch"
-						: slug === "glass-card"
-							? "Liquid Glass Card"
-							: slug === "bottom-bar"
-								? "Liquid Glass Bottom Bar"
-								: slug === "typeset"
-									? "Typeset"
-									: slug === "select"
-										? "Motion Select"
-										: slug === "input"
-											? "Motion Input"
-											: slug === "button"
-												? "Motion Button"
-												: "Motion Tabs";
+		slug === "table"
+			? "Motion Table"
+			: slug === "accordion"
+				? "Motion Accordion"
+				: slug === "checkbox"
+					? "Motion Checkbox"
+					: slug === "slider"
+						? "Motion Slider"
+						: slug === "switch"
+							? "Motion Switch"
+							: slug === "glass-card"
+								? "Liquid Glass Card"
+								: slug === "bottom-bar"
+									? "Liquid Glass Bottom Bar"
+									: slug === "typeset"
+										? "Typeset"
+										: slug === "select"
+											? "Motion Select"
+											: slug === "input"
+												? "Motion Input"
+												: slug === "button"
+													? "Motion Button"
+													: "Motion Tabs";
 
 	const description =
-		slug === "accordion"
-			? "Bouncy spring-height animated accordion with rotating chevrons, layout variants, & single/multi selection"
-			: slug === "checkbox"
-				? "Spring-animated checkbox with path draw checkmarks, indeterminate dash states, & color variants"
-				: slug === "slider"
-					? "Tactile spring range slider with floating value tooltip badge, step ticks, and color variants"
-					: slug === "switch"
-						? "Spring-animated toggle switch with thumb icon swap, async loading state, and color variants"
-						: slug === "glass-card"
-							? "Tactile glass surface container with SVG feDisplacementMap light refraction, chromatic aberration, & 3D tilt hover"
-							: slug === "bottom-bar"
-								? "Official Aave Glass Lens Generator & Fluid Dynamics Studio"
-								: slug === "typeset"
-									? "A styling system for HTML and rendered markdown with 3 rhythm controls: size, leading, and flow."
-									: slug === "select"
-										? "Animated combobox dropdown with search filtering, spring scale physics, and keyboard navigation."
-										: slug === "input"
-											? "Interactive input field with focus ring animations, error shake, and password toggling."
-											: slug === "button"
-												? "Spring interactive button with multi-state loading, success, and error feedback."
-												: "Spring animated layout indicator with exclusion pill and underline tab variants.";
+		slug === "table"
+			? "Interactive data table with staggered row entrance animations, sortable column headers, & loading skeletons"
+			: slug === "accordion"
+				? "Bouncy spring-height animated accordion with rotating chevrons, layout variants, & single/multi selection"
+				: slug === "checkbox"
+					? "Spring-animated checkbox with path draw checkmarks, indeterminate dash states, & color variants"
+					: slug === "slider"
+						? "Tactile spring range slider with floating value tooltip badge, step ticks, and color variants"
+						: slug === "switch"
+							? "Spring-animated toggle switch with thumb icon swap, async loading state, and color variants"
+							: slug === "glass-card"
+								? "Tactile glass surface container with SVG feDisplacementMap light refraction, chromatic aberration, & 3D tilt hover"
+								: slug === "bottom-bar"
+									? "Official Aave Glass Lens Generator & Fluid Dynamics Studio"
+									: slug === "typeset"
+										? "A styling system for HTML and rendered markdown with 3 rhythm controls: size, leading, and flow."
+										: slug === "select"
+											? "Animated combobox dropdown with search filtering, spring scale physics, and keyboard navigation."
+											: slug === "input"
+												? "Interactive input field with focus ring animations, error shake, and password toggling."
+												: slug === "button"
+													? "Spring interactive button with multi-state loading, success, and error feedback."
+													: "Spring animated layout indicator with exclusion pill and underline tab variants.";
 
 	return (
 		<div className="space-y-8 max-w-5xl pb-16">
@@ -469,7 +510,80 @@ export default function ComponentPage({ params }: { params: Promise<{ slug: stri
 							<div
 								className={`p-6 space-y-6 transition-colors duration-300 ${activeTheme === "light" ? "bg-zinc-100" : "bg-[#09090b]"}`}
 							>
-								{slug === "accordion" ? (
+								{slug === "table" ? (
+									<div className="space-y-6 py-6 px-4">
+										<div className="flex items-center justify-between">
+											<h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground">
+												Student Roster (Staggered Entrance & Sortable Headers)
+											</h4>
+											<span className="text-xs font-mono text-muted-foreground">
+												4 Active Records
+											</span>
+										</div>
+
+										<div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md overflow-hidden shadow-xs">
+											<MotionTable>
+												<TableHeader className="bg-muted/40">
+													<MotionTableRow interactive={false}>
+														<TableHead className="w-12 text-center">#</TableHead>
+														<TableSortHead sortDirection="asc">Student Name</TableSortHead>
+														<TableHead>Grade Level</TableHead>
+														<TableHead>Attendance</TableHead>
+														<TableHead className="text-end">GPA</TableHead>
+													</MotionTableRow>
+												</TableHeader>
+												<TableBody>
+													{[
+														{
+															id: 1,
+															name: "Elena Rostova",
+															grade: "Grade 11",
+															attendance: "98.5%",
+															gpa: "3.95",
+														},
+														{
+															id: 2,
+															name: "Marcus Chen",
+															grade: "Grade 10",
+															attendance: "96.2%",
+															gpa: "3.88",
+														},
+														{
+															id: 3,
+															name: "Sophia Martinez",
+															grade: "Grade 12",
+															attendance: "99.1%",
+															gpa: "4.00",
+														},
+														{
+															id: 4,
+															name: "Liam O'Connor",
+															grade: "Grade 9",
+															attendance: "94.8%",
+															gpa: "3.75",
+														},
+													].map((row, idx) => (
+														<MotionTableRow key={row.id} index={idx}>
+															<TableCell className="text-center font-mono text-xs text-muted-foreground">
+																0{row.id}
+															</TableCell>
+															<TableCell className="font-semibold text-foreground">
+																{row.name}
+															</TableCell>
+															<TableCell className="text-xs font-mono">{row.grade}</TableCell>
+															<TableCell className="text-xs font-mono text-emerald-400">
+																{row.attendance}
+															</TableCell>
+															<TableCell className="text-end font-mono font-bold text-teal-400">
+																{row.gpa}
+															</TableCell>
+														</MotionTableRow>
+													))}
+												</TableBody>
+											</MotionTable>
+										</div>
+									</div>
+								) : slug === "accordion" ? (
 									<div className="flex flex-col items-center justify-center py-12 px-6 max-w-xl mx-auto space-y-10">
 										<div className="space-y-3 text-center w-full">
 											<h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground">
