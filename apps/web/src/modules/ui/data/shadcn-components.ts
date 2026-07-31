@@ -7,6 +7,7 @@ import {
 	Menu01Icon,
 	Settings02Icon,
 	SmartPhone01Icon,
+	TableIcon,
 	TextFontIcon,
 	Tick02Icon,
 	ToggleOnIcon,
@@ -34,6 +35,15 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 		id: "motion-components",
 		title: "Motion Components",
 		items: [
+			{
+				id: "table",
+				name: "Motion Table",
+				description:
+					"Interactive data table with staggered row entrance animations, sortable column headers, & loading skeletons",
+				category: "Motion",
+				icon: TableIcon,
+				badge: "New",
+			},
 			{
 				id: "accordion",
 				name: "Motion Accordion",
