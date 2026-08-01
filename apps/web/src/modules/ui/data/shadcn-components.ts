@@ -39,7 +39,7 @@ export const SHADCN_COMPONENTS_NAV: ShadcnCategory[] = [
 				id: "table",
 				name: "Motion Table",
 				description:
-					"Interactive data table with staggered row entrance animations, sortable column headers, & loading skeletons",
+					"Interactive data table with sortable columns, row selection, expandable rows, live updates, loading skeletons, empty states & density variants",
 				category: "Motion",
 				icon: TableIcon,
 				badge: "New",

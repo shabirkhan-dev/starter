@@ -95,6 +95,7 @@ export {
 	SelectTrigger as MotionSelectTrigger,
 	SelectValue as MotionSelectValue,
 } from "./components/motion/select";
+export { useTableSelection, useTableSort } from "./components/motion/table";
 export {
 	Tabs as MotionTabs,
 	TabsContent as MotionTabsContent,
