@@ -1,10 +1,14 @@
 import { Button } from "@rabtx/ui/button";
 import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/layouts/docs/page";
+import { ArrowRight, Check, Download, Plus, Settings, Trash2 } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/components/mdx";
 import { Preview } from "@/components/preview";
 import { rabtxSource } from "@/lib/source";
+
+// Icons the MDX examples reference; MDX only sees what is passed in below.
+const icons = { ArrowRight, Check, Download, Plus, Settings, Trash2 };
 
 export default async function Page(props: PageProps<"/rabtx/[[...slug]]">) {
 	const params = await props.params;
@@ -18,7 +22,7 @@ export default async function Page(props: PageProps<"/rabtx/[[...slug]]">) {
 			<DocsTitle>{page.data.title}</DocsTitle>
 			<DocsDescription>{page.data.description}</DocsDescription>
 			<DocsBody>
-				<MDX components={getMDXComponents({ Button, Preview })} />
+				<MDX components={getMDXComponents({ Button, Preview, ...icons })} />
 			</DocsBody>
 		</DocsPage>
 	);

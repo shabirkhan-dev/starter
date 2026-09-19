@@ -67,13 +67,75 @@ not spring — the press snaps in 80ms.
 	<Button kind="terminal" variant="destructive">rm -rf</Button>
 </Preview>
 
+## Icons
+
+Icons are children; the gap between icon and label comes from `size`, so nothing extra
+is needed to space them. Put the icon before or after the text to get a leading or
+trailing icon.
+
+<Preview>
+	<Button kind="detail"><Download className="size-4" />Download</Button>
+	<Button kind="detail">Continue<ArrowRight className="size-4" /></Button>
+	<Button kind="detail" variant="destructive"><Trash2 className="size-4" />Delete</Button>
+</Preview>
+
+An icon-only button has no text for a screen reader to announce, so it must carry its own
+accessible name — `aria-label` on web, `accessibilityLabel` on native. `size="icon"` drops
+the horizontal padding and squares the box.
+
+<Preview>
+	<Button size="icon" aria-label="Add item"><Plus className="size-4" /></Button>
+	<Button kind="detail" size="icon" aria-label="Settings"><Settings className="size-4" /></Button>
+	<Button kind="glass" size="icon" aria-label="Download"><Download className="size-4" /></Button>
+	<Button kind="terminal" size="icon" aria-label="Confirm"><Check className="size-4" /></Button>
+</Preview>
+
+## States
+
+All four kinds carry the same state set. Hover and keyboard focus are web-only; press
+works on both platforms.
+
+<Preview>
+	<Button kind="detail">Default</Button>
+	<Button kind="detail" disabled>Disabled</Button>
+	<Button kind="detail" animated={false}>Motion off</Button>
+</Preview>
+
+Tab to a button to see the focus ring. It is drawn in `--ink` rather than a fixed colour,
+so it stays legible against every variant, and it is offset from the surface so it reads
+clearly on the `detail` rim.
+
+<Preview>
+	<Button variant="primary">Tab to me</Button>
+	<Button variant="secondary">Then me</Button>
+	<Button variant="destructive">And me</Button>
+	<Button variant="ghost">Finally me</Button>
+</Preview>
+
+Disabled removes pointer events on web, sets `disabled` on the native `Pressable`, and
+turns motion off on both — a disabled control never animates like an enabled one.
+
+<Preview>
+	<Button kind="solid" disabled>Solid</Button>
+	<Button kind="detail" disabled>Detail</Button>
+	<Button kind="glass" disabled>Glass</Button>
+	<Button kind="terminal" disabled>Terminal</Button>
+</Preview>
+
+Loading and success states are not built into this Button yet. Compose them from your own
+state for now rather than assuming the component provides them.
+
 ## Sizes
 
 <Preview>
 	<Button size="sm">Small</Button>
 	<Button size="md">Medium</Button>
 	<Button size="lg">Large</Button>
+	<Button size="icon" aria-label="Add"><Plus className="size-4" /></Button>
 </Preview>
+
+Labels and box dimensions stay fixed across state changes, so a row of buttons never
+reflows when one of them is pressed or disabled.
 
 ## Motion off
 
@@ -95,7 +157,10 @@ thing without the prop.
 | `animated` | `boolean` | `true` |
 | `className` | `string` | — |
 
-Everything else passes through to `motion.button` on web and `Pressable` on native.
+Everything else passes through to `motion.button` on web and `Pressable` on native — so
+`aria-label`, `onClick` and `type` work on web, and `accessibilityLabel`, `onPress` and
+`testID` work on native. Native `onPressIn` and `onPressOut` callbacks run alongside the
+internal spring rather than replacing it.
 
 ## Customising
 

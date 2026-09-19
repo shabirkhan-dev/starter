@@ -8,6 +8,13 @@ Read this file first when working in this repo.
 Monorepo Starter managed with **Turborepo + Bun**. Apps, shared packages, and
 multi-language scripts, all wired into a single lint/format/build/test surface.
 
+## UI design context
+
+Before changing UI components, read [DESIGN.md](DESIGN.md), especially **Rabtx UI: shared design intent**.
+It defines solid, detailed, glass and terminal materials, motion, platform scope and known gaps.
+Detailed means touching tonal contours with no shadows; do not infer the design solely from existing code.
+Keep that document as the shared source of truth instead of copying design rules into agent-specific folders.
+
 ## Documentation
 
 There is **no root `docs/` folder**. Project docs live in the docs app:
