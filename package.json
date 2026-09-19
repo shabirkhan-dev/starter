@@ -32,7 +32,7 @@
     "scripts:run": "bash scripts/bash/main.sh",
     "scripts:run:bash": "bash scripts/bash/main.sh",
     "scripts:run:python": "python scripts/python/main.py",
-    "prepare": "lefthook install"
+    "prepare": "git rev-parse --git-dir >/dev/null 2>&1 || exit 0; lefthook install"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
