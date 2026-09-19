@@ -1,0 +1,43 @@
+---
+title: Rabtx UI
+description: Polished, animated components for web and React Native from one API.
+---
+
+Rabtx UI sits on top of shadcn and fills the gap shadcn leaves: motion, material and
+detail. One import serves both platforms.
+
+```tsx
+import { Button } from "@rabtx/ui/button";
+```
+
+Metro resolves `button.native.tsx` in the Expo app; Next resolves `button.tsx`. Same
+props, no `Platform.OS` branching in your code.
+
+## Three axes
+
+Components are described by three orthogonal props, never a matrix of one-off styles.
+
+| Axis | Prop | Values |
+| --- | --- | --- |
+| Material | `kind` | `solid` `glass` `detail` `terminal` |
+| Colour role | `variant` | `primary` `secondary` `destructive` `ghost` |
+| Geometry | `size` | `sm` `md` `lg` `icon` |
+
+`variant` sets three CSS variables — `--fill` (filled surface), `--on-fill` (text on it)
+and `--ink` (line and text for unfilled surfaces). `kind` consumes them. So a kind never
+names a colour and a variant never names a shape, and adding a fifth kind costs one line
+instead of four more variants.
+
+## Motion
+
+Motion is on by default — that is the point of the library. Tokens live in one file and
+drive both platforms, because Framer Motion and Reanimated accept the same spring
+parameters.
+
+Each kind carries its own motion character: `glass` is slower and heavier, `terminal`
+does not spring at all. Pass `animated={false}` to opt out; the OS reduced-motion
+setting forces it off regardless.
+
+## Status
+
+Button only. More components land one at a time.
