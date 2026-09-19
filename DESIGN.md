@@ -51,7 +51,7 @@ Material is the `kind` axis: `solid`, `detail`, `glass`, `terminal`. It is indep
 | --- | --- |
 | `solid` | A clean opaque surface. Polish comes from proportions, spacing, typography, color and complete interaction states. Keep decoration restrained. |
 | `detail` | A surface with two touching rounded contours. The outer rim follows the inner curve with **zero gap or spacer** and subtly blends into the surrounding background. Depth comes from tonal differences and precise edges. **No cast shadows, blurred shadows or background glow.** |
-| `glass` | An intentional translucent glass material whose background contributes to its appearance. Liquid glass is the desired direction, but the exact refraction, highlights and deformation have **not yet been agreed**. Do not present simple opacity or backdrop blur as completed liquid glass. |
+| `glass` | **Liquid glass**, in the sense Apple uses it across recent iOS and macOS: a translucent material that refracts and bends what sits behind it, picks up specular highlights along its edges, and reacts to motion rather than sitting flat. The background is part of the material, not a tint over it. Opacity plus a backdrop blur is a fallback, not the target — do not describe that fallback as finished. |
 | `terminal` | Squarish corners, crisp edges and a coherent terminal aesthetic. Monospace and restrained color fit the direction. Current uppercase labels and hover inversion are implementation choices, not mandatory requirements for every future component. |
 
 “Polished” is the quality bar for all four kinds; `detail` is one specific material construction.
@@ -102,8 +102,13 @@ and supported platforms. Be explicit about untested native behavior and simplifi
 - Shared Button choices: `packages/rabtx/src/button/button.shared.ts` and `packages/rabtx/src/motion.ts`.
 - Web/native implementations: `button.tsx` and `button.native.tsx` in that Button directory.
 - Preview source: `apps/docs/content/rabtx/button.mdx`; route: `/rabtx/button`.
-- Current glass fallback: web translucency plus backdrop blur; native flat translucency. True liquid
-  glass remains unfinished. Shadows still present in other kinds do not redefine the detail contract.
+- Current glass fallback: web translucency plus backdrop blur; native flat translucency. Neither is
+  liquid glass yet. On native the intended path is `expo-glass-effect`, already a mobile dependency,
+  which hands the real system material to iOS instead of imitating it. The web has no equivalent
+  system material, so it has to be approximated — layered translucency, an edge highlight that
+  responds to the surface behind it, and refraction where it is affordable. Treat the web and native
+  results as the same material with different fidelity, and say which one you tested.
+  Shadows still present in other kinds do not redefine the detail contract.
 
 ## Layout Rules
 

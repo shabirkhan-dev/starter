@@ -43,10 +43,23 @@ export const sizeClass: Record<Size, string> = {
 	icon: "h-10 w-10 p-0",
 };
 
-/** Each kind gets its own motion character. Terminal snaps instead of springing. */
-export const kindMotion: Record<Kind, { transition: TransitionName; pressScale: number }> = {
-	solid: { transition: "press", pressScale: 0.97 },
-	detail: { transition: "press", pressScale: 0.98 },
-	glass: { transition: "soft", pressScale: 0.96 },
-	terminal: { transition: "snap", pressScale: 1 },
+/**
+ * Each kind gets its own motion character.
+ *
+ * `pressScale` is how far the surface sinks under a press; `hoverLift` is how far it
+ * rises on pointer hover, in pixels, and is web-only because native has no hover.
+ * Both are transforms, so neither reflows the surrounding layout and neither adds a
+ * shadow — `detail` keeps its depth from edge contrast even while it lifts.
+ *
+ * Terminal is deliberately inert: it neither scales nor lifts, because snapping with
+ * no displacement is what makes it read as a terminal rather than a soft UI control.
+ */
+export const kindMotion: Record<
+	Kind,
+	{ transition: TransitionName; pressScale: number; hoverLift: number }
+> = {
+	solid: { transition: "press", pressScale: 0.95, hoverLift: -1 },
+	detail: { transition: "press", pressScale: 0.96, hoverLift: -1 },
+	glass: { transition: "soft", pressScale: 0.94, hoverLift: -2 },
+	terminal: { transition: "snap", pressScale: 1, hoverLift: 0 },
 };

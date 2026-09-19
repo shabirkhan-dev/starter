@@ -15,7 +15,8 @@ import { Button } from "@rabtx/ui/button";
 
 ### Solid
 
-The default. Token fill, small shadow, springy press.
+The default: a clean opaque token fill. It no longer carries a shadow — depth comes from
+the hover lift and the press, not from decoration.
 
 <Preview>
 	<Button kind="solid" variant="primary">Primary</Button>
@@ -137,10 +138,29 @@ state for now rather than assuming the component provides them.
 Labels and box dimensions stay fixed across state changes, so a row of buttons never
 reflows when one of them is pressed or disabled.
 
+## Motion
+
+Two transforms, both per-kind. On hover the surface lifts a little; on press it sinks.
+Because both are transforms, nothing around the button reflows and no shadow is involved,
+so `detail` keeps its edge-contrast depth while it moves.
+
+| Kind | Press scale | Hover lift |
+| --- | --- | --- |
+| `solid` | 0.95 | 1px |
+| `detail` | 0.96 | 1px |
+| `glass` | 0.94 | 2px |
+| `terminal` | — | — |
+
+Terminal is deliberately inert: it neither scales nor lifts. Snapping with no displacement
+is what makes it read as a terminal rather than a soft UI control.
+
+Hover is web-only — native has no hover — so the lift is a web addition while the press
+scale applies to both platforms.
+
 ## Motion off
 
-`animated={false}` removes the transform. The OS reduced-motion setting does the same
-thing without the prop.
+`animated={false}` removes both transforms. The OS reduced-motion setting does the same
+thing without the prop, and a disabled button never animates either.
 
 <Preview>
 	<Button animated={false}>No transform</Button>
