@@ -70,15 +70,18 @@ not spring — the press snaps in 80ms.
 
 ## Icons
 
-Icons are children; the gap between icon and label comes from `size`, so nothing extra
-is needed to space them. Put the icon before or after the text to get a leading or
-trailing icon.
+Icons are children. Mark them with `data-icon="inline-start"` or `data-icon="inline-end"`,
+the same convention the shadcn Button uses, so the padding tightens on the side holding
+the icon instead of leaving it adrift in full padding.
 
 <Preview>
-	<Button kind="detail"><Download className="size-4" />Download</Button>
-	<Button kind="detail">Continue<ArrowRight className="size-4" /></Button>
-	<Button kind="detail" variant="destructive"><Trash2 className="size-4" />Delete</Button>
+	<Button kind="detail"><Download data-icon="inline-start" className="size-4" />Download</Button>
+	<Button kind="detail">Continue<ArrowRight data-icon="inline-end" className="size-4" /></Button>
+	<Button kind="detail" variant="destructive"><Trash2 data-icon="inline-start" className="size-4" />Delete</Button>
 </Preview>
+
+Rabtx restates those spacing rules at its own scale. shadcn tunes them to `px-2.5`, and
+applying that to the wider Rabtx padding would cut too deep on the icon side.
 
 An icon-only button has no text for a screen reader to announce, so it must carry its own
 accessible name — `aria-label` on web, `accessibilityLabel` on native. `size="icon"` drops
@@ -123,8 +126,25 @@ turns motion off on both — a disabled control never animates like an enabled o
 	<Button kind="terminal" disabled>Terminal</Button>
 </Preview>
 
-Loading and success states are not built into this Button yet. Compose them from your own
-state for now rather than assuming the component provides them.
+Loading and success are not props on this Button. Compose loading from your own state with
+the shared `Spinner`, marking it with `data-icon` like any other icon:
+
+```tsx
+import { Spinner } from "@school-os/ui/components/spinner";
+
+<Button kind="detail" disabled={saving}>
+	{saving && <Spinner data-icon="inline-start" className="size-4" />}
+	{saving ? "Saving" : "Save"}
+</Button>
+```
+
+## Links
+
+Do not render this Button as an anchor. It inherits Base UI's Button through shadcn, which
+always applies `role="button"` — that overrides the semantic link role and costs you the
+behaviour people expect from a link: middle-click, open in new tab, the browser's own
+context menu. For a link that looks like a button, style a plain `<a>` with the same kind
+and size classes instead.
 
 ## Sizes
 

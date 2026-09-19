@@ -40,10 +40,17 @@ export const variantVars: Record<Variant, string> = {
 		"[--fill:var(--color-muted)] [--on-fill:var(--color-foreground)] [--ink:var(--color-foreground)]",
 };
 
+/**
+ * shadcn tightens the padding on whichever side holds an icon, keyed off
+ * `data-icon="inline-start" | "inline-end"`. Those rules ship with its own size
+ * classes and are tuned to its `px-2.5`; against the wider Rabtx padding they
+ * would cut too deep, so each size restates them at its own scale. Without this
+ * the inherited shadcn rule still fires and the button ends up lopsided.
+ */
 export const sizeClass: Record<Size, string> = {
-	sm: "h-8 px-3 text-xs gap-1.5",
-	md: "h-10 px-4 text-sm gap-2",
-	lg: "h-12 px-6 text-base gap-2",
+	sm: "h-8 px-3 text-xs gap-1.5 has-data-[icon=inline-start]:ps-2 has-data-[icon=inline-end]:pe-2",
+	md: "h-10 px-4 text-sm gap-2 has-data-[icon=inline-start]:ps-3 has-data-[icon=inline-end]:pe-3",
+	lg: "h-12 px-6 text-base gap-2 has-data-[icon=inline-start]:ps-5 has-data-[icon=inline-end]:pe-5",
 	icon: "h-10 w-10 p-0",
 };
 
