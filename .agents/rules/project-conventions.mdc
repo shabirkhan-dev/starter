@@ -3,7 +3,7 @@ description: Monorepo structure, tooling, and conventions
 alwaysApply: true
 ---
 
-# School OS Conventions
+# Starter Conventions
 
 - **Monorepo**: Turborepo with `apps/*` and `packages/*`. Run from root: `bun run dev`, `bun run build`, `bun run lint`, `bun run format`.
 - **Package manager**: Bun only. Use `bun` for install/run — never npm, yarn, or pnpm.

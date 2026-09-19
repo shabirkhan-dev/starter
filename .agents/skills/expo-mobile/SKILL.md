@@ -1,6 +1,6 @@
 ---
 name: expo-mobile
-description: Best practices for Expo Router mobile apps in this monorepo school-os; Tailwind/NativeWind; official Expo Skills and LLM docs.
+description: Best practices for Expo Router mobile apps in this monorepo; Tailwind/NativeWind; official Expo Skills and LLM docs.
 version: 1.2.0
 license: MIT
 ---
@@ -137,4 +137,4 @@ A fresh **create-expo-app** template may use **StyleSheet** + **ThemedText** / *
 - https://docs.expo.dev/router/introduction
 - https://docs.expo.dev/develop/development-builds/create-a-build
 - https://www.nativewind.dev/ (NativeWind — native `className`)
-- Repo: **`apps/mobile/AGENTS.md`**, **`.cursor/rules/expo-ai-agents.mdc`**
+- Repo: **`apps/mobile/AGENTS.md`**, **`.agents/rules/expo-ai-agents.mdc`**

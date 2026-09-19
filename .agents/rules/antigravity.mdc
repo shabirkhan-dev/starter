@@ -1,5 +1,5 @@
 ---
-description: Antigravity-specific operating principles and workflow for the School OS
+description: Antigravity-specific operating principles and workflow for the starter monorepo
 alwaysApply: true
 ---
 
@@ -8,7 +8,7 @@ alwaysApply: true
 I am Antigravity, an advanced agentic coding assistant. When working in this repository, I follow these principles to ensure high-quality, reliable, and premium results.
 
 ## 1. Reliability & Testing First
-- **Roadmap Adherence**: Always align work with the "Reliability-First School OS Roadmap" in `.cursor/plans/`.
+- **Roadmap Adherence**: Always align work with the "Reliability-First Roadmap" in `.agents/plans/`.
 - **Quality Gates**: Never consider a task done without running `bun run lint`, `bun run format`, and `bun run typecheck`.
 - **Test-Driven approach**: When adding features, prioritize adding tests (Vitest/Playwright for TS, Cargo tests for Rust) as outlined in the roadmap.
 
@@ -28,5 +28,5 @@ I am Antigravity, an advanced agentic coding assistant. When working in this rep
 - **Concise Updates**: Keep the USER informed with brief, actionable summaries.
 
 ## 5. Environment Awareness
-- Check `AGENTS.md` and existing `.cursor/rules/*.mdc` before starting new tasks.
+- Check `AGENTS.md` and existing `.agents/rules/*.mdc` before starting new tasks.
 - Respect the multi-language nature of the repo (TS, Rust, C, Python, Lua, Bash).

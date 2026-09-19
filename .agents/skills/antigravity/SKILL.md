@@ -43,6 +43,6 @@ When working on the frontend (`apps/web`, `apps/mobile`):
 - **Feedback**: Antigravity thrives on specific design feedback—mention colors, moods, or specific UI patterns you like.
 
 ## References
-- [AGENTS.md](file:///home/shabir/work/school-os/AGENTS.md)
-- [.cursor/rules/antigravity.mdc](file:///home/shabir/work/school-os/.cursor/rules/antigravity.mdc)
-- [.cursor/plans/school-os-next-phase-roadmap-fbfaf701.plan.md](file:///home/shabir/work/school-os/.cursor/plans/school-os-next-phase-roadmap-fbfaf701.plan.md)
+- [AGENTS.md](../../../AGENTS.md)
+- [.agents/rules/antigravity.mdc](../../rules/antigravity.mdc)
+- [.agents/plans/next-phase-roadmap.plan.md](../../plans/next-phase-roadmap.plan.md)

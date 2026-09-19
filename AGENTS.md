@@ -30,7 +30,7 @@ Before any Next.js work, find and read the relevant doc in `node_modules/next/di
 ## Repository layout
 
 ```
-school-os/
+starter/
 ├── apps/
 │   ├── web/             # Next.js (React, Tailwind, shadcn-style UI)
 │   ├── mobile/          # Expo Router + NativeWind app (TypeScript)
@@ -45,7 +45,7 @@ school-os/
 │   └── logger/          # Shared logger (TS + Rust)
 ├── scripts/             # Utility scripts: bash/, python/
 ├── docker/              # Docker Compose fragments (see docker/README.md)
-├── .cursor/rules/       # Cursor-specific rules (also summarised below)
+├── .agents/rules/       # Cursor-specific rules (also summarised below)
 ├── .devcontainer/       # Dev Container (Bun, Rust, Python, Bash tooling)
 ├── .github/workflows/   # CI (lint, typecheck, build, test)
 └── (root config)        # biome.json, turbo.json, lefthook.yml, .editorconfig, etc.
@@ -156,16 +156,16 @@ only, then `bun run dev`. See `/docs/docker` and `docker/README.md`.
 - `DESIGN.md` — design-system brief for UI generation and review.
 - **Docs app** (`apps/docs`, run with `bun --cwd apps/docs run dev`):
   - `/docs/production-roadmap` — production build phases and Nest API spine
-  - `/docs/ai-first-workflow` — school-os audit and AI-first workflow roadmap
+  - `/docs/ai-first-workflow` — starter audit and AI-first workflow roadmap
   - `/docs/qol` — full QoL stack (hooks, CI, per-language tools)
   - `/docs/architecture` — architecture baseline and enforceable boundaries
   - `/docs/overrides` — policy for project-specific architecture overrides
   - `/docs/docker` — Docker Compose setup
   - `/docs/deploy` — Vercel (web/docs) + Render (Nest) + Neon
   - `/docs/product-system-design` — product architecture and security model
-- `.cursor/skills/expo-mobile/SKILL.md` — Expo Router + EAS + official Expo Skills / LLM doc links for `apps/mobile`.
+- `.agents/skills/expo-mobile/SKILL.md` — Expo Router + EAS + official Expo Skills / LLM doc links for `apps/mobile`.
 - `.agents/skills/browser-ui-test/SKILL.md` — Browser UI/UX verification via Playwright MCP + `apps/web` e2e after interactive web changes.
-- `.cursor/rules/expo-ai-agents.mdc` — Expo remote skills URL, skill table, `llms.txt` bundles (when working under `apps/mobile/**`).
+- `.agents/rules/expo-ai-agents.mdc` — Expo remote skills URL, skill table, `llms.txt` bundles (when working under `apps/mobile/**`).
 - `apps/mobile/AGENTS.md` — Short index for agents opening the mobile app folder.
 - `docker/README.md` — Compose fragment layout and `-f` fallback.
 - `biome.json` — Biome config (lint rules, formatter settings).

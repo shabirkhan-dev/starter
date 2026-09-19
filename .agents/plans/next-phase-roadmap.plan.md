@@ -27,7 +27,7 @@ isProject: false
 # Reliability-First Starter Roadmap
 
 ## Goals
-- Make this school-os safe as a default base for all 5 upcoming projects.
+- Make this starter safe as a default base for all 5 upcoming projects.
 - Enforce high-confidence quality gates in CI before merge/release.
 - Define an opinionated architecture that is easy to override per project.
 
@@ -67,7 +67,7 @@ isProject: false
   - import boundary checks (for TS), directory conventions, and module template structure.
 - Add override mechanism for future projects:
   - `docs/overrides.md` + per-project `ARCHITECTURE.md` that can intentionally deviate with rationale.
-- Create school-os templates for new modules/apps with default folders and test scaffolding.
+- Create starter templates for new modules/apps with default folders and test scaffolding.
 
 ## Phase 4: DX Acceleration (after reliability baseline)
 - Add generators (`scripts/scaffold/*` or CLI) for:
@@ -90,7 +90,7 @@ isProject: false
 - `AGENTS.md`, `PROJECT.md`, `docs/QoL.md`, `docs/docker.md` (single source of truth and drift cleanup)
 - New docs: `docs/architecture/*`, `docs/overrides.md`
 
-## Definition of Done for “production-ready school-os”
+## Definition of Done for “production-ready starter”
 - Every PR gated by lint/typecheck/unit; integration/e2e policy enforced.
 - Main branch has deterministic build/test results with artifacted reports.
 - Clear architecture rules are both documented and machine-enforced.

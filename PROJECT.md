@@ -5,7 +5,7 @@ For quick setup/use, start with `README.md`.
 
 ## What this repository includes
 
-Monorepo school-os managed by **Bun + Turborepo**, with:
+Monorepo starter managed by **Bun + Turborepo**, with:
 
 - Multiple app templates (web, mobile, API, docs, Rust)
 - Shared workspace packages (`@school-os/*`)
@@ -17,7 +17,7 @@ Monorepo school-os managed by **Bun + Turborepo**, with:
 ## Repository layout
 
 ```text
-school-os/
+starter/
 ├── apps/                     # Runnable applications
 │   ├── web/                  # Next.js app
 │   ├── mobile/               # Expo Router + NativeWind app
@@ -167,7 +167,7 @@ More details: docs app `/docs/docker` and `docker/README.md`.
 ## Conventions and development rules
 
 - Primary repository guidance: `AGENTS.md`
-- Cursor-specific rules: `.cursor/rules/`
+- Cursor-specific rules: `.agents/rules/`
 - Architecture baseline: docs app `/docs/architecture`
 - Override process: docs app `/docs/overrides`
 - Use workspace imports as `@school-os/<package>`

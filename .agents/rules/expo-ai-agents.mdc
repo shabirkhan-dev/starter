@@ -16,7 +16,7 @@ Remote skills are discovered when you work on Expo-related tasks (they are not s
 
 ## Bundled skill in this repo
 
-See **`.cursor/skills/expo-mobile/SKILL.md`** for monorepo-specific commands, **Tailwind CSS / NativeWind** (plus remote skill `expo-tailwind-setup`), layout (`src/app`), and EAS.
+See **`.agents/skills/expo-mobile/SKILL.md`** for monorepo-specific commands, **Tailwind CSS / NativeWind** (plus remote skill `expo-tailwind-setup`), layout (`src/app`), and EAS.
 
 ## Expo Skills (official plugin)
 
