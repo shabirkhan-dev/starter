@@ -38,12 +38,22 @@ we target iOS 26.
 
 ### Detail
 
-Solid with a layered shadow and an inset highlight ring — the extra polish pass.
+Two touching contours, with no gap or shadow. The outer rim blends into the
+background; the inner edge uses a lighter top and darker bottom for subtle depth.
+Press and release to feel the restrained spring. On web, the edge tones also reverse
+while pressed. The shared `--button-rim` and `--radius` tokens control the finish.
 
 <Preview>
 	<Button kind="detail" variant="primary">Primary</Button>
 	<Button kind="detail" variant="secondary">Secondary</Button>
 	<Button kind="detail" variant="destructive">Delete</Button>
+</Preview>
+
+<Preview>
+	<Button kind="detail" variant="secondary">Press and hold</Button>
+	<Button kind="detail" variant="secondary" disabled>Disabled</Button>
+	<Button kind="detail" variant="secondary" animated={false}>Motion off</Button>
+	<Button kind="detail" variant="secondary" size="icon" aria-label="Add">+</Button>
 </Preview>
 
 ### Terminal

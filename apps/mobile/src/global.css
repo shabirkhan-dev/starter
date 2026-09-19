@@ -4,6 +4,7 @@
 
 @source '../../../packages/ui/src/**/*.tsx';
 @source '../src/**/*.tsx';
+@source '../../../packages/rabtx/src/**/*.{ts,tsx}';
 
 :root {
   --font-display:

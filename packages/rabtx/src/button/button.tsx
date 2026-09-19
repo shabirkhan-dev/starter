@@ -20,7 +20,7 @@ const kindClass: Record<Kind, string> = {
 	glass:
 		"rounded-2xl border border-(--ink)/20 bg-(--fill)/15 text-(--ink) shadow-lg backdrop-blur-xl hover:bg-(--fill)/25",
 	detail:
-		"rounded-lg bg-(--fill) text-(--on-fill) shadow-[0_1px_2px_rgba(0,0,0,0.24),0_4px_12px_-2px_rgba(0,0,0,0.16)] inset-ring inset-ring-white/20 hover:brightness-110",
+		"relative rounded-lg border-2 border-button-rim bg-(--fill) text-(--on-fill) before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-2px)] before:border before:border-(--on-fill)/20 before:border-t-(--on-fill)/40 before:border-b-foreground/20 hover:brightness-105 active:before:border-t-foreground/20 active:before:border-b-(--on-fill)/30",
 	terminal:
 		"rounded-none border-2 border-(--ink) font-mono uppercase tracking-wider text-(--ink) hover:bg-(--ink) hover:text-background",
 };
@@ -33,13 +33,15 @@ export function Button({
 	size = "md",
 	animated = true,
 	className,
+	disabled,
 	...props
 }: ButtonProps) {
-	const on = useMotion(animated);
+	const on = useMotion(animated && !disabled);
 	const { transition: name, pressScale } = kindMotion[kind];
 
 	return (
 		<motion.button
+			disabled={disabled}
 			whileTap={on ? { scale: pressScale } : undefined}
 			transition={transition[name]}
 			className={cn(base, variantVars[variant], kindClass[kind], sizeClass[size], className)}

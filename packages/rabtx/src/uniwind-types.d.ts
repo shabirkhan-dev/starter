@@ -2,10 +2,13 @@
 // across workspace boundaries. Add interfaces here as components need them.
 /// <reference types="uniwind/types" />
 
-import type { PressableProps, TextProps } from "react-native";
-import type { AnimatedProps } from "react-native-reanimated";
+import "react-native";
+import "react-native-reanimated";
 
 declare module "react-native" {
+	interface ViewProps {
+		className?: string;
+	}
 	interface TextProps {
 		className?: string;
 	}

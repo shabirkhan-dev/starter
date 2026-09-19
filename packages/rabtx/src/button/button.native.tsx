@@ -1,5 +1,11 @@
 import type { ReactNode } from "react";
-import { Pressable, type PressableProps, Text } from "react-native";
+import {
+	Pressable,
+	type PressableProps,
+	type PressableStateCallbackType,
+	Text,
+	View,
+} from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -27,7 +33,7 @@ const base = "flex-row shrink-0 items-center justify-center";
 const kindClass: Record<Kind, string> = {
 	solid: "rounded-lg bg-(--fill)",
 	glass: "rounded-2xl border border-(--ink)/20 bg-(--fill)/20",
-	detail: "rounded-lg bg-(--fill) shadow-lg",
+	detail: "relative rounded-lg border-2 border-button-rim bg-(--fill)",
 	terminal: "rounded-none border-2 border-(--ink)",
 };
 
@@ -64,25 +70,49 @@ export function Button({
 	animated = true,
 	className,
 	children,
+	disabled,
+	onPressIn,
+	onPressOut,
+	style: callerStyle,
 	...props
 }: ButtonProps) {
-	const on = useMotion(animated);
+	const on = useMotion(animated && !disabled);
 	const { transition: name, pressScale } = kindMotion[kind];
 	const scale = useSharedValue(1);
-	const style = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+	const style = useAnimatedStyle(() => ({ transform: [{ scale: on ? scale.value : 1 }] }));
 
 	return (
 		<AnimatedPressable
-			onPressIn={() => {
+			disabled={disabled}
+			onPressIn={(event) => {
 				if (on) scale.value = animate(pressScale, transition[name]);
+				onPressIn?.(event);
 			}}
-			onPressOut={() => {
-				if (on) scale.value = animate(1, transition[name]);
+			onPressOut={(event) => {
+				scale.value = on ? animate(1, transition[name]) : 1;
+				onPressOut?.(event);
 			}}
-			style={style}
-			className={cn(base, variantVars[variant], kindClass[kind], sizeClass[size], className)}
+			style={(state: PressableStateCallbackType) => [
+				style,
+				typeof callerStyle === "function" ? callerStyle(state) : callerStyle,
+			]}
+			className={cn(
+				base,
+				variantVars[variant],
+				kindClass[kind],
+				sizeClass[size],
+				disabled && "opacity-50",
+				className,
+			)}
 			{...props}
 		>
+			{kind === "detail" && (
+				<View
+					pointerEvents="none"
+					accessible={false}
+					className="absolute inset-0 rounded-[calc(var(--radius-lg)-2px)] border border-(--on-fill)/20 border-t-(--on-fill)/40 border-b-foreground/20"
+				/>
+			)}
 			{typeof children === "string" ? (
 				<Text className={cn("font-medium", textClass[kind], textSize[size])}>{children}</Text>
 			) : (

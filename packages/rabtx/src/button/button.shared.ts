@@ -46,7 +46,7 @@ export const sizeClass: Record<Size, string> = {
 /** Each kind gets its own motion character. Terminal snaps instead of springing. */
 export const kindMotion: Record<Kind, { transition: TransitionName; pressScale: number }> = {
 	solid: { transition: "press", pressScale: 0.97 },
-	detail: { transition: "press", pressScale: 0.97 },
+	detail: { transition: "press", pressScale: 0.98 },
 	glass: { transition: "soft", pressScale: 0.96 },
 	terminal: { transition: "snap", pressScale: 1 },
 };
