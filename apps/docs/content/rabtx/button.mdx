@@ -1,0 +1,97 @@
+---
+title: Button
+description: One button, four materials, animated by default, web and native.
+---
+
+```tsx
+import { Button } from "@rabtx/ui/button";
+
+<Button kind="solid" variant="primary">Save</Button>
+```
+
+## Kinds
+
+`kind` picks the material — surface, shape and motion character.
+
+### Solid
+
+The default. Token fill, small shadow, springy press.
+
+<Preview>
+	<Button kind="solid" variant="primary">Primary</Button>
+	<Button kind="solid" variant="secondary">Secondary</Button>
+	<Button kind="solid" variant="destructive">Delete</Button>
+	<Button kind="solid" variant="ghost">Ghost</Button>
+</Preview>
+
+### Glass
+
+Translucent fill, hairline border, backdrop blur. Slower and heavier motion — glass has
+mass. On native this is flat translucency for now; `expo-glass-effect` replaces it when
+we target iOS 26.
+
+<Preview>
+	<Button kind="glass" variant="primary">Primary</Button>
+	<Button kind="glass" variant="secondary">Secondary</Button>
+	<Button kind="glass" variant="destructive">Delete</Button>
+</Preview>
+
+### Detail
+
+Solid with a layered shadow and an inset highlight ring — the extra polish pass.
+
+<Preview>
+	<Button kind="detail" variant="primary">Primary</Button>
+	<Button kind="detail" variant="secondary">Secondary</Button>
+	<Button kind="detail" variant="destructive">Delete</Button>
+</Preview>
+
+### Terminal
+
+Square corners, monospace, inverting hover. It reads as terminal partly because it does
+not spring — the press snaps in 80ms.
+
+<Preview>
+	<Button kind="terminal" variant="primary">Run</Button>
+	<Button kind="terminal" variant="secondary">Abort</Button>
+	<Button kind="terminal" variant="destructive">rm -rf</Button>
+</Preview>
+
+## Sizes
+
+<Preview>
+	<Button size="sm">Small</Button>
+	<Button size="md">Medium</Button>
+	<Button size="lg">Large</Button>
+</Preview>
+
+## Motion off
+
+`animated={false}` removes the transform. The OS reduced-motion setting does the same
+thing without the prop.
+
+<Preview>
+	<Button animated={false}>No transform</Button>
+	<Button kind="glass" animated={false}>No transform</Button>
+</Preview>
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `kind` | `solid \| glass \| detail \| terminal` | `solid` |
+| `variant` | `primary \| secondary \| destructive \| ghost` | `primary` |
+| `size` | `sm \| md \| lg \| icon` | `md` |
+| `animated` | `boolean` | `true` |
+| `className` | `string` | — |
+
+Everything else passes through to `motion.button` on web and `Pressable` on native.
+
+## Customising
+
+Four levers, cheapest first.
+
+1. **Tokens** — change `--primary` in `globals.css`; every kind and both platforms follow.
+2. **Props** — `kind`, `variant`, `size`.
+3. **className** — merged with `tailwind-merge`, so `className="rounded-none"` wins.
+4. **Motion** — `animated={false}`, or edit the springs in `packages/rabtx/src/motion.ts`.
