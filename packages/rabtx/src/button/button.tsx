@@ -1,7 +1,7 @@
 "use client";
 
 import { Button as ShadcnButton } from "@school-os/ui/components/button";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import type { ComponentProps, CSSProperties } from "react";
 import { useState } from "react";
 import { cn } from "../cn";
@@ -12,6 +12,7 @@ import {
 	type Kind,
 	kindMotion,
 	sizeClass,
+	stateLabel,
 	variantVars,
 } from "./button.shared";
 
@@ -84,13 +85,18 @@ export function Button({
 	animated = true,
 	pressScale,
 	ripple = false,
+	state,
+	loadingText,
+	successText,
+	errorText,
 	className,
 	children,
 	disabled,
 	onPointerDown,
 	...props
 }: ButtonProps) {
-	const on = useMotion(animated && !disabled);
+	const busy = state === "loading";
+	const on = useMotion(animated && !disabled && !busy);
 	const { transition: name, pressScale: kindPress, hoverLift } = kindMotion[kind];
 	const press = pressScale ?? kindPress;
 	const [ripples, setRipples] = useState<Ripple[]>([]);
@@ -112,11 +118,19 @@ export function Button({
 	return (
 		<MotionButton
 			variant="ghost"
-			disabled={disabled}
+			disabled={disabled || busy}
+			// Disabling on its own would drop focus mid-action and leave a keyboard or
+			// screen-reader user with nowhere to land. Base UI keeps it focusable, and
+			// aria-busy is what actually announces the wait.
+			focusableWhenDisabled={busy || undefined}
+			aria-busy={busy || undefined}
 			onPointerDown={handlePointerDown}
 			whileHover={on && hoverLift ? { y: hoverLift } : undefined}
 			whileTap={on ? { scale: press, y: 0 } : undefined}
 			transition={transition[name]}
+			// Only stateful buttons animate their box, so the width morph costs nothing
+			// for the ordinary ones.
+			layout={state === undefined ? undefined : true}
 			className={cn(
 				base,
 				variantVars[variant],
@@ -127,7 +141,25 @@ export function Button({
 			)}
 			{...props}
 		>
-			{children}
+			{state === undefined ? (
+				children
+			) : (
+				<AnimatePresence mode="popLayout" initial={false}>
+					{/* Keyed by state, so each label is a genuine enter/exit rather than a
+					    text swap: the outgoing one blurs up and out while the next blurs in,
+					    and `gap: inherit` keeps icon spacing identical to the unwrapped case. */}
+					<motion.span
+						key={state}
+						className="inline-flex items-center gap-[inherit]"
+						initial={on ? { opacity: 0, filter: "blur(4px)", y: -6 } : false}
+						animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+						exit={on ? { opacity: 0, filter: "blur(4px)", y: 6 } : { opacity: 0 }}
+						transition={transition[name]}
+					>
+						{stateLabel(state, { loadingText, successText, errorText }, children)}
+					</motion.span>
+				</AnimatePresence>
+			)}
 			{ripples.map((r) => (
 				<motion.span
 					key={r.id}

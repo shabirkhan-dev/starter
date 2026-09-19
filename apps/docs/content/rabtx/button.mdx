@@ -126,17 +126,40 @@ turns motion off on both — a disabled control never animates like an enabled o
 	<Button kind="terminal" disabled>Terminal</Button>
 </Preview>
 
-Loading and success are not props on this Button. Compose loading from your own state with
-the shared `Spinner`, marking it with `data-icon` like any other icon:
+### Loading and result
+
+Pass `state` and the button swaps its own label. Each label blurs out upward as the next
+blurs in from above, and the button's width morphs between them rather than snapping.
+
+<Preview>
+	<ButtonStateDemo />
+	<ButtonStateDemo outcome="error" />
+</Preview>
 
 ```tsx
-import { Spinner } from "@school-os/ui/components/spinner";
+const [state, setState] = useState<ButtonState>("idle");
 
-<Button kind="detail" disabled={saving}>
-	{saving && <Spinner data-icon="inline-start" className="size-4" />}
-	{saving ? "Saving" : "Save"}
+<Button
+	state={state}
+	onClick={save}
+	loadingText="Saving"
+	successText="Saved"
+	errorText="Try again"
+>
+	Save changes
 </Button>
 ```
+
+Only `state` is required; each `*Text` falls back to the button's children, so you name
+just the states you actually use.
+
+Two things happen automatically while loading. The button is disabled, so the action
+cannot fire twice — but it stays **focusable**, because disabling outright would drop a
+keyboard or screen-reader user out of the control mid-action. It also carries `aria-busy`,
+which is what actually announces the wait.
+
+Leaving `state` off keeps the button completely unstateful: no wrapper element, no
+presence tracking, no layout animation. You only pay for this when you ask for it.
 
 ## Links
 

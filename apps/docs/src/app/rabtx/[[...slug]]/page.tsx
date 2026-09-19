@@ -3,6 +3,7 @@ import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/layo
 import { ArrowRight, Check, Download, Plus, Settings, Trash2 } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ButtonStateDemo } from "@/components/button-state-demo";
 import { getMDXComponents } from "@/components/mdx";
 import { Preview } from "@/components/preview";
 import { rabtxSource } from "@/lib/source";
@@ -22,7 +23,7 @@ export default async function Page(props: PageProps<"/rabtx/[[...slug]]">) {
 			<DocsTitle>{page.data.title}</DocsTitle>
 			<DocsDescription>{page.data.description}</DocsDescription>
 			<DocsBody>
-				<MDX components={getMDXComponents({ Button, Preview, ...icons })} />
+				<MDX components={getMDXComponents({ Button, ButtonStateDemo, Preview, ...icons })} />
 			</DocsBody>
 		</DocsPage>
 	);

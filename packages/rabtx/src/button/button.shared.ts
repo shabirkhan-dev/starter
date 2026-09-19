@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { TransitionName } from "../motion";
 
 /** Material: surface, shape and motion character. */
@@ -16,7 +17,34 @@ export type ButtonBaseProps = {
 	pressScale?: number;
 	/** Spawn a ripple from the press point. Off by default, and web-only. */
 	ripple?: boolean;
+	/**
+	 * Drives the label swap. Leaving it undefined keeps the button entirely
+	 * unstateful — no wrapper, no presence tracking — so existing buttons are
+	 * untouched and only opted-in ones pay for the behaviour.
+	 */
+	state?: ButtonState;
+	loadingText?: ReactNode;
+	successText?: ReactNode;
+	errorText?: ReactNode;
 };
+
+export type ButtonState = "idle" | "loading" | "success" | "error";
+
+/**
+ * The label a state shows. `idle` falls back to the button's own children, so a
+ * caller only names the states it actually uses.
+ */
+export function stateLabel(
+	state: ButtonState,
+	labels: Pick<ButtonBaseProps, "loadingText" | "successText" | "errorText">,
+	children: ReactNode,
+): ReactNode {
+	if (state === "loading") return labels.loadingText ?? children;
+	if (state === "success") return labels.successText ?? children;
+	if (state === "error") return labels.errorText ?? children;
+
+	return children;
+}
 
 /**
  * Variant sets colour variables; kind consumes them. That keeps the axes additive —
