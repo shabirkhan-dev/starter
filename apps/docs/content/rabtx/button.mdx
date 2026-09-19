@@ -155,7 +155,24 @@ Terminal is deliberately inert: it neither scales nor lifts. Snapping with no di
 is what makes it read as a terminal rather than a soft UI control.
 
 Hover is web-only — native has no hover — so the lift is a web addition while the press
-scale applies to both platforms.
+scale applies to both platforms. `pressScale` overrides the kind's depth per button when
+you need a specific one to sink further or not at all.
+
+### Ripple
+
+`ripple` spawns a circle from the exact press point and expands it past the far edge. It is
+off by default, since it suits a confirming action far more than every button on a page.
+Reduced motion and `animated={false}` suppress it along with the other transforms.
+
+<Preview>
+	<Button ripple>Tap me</Button>
+	<Button kind="detail" ripple>Ripple</Button>
+	<Button kind="terminal" ripple>Run</Button>
+	<Button kind="detail" ripple pressScale={0.88}>Deeper press</Button>
+</Preview>
+
+Web-only for now. React Native has its own `android_ripple` on `Pressable` and no iOS
+equivalent, so the native side is deliberately left without one rather than faked.
 
 ## Motion off
 

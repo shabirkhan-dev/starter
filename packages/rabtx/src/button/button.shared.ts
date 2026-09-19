@@ -12,6 +12,10 @@ export type ButtonBaseProps = {
 	size?: Size;
 	/** Off = no transform, instant state changes. Reduced motion forces this too. */
 	animated?: boolean;
+	/** Override the kind's press depth. Lower sinks further; 1 disables the scale. */
+	pressScale?: number;
+	/** Spawn a ripple from the press point. Off by default, and web-only. */
+	ripple?: boolean;
 };
 
 /**
@@ -58,8 +62,8 @@ export const kindMotion: Record<
 	Kind,
 	{ transition: TransitionName; pressScale: number; hoverLift: number }
 > = {
-	solid: { transition: "press", pressScale: 0.95, hoverLift: -1 },
-	detail: { transition: "press", pressScale: 0.96, hoverLift: -1 },
-	glass: { transition: "soft", pressScale: 0.94, hoverLift: -2 },
+	solid: { transition: "press", pressScale: 0.93, hoverLift: -1 },
+	detail: { transition: "press", pressScale: 0.94, hoverLift: -1 },
+	glass: { transition: "soft", pressScale: 0.93, hoverLift: -2 },
 	terminal: { transition: "snap", pressScale: 1, hoverLift: 0 },
 };
