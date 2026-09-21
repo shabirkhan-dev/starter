@@ -1,244 +1,40 @@
 ---
 title: Button
-description: One button, four materials, animated by default, web and native.
+description: The shadcn Button, copied verbatim as the Rabtx starting point.
 ---
 
 ```tsx
 import { Button } from "@rabtx/ui/button";
 
-<Button kind="solid" variant="primary">Save changes</Button>
+<Button>Save changes</Button>
 ```
 
-Three independent axes: `kind` is the material, `variant` is the colour role, `size` is
-the box. Motion is on by default and follows the OS reduced-motion setting.
+This is the shadcn Button with nothing changed. It is the baseline the Rabtx materials get
+built on, one step at a time, so every later change is visible as a difference from here.
 
-## Kinds
+## Variants
 
-### Solid
-
-The default: an opaque pill with a hairline edge, a light top edge and a dark bottom
-edge. Depth is those three tones, never a drop shadow — a cast shadow under a coloured
-fill only smears the page. Hover raises the brightness and scales the box to 1.02; a
-press sinks it to 0.93 on a stiff spring.
-
-<ButtonMatrix kind="solid" />
-
-Radius belongs to the material, not the size, so `size="icon"` is a circle rather than a
-squircle of some intermediate radius.
-
-### Detail
-
-Two touching contours with no gap and no shadow. The outer rim blends into the
-background; the inner edge is lighter along the top and darker along the bottom. Press
-and release to feel the restrained spring. On web the edge tones also reverse while
-pressed.
-
-<ButtonMatrix kind="detail" />
-
-### Glass
-
-Translucent fill, hairline border, backdrop blur. Slower and heavier motion — glass has
-mass. On native this is flat translucency for now; `expo-glass-effect` replaces it when
-we target iOS 26. This is a fallback, not liquid glass.
-
-<ButtonMatrix kind="glass" />
-
-### Terminal
-
-Square corners, monospace, inverting hover. It reads as terminal partly because it does
-not spring — the press snaps in 80ms.
-
-<ButtonMatrix kind="terminal" />
-
-## Colour roles
-
-A variant sets colour only. Shape, edge and motion come from the material, so all four
-roles work in all four kinds.
-
-<Preview label="solid · primary · secondary · destructive · ghost">
-	<Button variant="primary">Save changes</Button>
-	<Button variant="secondary">Save changes</Button>
-	<Button variant="destructive">Delete</Button>
-	<Button variant="ghost">Cancel</Button>
-</Preview>
-
-`ghost` is the one role that does not fill. It drops the material surface for a flat text
-button, which is the only thing that keeps it legible on a light page — a near-white fill
-on a white card is invisible. Everything else about it, including shape and press, still
-comes from the kind.
-
-## Icons
-
-Icons are children. Mark them with `data-icon="inline-start"` or `data-icon="inline-end"`,
-the same convention the shadcn Button uses, so the padding tightens on the side holding
-the icon instead of leaving it adrift in full padding.
-
-<Preview label="data-icon=inline-start · data-icon=inline-end">
-	<Button><Download data-icon="inline-start" className="size-4" />Download</Button>
-	<Button>Continue<ArrowRight data-icon="inline-end" className="size-4" /></Button>
-</Preview>
-
-Rabtx restates those spacing rules at its own scale. shadcn tunes them to `px-2.5`, and
-applying that to the wider Rabtx padding would cut too deep on the icon side.
-
-An icon-only button has no text for a screen reader to announce, so it must carry its own
-accessible name — `aria-label` on web, `accessibilityLabel` on native. `size="icon"` drops
-the horizontal padding and squares the box; with a pill material it becomes a circle.
-
-<Preview label="size=icon · aria-label required on all four">
-	<Button size="icon" aria-label="Add item"><Plus className="size-4" /></Button>
-	<Button kind="detail" size="icon" aria-label="Settings"><Settings className="size-4" /></Button>
-	<Button kind="glass" size="icon" aria-label="Download"><Download className="size-4" /></Button>
-	<Button kind="terminal" size="icon" aria-label="Confirm"><Check className="size-4" /></Button>
-</Preview>
-
-## Interaction states
-
-Hover and keyboard focus are web-only; press works on both platforms.
-
-<Preview label="default · disabled · animated=false">
+<Preview>
 	<Button>Default</Button>
-	<Button disabled>Disabled</Button>
-	<Button animated={false}>Motion off</Button>
+	<Button variant="outline">Outline</Button>
+	<Button variant="secondary">Secondary</Button>
+	<Button variant="ghost">Ghost</Button>
+	<Button variant="destructive">Destructive</Button>
+	<Button variant="link">Link</Button>
 </Preview>
 
-Disabled removes pointer events on web, sets `disabled` on the native `Pressable`, and
-turns motion off on both — a disabled control never animates like an enabled one.
+## Sizes
 
-Tab to a button to see the focus ring. It is drawn in `--ink` rather than a fixed colour,
-so it stays legible against every variant, and it is offset from the surface so it reads
-clearly on the `detail` rim.
-
-<Preview label="focus-visible · tab through the row">
-	<Button variant="primary">Tab to me</Button>
-	<Button variant="secondary">Then me</Button>
-	<Button variant="destructive">And me</Button>
-	<Button variant="ghost">Finally me</Button>
+<Preview>
+	<Button size="xs">Extra small</Button>
+	<Button size="sm">Small</Button>
+	<Button size="default">Default</Button>
+	<Button size="lg">Large</Button>
 </Preview>
 
-Hover is gated behind `(hover: hover) and (pointer: fine)`, so a touch device never
-receives a phantom hover that sticks until the next tap elsewhere.
+## Disabled
 
-### Loading and result
-
-Pass `state` and the button swaps its own label. Each label blurs out upward as the next
-blurs in from above, and the button's width morphs between them rather than snapping.
-
-<Preview label="state cycle · loading → success">
-	<ButtonStateDemo />
-	<ButtonStateDemo outcome="error" />
+<Preview>
+	<Button disabled>Default</Button>
+	<Button variant="outline" disabled>Outline</Button>
 </Preview>
-
-```tsx
-const [state, setState] = useState<ButtonState>("idle");
-
-<Button
-	state={state}
-	onClick={save}
-	loadingText="Saving"
-	successText="Saved"
-	errorText="Try again"
->
-	Save changes
-</Button>
-```
-
-Only `state` is required; each `*Text` falls back to the button's children, so you name
-just the states you actually use.
-
-Two things happen automatically while loading. The button is disabled, so the action
-cannot fire twice — but it stays **focusable**, because disabling outright would drop a
-keyboard or screen-reader user out of the control mid-action. It also carries `aria-busy`,
-which is what actually announces the wait.
-
-Leaving `state` off keeps the button completely unstateful: no wrapper element, no
-presence tracking, no layout animation. You only pay for this when you ask for it.
-
-## Links
-
-Do not render this Button as an anchor. It inherits Base UI's Button through shadcn, which
-always applies `role="button"` — that overrides the semantic link role and costs you the
-behaviour people expect from a link: middle-click, open in new tab, the browser's own
-context menu. For a link that looks like a button, style a plain `<a>` with the same kind
-and size classes instead.
-
-## Motion
-
-Each kind declares its own character, and every lever is optional — a material can
-decline hover without losing its press.
-
-| Kind | Press scale | Hover |
-| --- | --- | --- |
-| `solid` | 0.93 | scale to 1.02 |
-| `detail` | 0.94 | 1px lift |
-| `glass` | 0.93 | scale to 1.01, 2px lift |
-| `terminal` | — | none |
-
-Every one of those is a transform, so nothing around the button reflows and no shadow is
-involved — `detail` keeps its edge-contrast depth while it moves. Hover is web-only:
-native has no pointer to hover with, while the press scale applies to both platforms.
-`pressScale` overrides the kind's depth per button when you need a specific one to sink
-further or not at all.
-
-Labels and box dimensions stay fixed across state changes, so a row of buttons never
-reflows when one of them is pressed or disabled.
-
-### Ripple
-
-`ripple` spawns a circle from the exact press point and expands it past the far edge. It
-is off by default, since it suits a confirming action far more than every button on a
-page. Reduced motion and `animated={false}` suppress it along with the other transforms.
-
-<Preview label="ripple · solid 0.93 · detail · terminal · pressScale=0.88">
-	<Button ripple>Tap me</Button>
-	<Button kind="detail" ripple>Ripple</Button>
-	<Button kind="terminal" ripple>Run</Button>
-	<Button kind="detail" ripple pressScale={0.88}>Deeper press</Button>
-</Preview>
-
-Web-only for now. React Native has its own `android_ripple` on `Pressable` and no iOS
-equivalent, so the native side is deliberately left without one rather than faked.
-
-## Motion off
-
-`animated={false}` removes both transforms. The OS reduced-motion setting does the same
-thing without the prop, and a disabled button never animates either. Colour and edge
-responses still work, so a motion-free button is not a dead one.
-
-<Preview label="animated=false · solid and glass">
-	<Button animated={false}>No transform</Button>
-	<Button kind="glass" animated={false}>No transform</Button>
-</Preview>
-
-## Props
-
-| Prop | Type | Default |
-| --- | --- | --- |
-| `kind` | `solid \| detail \| glass \| terminal` | `solid` |
-| `variant` | `primary \| secondary \| destructive \| ghost` | `primary` |
-| `size` | `sm \| md \| lg \| icon` | `md` |
-| `animated` | `boolean` | `true` |
-| `pressScale` | `number` | per kind |
-| `ripple` | `boolean` | `false` |
-| `state` | `idle \| loading \| success \| error` | — |
-| `loadingText` / `successText` / `errorText` | `ReactNode` | children |
-| `className` | `string` | — |
-
-Everything else passes through to `motion.button` on web and `Pressable` on native — so
-`aria-label`, `onClick` and `type` work on web, and `accessibilityLabel`, `onPress` and
-`testID` work on native. Native `onPressIn` and `onPressOut` callbacks run alongside the
-internal spring rather than replacing it.
-
-## Customising
-
-Five levers, cheapest first.
-
-1. **Tokens** — `--primary` and friends in `globals.css` recolour every kind on both
-   platforms. `--button-edge`, `--button-sheen` and `--button-shade` are the filled
-   surface's edge and bevel, and have their own dark-theme values.
-2. **Props** — `kind`, `variant`, `size`.
-3. **className** — merged with `tailwind-merge`, so `className="rounded-none"` wins.
-4. **Motion** — `animated={false}`, or edit the springs in `packages/rabtx/src/motion.ts`.
-5. **Material** — one entry per kind in `button.shared.ts`: `kindShape` for silhouette and
-   type, `kindSurface` for fill and edge, `kindMotion` for its character. A kind can be
-   tuned there without touching the component or the other kinds.

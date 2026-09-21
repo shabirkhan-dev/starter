@@ -4,9 +4,7 @@
 	"private": true,
 	"type": "module",
 	"exports": {
-		"./button": "./src/button/index.ts",
-		"./motion": "./src/motion.ts",
-		"./cn": "./src/cn.ts"
+		"./button": "./src/button.tsx"
 	},
 	"scripts": {
 		"lint": "biome check .",
@@ -14,32 +12,17 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
+		"@base-ui/react": "^1.6.0",
 		"@school-os/ui": "workspace:*",
-		"clsx": "^2.1.1",
-		"tailwind-merge": "^3.6.0"
+		"class-variance-authority": "^0.7.1"
 	},
 	"devDependencies": {
 		"@school-os/typescript-config": "workspace:*",
 		"@types/react": "^19.2.14",
-		"motion": "^12.42.2",
 		"react": "^19.2.6",
-		"react-native": "0.86.0",
-		"react-native-reanimated": "4.5.2",
-		"typescript": "^6.0.3",
-		"uniwind": "^1.10.0"
+		"typescript": "^6.0.3"
 	},
 	"peerDependencies": {
-		"motion": ">=12",
-		"react": ">=19",
-		"react-native": "*",
-		"react-native-reanimated": "*"
-	},
-	"peerDependenciesMeta": {
-		"react-native": {
-			"optional": true
-		},
-		"react-native-reanimated": {
-			"optional": true
-		}
+		"react": ">=19"
 	}
 }

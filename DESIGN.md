@@ -50,7 +50,7 @@ Material is the `kind` axis: `solid`, `detail`, `glass`, `terminal`. It is indep
 | Kind | Intended appearance and behavior |
 | --- | --- |
 | `solid` | A clean opaque pill. Depth is three tones — a hairline edge, a light top edge and a dark bottom edge — and never a drop shadow. Polish comes from proportions, spacing, typography, color and complete interaction states. |
-| `detail` | A surface with two touching rounded contours. The outer rim follows the inner curve with **zero gap or spacer** and subtly blends into the surrounding background. Depth comes from tonal differences and precise edges. **No cast shadows, blurred shadows or background glow.** |
+| `detail` | A surface with two touching rounded contours. The outer rim follows the inner curve with **zero gap or spacer** and subtly blends into the surrounding background. The inner contour carries the same depth as `solid` — hairline edge, light top, dark bottom — so the two materials differ in construction, not in tone. **No cast shadows, blurred shadows or background glow.** |
 | `glass` | **Liquid glass**, in the sense Apple uses it across recent iOS and macOS: a translucent material that refracts and bends what sits behind it, picks up specular highlights along its edges, and reacts to motion rather than sitting flat. The background is part of the material, not a tint over it. Opacity plus a backdrop blur is a fallback, not the target — do not describe that fallback as finished. |
 | `terminal` | Squarish corners, crisp edges and a coherent terminal aesthetic. Monospace and restrained color fit the direction. Current uppercase labels and hover inversion are implementation choices, not mandatory requirements for every future component. |
 
@@ -62,12 +62,15 @@ Do not interpret polished as “add more shadows, glow or animation.”
 - Start with the actual component surface and its rounded boundary.
 - Put the outer contour directly against the inner contour; keep their curves concentric.
 - Let the outer rim sit only subtly apart from the surrounding surface, including charcoal.
-- Create depth through edge contrast, not a floating drop shadow. The current Button uses a
-  lighter top and darker bottom as a first implementation; the owner has not finalized those tones.
+- Create depth through edge contrast, not a floating drop shadow. Detail and solid share one
+  depth language: `--button-edge` for the hairline, `--button-sheen` and `--button-shade` for the
+  light top and dark bottom. Solid draws those three tones as a border plus inset shadows; detail
+  draws the same tones as its inner contour, which is what keeps its two contours touching, and
+  inverts the bevel while pressed.
 - Keep surface, rim and radius decisions in shared tokens. The Button consumes `--button-rim`
-  for the detail contour and `--button-edge`, `--button-sheen`, `--button-shade` for the filled
-  surface (the sheen and shade carry their own dark-theme values). Add more tokens only when an
-  actual design decision needs them.
+  for the outer detail contour and `--button-edge`, `--button-sheen`, `--button-shade` for the
+  surface that sits inside it (the sheen and shade carry their own dark-theme values). Add more
+  tokens only when an actual design decision needs them.
 - Radius belongs to the material, not the size (`kindShape`): solid is a pill, and `size="icon"`
   is therefore a circle. Sizes change height, padding and text scale only.
 - Check the result in light and dark themes on a plain background. A background effect must not
