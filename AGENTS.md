@@ -8,6 +8,22 @@ Read this file first when working in this repo.
 Monorepo Starter managed with **Turborepo + Bun**. Apps, shared packages, and
 multi-language scripts, all wired into a single lint/format/build/test surface.
 
+## Before you write code
+
+Multi-agent coordination lives in [.agents/](.agents/README.md). Load these in order:
+
+1. This file
+2. [.agents/README.md](.agents/README.md) — the protocol and directory map
+3. [.agents/agent-contract.md](.agents/agent-contract.md) — behaviour, evidence, violation policy
+4. Exactly one charter from [.agents/roles/](.agents/roles/README.md) — who you are and what you own
+5. [.agents/worktrees.md](.agents/worktrees.md) — branch, port and worktree lifecycle
+6. Your board card from [.agents/board/](.agents/board/README.md)
+
+The short version: claim a card before coding, work in your own worktree on
+`agent/<role>/<card-slug>`, write only inside the card's scope, stage explicit paths rather than
+`git add -A`, and record real validation output on the card. `main` is integration-only.
+[.agents/ownership.yaml](.agents/ownership.yaml) is the machine-readable role-to-path map.
+
 ## UI design context
 
 Before changing UI components, read [DESIGN.md](DESIGN.md), especially **Rabtx UI: shared design intent**.
