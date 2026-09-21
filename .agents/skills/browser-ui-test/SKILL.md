@@ -26,7 +26,7 @@ Do **not** stop at typecheck alone for these changes.
 Needs the `playwright` MCP server (`@playwright/mcp`) configured in your editor; the repo no
 longer ships an MCP config of its own.
 
-1. Ensure web is running (`bun run dev` or `bun --cwd apps/web run dev`). Default local URL: `http://localhost:3000` (e2e config uses `:3005`).
+1. Ensure web is running (`bun run dev` or `bun --cwd=apps/web run dev`). Default local URL: `http://localhost:3000` (e2e config uses `:3005`).
 2. Call `GetMcpTools` for server `playwright`, then use tools to:
    - navigate to the affected route
    - `browser_snapshot` (accessibility tree — primary signal)

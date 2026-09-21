@@ -32,7 +32,7 @@ with `bun run dev:ai`, or run the lot with `bun run dev:all`.
 | Nest API | http://localhost:4000 — `/api/v1/health`, `/api/docs` |
 | Docs | http://localhost:3002/docs |
 
-To work on one app in isolation: `bun --cwd apps/web run dev` (same pattern for `mobile`,
+To work on one app in isolation: `bun --cwd=apps/web run dev` (same pattern for `mobile`,
 `nest-api`, `docs`, `rust`).
 
 ## Layout
@@ -131,7 +131,7 @@ See [.devcontainer/README.md](.devcontainer/README.md).
 ## Docs
 
 ```bash
-bun --cwd apps/docs run dev
+bun --cwd=apps/docs run dev
 ```
 
 - [/docs/quick-start](http://localhost:3002/docs/quick-start)

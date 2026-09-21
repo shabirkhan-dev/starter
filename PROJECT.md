@@ -40,7 +40,7 @@ starter/
 └── AGENTS.md                 # Universal AI agent guidance
 ```
 
-Documentation is served by `apps/docs` (`bun --cwd apps/docs run dev` → http://localhost:3002/docs).
+Documentation is served by `apps/docs` (`bun --cwd=apps/docs run dev` → http://localhost:3002/docs).
 There is no root `docs/` directory.
 ## Apps and stacks
 
@@ -90,11 +90,11 @@ bun --cwd <app-path> run <script>
 
 Examples:
 
-- `bun --cwd apps/web run dev`
-- `bun --cwd apps/mobile run start`
-- `bun --cwd apps/nest-api run dev`
-- `bun --cwd apps/docs run dev`
-- `bun --cwd apps/rust run dev`
+- `bun --cwd=apps/web run dev`
+- `bun --cwd=apps/mobile run start`
+- `bun --cwd=apps/nest-api run dev`
+- `bun --cwd=apps/docs run dev`
+- `bun --cwd=apps/rust run dev`
 
 ## Tooling and quality system
 

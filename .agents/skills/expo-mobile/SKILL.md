@@ -107,12 +107,12 @@ A fresh **create-expo-app** template may use **StyleSheet** + **ThemedText** / *
 
 ## Commands
 
-- Dev: `bun --cwd apps/mobile run start` (or `run dev` if defined)
-- Typecheck: `bun --cwd apps/mobile run typecheck`
-- Lint: `bun --cwd apps/mobile run lint`
-- Test: `bun --cwd apps/mobile run test`
-- EAS dev build Android: `bun --cwd apps/mobile run build:dev:android`
-- EAS dev build iOS: `bun --cwd apps/mobile run build:dev:ios`
+- Dev: `bun --cwd=apps/mobile run start` (or `run dev` if defined)
+- Typecheck: `bun --cwd=apps/mobile run typecheck`
+- Lint: `bun --cwd=apps/mobile run lint`
+- Test: `bun --cwd=apps/mobile run test`
+- EAS dev build Android: `bun --cwd=apps/mobile run build:dev:android`
+- EAS dev build iOS: `bun --cwd=apps/mobile run build:dev:ios`
 
 ## Routing
 

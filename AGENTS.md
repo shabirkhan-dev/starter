@@ -36,7 +36,7 @@ Keep that document as the shared source of truth instead of copying design rules
 There is **no root `docs/` folder**. Project docs live in the docs app:
 
 - Source: `apps/docs/content/docs/`
-- Dev: `bun --cwd apps/docs run dev`
+- Dev: `bun --cwd=apps/docs run dev`
 - Browse: http://localhost:3002/docs
 
 Key routes: `/docs/quick-start`, `/docs/production-roadmap`, `/docs/architecture`,
@@ -177,7 +177,7 @@ only, then `bun run dev`. See `/docs/docker` and `docker/README.md`.
 
 - `PROJECT.md` — detailed layout, tooling, and commands.
 - `DESIGN.md` — design-system brief for UI generation and review.
-- **Docs app** (`apps/docs`, run with `bun --cwd apps/docs run dev`):
+- **Docs app** (`apps/docs`, run with `bun --cwd=apps/docs run dev`):
   - `/docs/production-roadmap` — production build phases and Nest API spine
   - `/docs/ai-first-workflow` — starter audit and AI-first workflow roadmap
   - `/docs/qol` — full QoL stack (hooks, CI, per-language tools)
