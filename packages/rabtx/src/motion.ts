@@ -12,6 +12,13 @@ export type Transition =
 
 export type TransitionName = "press" | "soft" | "snap";
 
+/**
+ * Strong deceleration curve for ripples and exits. The bare `ease-out` keyword is
+ * too weak to read as intentional, which is why every timed animation names this
+ * instead. Web passes it straight to motion; native tweens stay duration-only.
+ */
+export const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 export const transition: Record<TransitionName, Transition> = {
 	/** Default press feedback. */
 	press: { type: "spring", stiffness: 500, damping: 30, mass: 0.6 },
