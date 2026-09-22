@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT OR Apache-2.0",
-  "packageManager": "bun@1.3.13",
+  "packageManager": "bun@1.4.2",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -42,7 +42,7 @@
     "lightningcss": "1.32.0",
     "oxfmt": "^0.70.0",
     "oxlint": "^1.85.0",
-    "turbo": "^2.10.5"
+    "turbo": "^2.11.2"
   },
   "ignoreScripts": [
     "sharp",
