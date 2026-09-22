@@ -245,7 +245,7 @@ function DesktopDropdown({
 	const [hovered, setHovered] = useState<string | null>(items[0]?.label ?? null);
 
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: hover bridge for dropdown + keyboard via trigger
+		// oxlint-disable-next-line jsx_a11y/no-static-element-interactions -- hover bridge for dropdown + keyboard via trigger
 		<div
 			className="relative"
 			onMouseEnter={onOpen}

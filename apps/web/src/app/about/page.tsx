@@ -32,7 +32,7 @@ export default function AboutPage() {
 	return (
 		<>
 			<script
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: theme before paint
+				// Intentional: theme before paint. No oxlint equivalent for Biome's noDangerouslySetInnerHtml, so this documents the choice rather than suppressing.
 				dangerouslySetInnerHTML={{ __html: atlasThemeScript }}
 			/>
 			<div className={cn(jakarta.variable, fraunces.variable, jetbrains.variable)}>

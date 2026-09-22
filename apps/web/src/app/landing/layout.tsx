@@ -32,7 +32,7 @@ export default function LandingLayout({ children }: Readonly<{ children: React.R
 		<>
 			{/* Apply the stored landing theme before paint to avoid a flash. */}
 			<script
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: required to run the theme script before hydration
+				// Intentional: required to run the theme script before hydration. No oxlint equivalent for Biome's noDangerouslySetInnerHtml, so this documents the choice rather than suppressing.
 				dangerouslySetInnerHTML={{ __html: atlasThemeScript }}
 			/>
 			<div className={cn(jakarta.variable, fraunces.variable, jetbrains.variable)}>{children}</div>

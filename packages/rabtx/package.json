@@ -7,8 +7,8 @@
 		"./button": "./src/button.tsx"
 	},
 	"scripts": {
-		"lint": "biome check .",
-		"lint:fix": "biome check --write .",
+		"lint": "oxlint",
+		"lint:fix": "oxlint --fix",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {

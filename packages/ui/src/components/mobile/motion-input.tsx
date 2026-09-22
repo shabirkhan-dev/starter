@@ -58,7 +58,7 @@ export function MobileMotionInput({
 	const hasError = Boolean(error);
 
 	// Trigger error shake animation
-	// biome-ignore lint/correctness/useExhaustiveDependencies: trigger shake on error change
+	// oxlint-disable-next-line react/exhaustive-deps -- trigger shake on error change
 	useEffect(() => {
 		if (hasError) {
 			shakeX.value = withSequence(

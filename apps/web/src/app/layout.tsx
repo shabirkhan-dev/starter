@@ -26,7 +26,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" className={inter.variable} suppressHydrationWarning>
 			<head>
-				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: static FOUC bootstrap, not user input */}
+				{/* Intentional: static FOUC bootstrap, not user input. No oxlint equivalent for Biome's noDangerouslySetInnerHtml, so this documents the choice rather than suppressing. */}
 				<script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
 			</head>
 			<body className="font-sans antialiased" suppressHydrationWarning>

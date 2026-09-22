@@ -23,8 +23,10 @@ export type InputClassNames = {
 	errorMessage?: string;
 };
 
-export interface MotionInputProps
-	extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "defaultValue" | "onChange"> {
+export interface MotionInputProps extends Omit<
+	InputHTMLAttributes<HTMLInputElement>,
+	"value" | "defaultValue" | "onChange"
+> {
 	label?: string;
 	value?: string;
 	defaultValue?: string;

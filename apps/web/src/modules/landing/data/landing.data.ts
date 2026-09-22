@@ -163,7 +163,7 @@ export const CUSTOMER_LOGOS: CustomerLogo[] = [
 	{ name: "NestJS", icon: ApertureIcon },
 	{ name: "Turbo", icon: Package01Icon },
 	{ name: "Bun", icon: GemIcon },
-	{ name: "Biome", icon: CommandIcon },
+	{ name: "oxc", icon: CommandIcon },
 	{ name: "Docker", icon: OctagonIcon },
 	{ name: "Rust", icon: CircleIcon },
 ];
@@ -221,7 +221,7 @@ export type ToolCall = {
 
 export const AGENT_TOOL_CALLS: ToolCall[] = [
 	{ name: "turbo run build", status: "done" },
-	{ name: "biome check", status: "done" },
+	{ name: "oxlint", status: "done" },
 	{ name: "architecture:check", status: "done" },
 ];
 
@@ -339,7 +339,7 @@ export const ABOUT_PRINCIPLES: AboutPrinciple[] = [
 		icon: "shield",
 		title: "Quality by default",
 		description:
-			"Biome, Lefthook, Turbo, and CI run before code lands — so green hooks become the habit, not a hope.",
+			"oxlint, Lefthook, Turbo, and CI run before code lands — so green hooks become the habit, not a hope.",
 	},
 ];
 
@@ -377,7 +377,7 @@ export const ABOUT_TEAM: AboutTeamMember[] = [
 		name: "Lena Ortiz",
 		role: "DX & tooling",
 		seed: "LenaOrtiz",
-		bio: "Ships hooks, Biome rules, and agent guidance so every commit stays reviewable.",
+		bio: "Ships hooks, oxlint rules, and agent guidance so every commit stays reviewable.",
 		tone: "blue",
 		profileHref: "#",
 	},
@@ -476,7 +476,7 @@ export const PRICING_TIERS: PricingTier[] = [
 export const PRICING_FEATURES: string[] = [
 	"Full monorepo starter (web · mobile · Nest · docs · Rust)",
 	"Shared @school-os packages and TS configs",
-	"Lefthook, Biome, Turbo, and architecture checks",
+	"Lefthook, oxlint, Turbo, and architecture checks",
 	"Docker Compose fragments + Dev Container",
 	"Docs site and production roadmap baked in",
 ];
@@ -563,7 +563,7 @@ export const FAQ_ITEMS: FaqItem[] = [
 		id: "security",
 		question: "What quality gates run before a commit?",
 		answer:
-			"Lefthook formats with Biome, lints, typechecks, blocks large files, scans for obvious secrets, and runs the architecture check — Conventional Commits required.",
+			"Lefthook formats with oxfmt, lints with oxlint, typechecks, blocks large files, scans for obvious secrets, and runs the architecture check — Conventional Commits required.",
 		icon: OctagonIcon,
 	},
 ];

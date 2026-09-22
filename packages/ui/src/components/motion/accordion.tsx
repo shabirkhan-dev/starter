@@ -10,8 +10,9 @@ import React, { type ComponentPropsWithoutRef, type ReactNode, forwardRef } from
 
 export type AccordionVariant = "default" | "contained" | "ghost";
 
-export interface MotionAccordionProps
-	extends ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> {
+export interface MotionAccordionProps extends ComponentPropsWithoutRef<
+	typeof AccordionPrimitive.Root
+> {
 	variant?: AccordionVariant;
 	className?: string;
 }
@@ -37,8 +38,9 @@ export const MotionAccordion = forwardRef<HTMLDivElement, MotionAccordionProps>(
 
 MotionAccordion.displayName = "MotionAccordion";
 
-export interface AccordionItemProps
-	extends ComponentPropsWithoutRef<typeof AccordionPrimitive.Item> {
+export interface AccordionItemProps extends ComponentPropsWithoutRef<
+	typeof AccordionPrimitive.Item
+> {
 	variant?: AccordionVariant;
 	className?: string;
 }
@@ -64,8 +66,9 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 
 AccordionItem.displayName = "AccordionItem";
 
-export interface AccordionTriggerProps
-	extends ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> {
+export interface AccordionTriggerProps extends ComponentPropsWithoutRef<
+	typeof AccordionPrimitive.Trigger
+> {
 	icon?: ReactNode;
 	className?: string;
 }
@@ -104,8 +107,9 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
 
 AccordionTrigger.displayName = "AccordionTrigger";
 
-export interface AccordionContentProps
-	extends ComponentPropsWithoutRef<typeof AccordionPrimitive.Panel> {
+export interface AccordionContentProps extends ComponentPropsWithoutRef<
+	typeof AccordionPrimitive.Panel
+> {
 	className?: string;
 }
 

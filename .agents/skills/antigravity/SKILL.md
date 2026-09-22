@@ -14,7 +14,7 @@ Use this skill to understand how Antigravity operates within this monorepo to de
 |------------|-------------|
 | **Reliability-First** | Aligns with the project roadmap to enforce test depth and CI quality gates. |
 | **Premium Design** | Implements state-of-the-art UI with rich aesthetics, gradients, and micro-animations. |
-| **Monorepo Mastery** | Expertly navigates Turborepo, Bun, and Biome across TS, Rust, C, and more. |
+| **Monorepo Mastery** | Expertly navigates Turborepo, Bun, and oxc across TS, Rust, C, and more. |
 | **Architecture Aware** | Respects and enforces architectural boundaries and ADRs. |
 
 ## Operating Principles
@@ -34,7 +34,7 @@ When working on the frontend (`apps/web`, `apps/mobile`):
 ### 3. Tooling Standards
 - **Bun**: The only package manager used.
 - **Turbo**: Used for task execution and orchestration.
-- **Biome**: The sole source of truth for linting and formatting.
+- **oxc**: oxlint is the source of truth for linting, oxfmt for formatting.
 - **Workspace Imports**: Always use `@school-os/*` for internal packages.
 
 ## Guidelines for Users

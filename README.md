@@ -79,7 +79,7 @@ file while Next resolves the web one, so a single import serves both platforms w
 | `bun run dev` | All dev servers except Rust |
 | `bun run dev:all` / `dev:rust` / `dev:ai` | Everything / Rust only / FastAPI only |
 | `bun run build` | Build every app |
-| `bun run lint` / `lint:fix` | Biome, plus ShellCheck and Ruff over `scripts/` |
+| `bun run lint` / `lint:fix` | oxlint, plus ShellCheck and Ruff over `scripts/` |
 | `bun run format` | Format TS/JS, shell, Python and Rust |
 | `bun run typecheck` | TypeScript across workspaces |
 | `bun run test` / `test:coverage` | Unit tests / coverage gates |
@@ -91,7 +91,7 @@ file while Next resolves the web one, so a single import serves both platforms w
 ## Tooling
 
 - **Bun** workspaces and **Turborepo** for the task graph
-- **Biome** for TS/JS — tabs, line width 100
+- **oxlint** for linting and **oxfmt** for formatting TS/JS — tabs, line width 100
 - **Lefthook** pre-commit and commit-msg, enforcing Conventional Commits
 - Bash: ShellCheck + shfmt · Python: Ruff · Rust: rustfmt + clippy
 

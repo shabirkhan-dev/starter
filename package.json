@@ -4,7 +4,10 @@
   "private": true,
   "license": "MIT OR Apache-2.0",
   "packageManager": "bun@1.3.13",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "turbo run dev --continue --filter=!rust --concurrency=12",
     "dev:rust": "bun --cwd=apps/rust run dev",
@@ -15,7 +18,7 @@
     "preflight": "bun run lint && bun run typecheck && bun run test",
     "lint": "turbo run lint && bun run scripts:lint",
     "lint:fix": "turbo run lint:fix",
-    "format": "biome format --write . && bun run scripts:format && (cd apps/rust && cargo fmt || true)",
+    "format": "oxfmt && bun run scripts:format && (cd apps/rust && cargo fmt || true)",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test && bun run test:scripts",
     "test:coverage": "(cd apps/web && bun run test:coverage) && (cd apps/nest-api && bun run test:cov) && (cd packages/logger && bun run test:coverage) && (cd apps/mobile && bun run test) && (cd apps/rust && bun run test) && bun run test:scripts",
@@ -35,13 +38,20 @@
     "prepare": "git rev-parse --git-dir >/dev/null 2>&1 || exit 0; lefthook install"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.15",
     "lefthook": "2.1.6",
     "lightningcss": "1.32.0",
+    "oxfmt": "^0.70.0",
+    "oxlint": "^1.85.0",
     "turbo": "^2.10.5"
   },
-  "ignoreScripts": ["sharp", "unrs-resolver"],
-  "trustedDependencies": ["sharp", "unrs-resolver"],
+  "ignoreScripts": [
+    "sharp",
+    "unrs-resolver"
+  ],
+  "trustedDependencies": [
+    "sharp",
+    "unrs-resolver"
+  ],
   "overrides": {
     "lightningcss": "1.32.0",
     "@expo/dom-webview": "57.0.0",

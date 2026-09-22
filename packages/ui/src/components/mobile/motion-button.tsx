@@ -161,7 +161,7 @@ export function MobileStatefulButton({
 	const textOpacity = useSharedValue(1);
 	const textTranslateY = useSharedValue(0);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: trigger text animation on state change
+	// oxlint-disable-next-line react/exhaustive-deps -- trigger text animation on state change
 	useEffect(() => {
 		textOpacity.value = 0;
 		textTranslateY.value = 8;

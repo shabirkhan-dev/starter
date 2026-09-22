@@ -92,8 +92,8 @@ venv/
 # lua (if any)
 *.luac
 
-# biome (cache)
-.biome/
+# oxc (cache)
+.oxlintcache
 
 # editor / IDE (local only)
 .idea/

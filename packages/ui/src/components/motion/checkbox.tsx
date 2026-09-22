@@ -11,8 +11,9 @@ import { type ComponentPropsWithoutRef, forwardRef, useState } from "react";
 export type CheckboxVariant = "default" | "indigo" | "emerald" | "destructive";
 export type CheckboxSize = "sm" | "default" | "lg";
 
-export interface MotionCheckboxProps
-	extends ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
+export interface MotionCheckboxProps extends ComponentPropsWithoutRef<
+	typeof CheckboxPrimitive.Root
+> {
 	variant?: CheckboxVariant;
 	size?: CheckboxSize;
 	indeterminate?: boolean;

@@ -554,10 +554,10 @@ export function MotionTableSkeleton({
 	return (
 		<TableBody className={className}>
 			{Array.from({ length: rows }).map((_, rIdx) => (
-				// biome-ignore lint/suspicious/noArrayIndexKey: static skeleton placeholders, never reordered
+				// oxlint-disable-next-line react/no-array-index-key -- static skeleton placeholders, never reordered
 				<TableRow key={`skeleton-row-${rIdx}`} className="border-b border-border/40">
 					{Array.from({ length: columns }).map((_, cIdx) => (
-						// biome-ignore lint/suspicious/noArrayIndexKey: static skeleton placeholders, never reordered
+						// oxlint-disable-next-line react/no-array-index-key -- static skeleton placeholders, never reordered
 						<TableCell key={`skeleton-cell-${rIdx}-${cIdx}`} className="py-3.5">
 							<Skeleton className="h-4 w-full rounded-md opacity-60" />
 						</TableCell>
